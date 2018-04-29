@@ -18,4 +18,10 @@ public class SplashActivity extends AppCompatActivity {
         Intent fGroup = new Intent(this, FriendGroupActivity.class);
         startActivity(fGroup);
     }
+
+    //TODO: Remove when have proper connection to the Start Hangout
+    public void openHangout(View view) {
+        Intent hangout = new Intent(this, HangoutActivity.class);
+        startActivity(hangout);
+    }
 }

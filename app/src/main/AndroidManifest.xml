@@ -25,6 +25,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.uw.tacoma.group2.mobileappproject.SplashActivity" />
         </activity>
+        <activity
+            android:name=".HangoutActivity"
+            android:parentActivityName=".SplashActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.uw.tacoma.group2.mobileappproject.SplashActivity" />
+        </activity>
+
     </application>
 
 </manifest>
