@@ -18,4 +18,9 @@ public class SplashActivity extends AppCompatActivity {
         Intent fGroup = new Intent(this, FriendGroupActivity.class);
         startActivity(fGroup);
     }
+
+    public void openFavorites(View view){
+        Intent favorites = new Intent(this,FavoritesActivity.class);
+        startActivity(favorites);
+    }
 }

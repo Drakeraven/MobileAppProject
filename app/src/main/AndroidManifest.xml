@@ -26,6 +26,7 @@
                 android:value="edu.uw.tacoma.group2.mobileappproject.SplashActivity" />
         </activity>
         <activity android:name=".FavoritesActivity" />
+        <activity android:name=".RestaurantsActivity"></activity>
     </application>
 
 </manifest>
