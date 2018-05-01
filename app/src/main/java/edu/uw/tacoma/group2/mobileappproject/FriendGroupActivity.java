@@ -106,7 +106,6 @@ public class FriendGroupActivity extends AppCompatActivity implements
 
     }
 
-    //TODO: FIll switch statement
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages. In this case, Friends or Groups.

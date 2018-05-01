@@ -50,6 +50,7 @@ public class FriendContent {
         return builder.toString();
     }
 
+    //TODO: Define what we need to know for a friend from fb API
     /**
      * A friend item representing a piece of content.
      */
