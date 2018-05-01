@@ -27,6 +27,7 @@ import java.util.Arrays;
 public class SplashActivity extends AppCompatActivity {
     private static final String EMAIL = "email";
     private static final String USER_POSTS = "user_posts";
+    private static final String USER_FRIENDS = "user_friends";
 
     private CallbackManager mCallbackManager;
 
@@ -67,7 +68,7 @@ public class SplashActivity extends AppCompatActivity {
         LoginButton mLoginButton = findViewById(R.id.login_button);
 
         // Set the initial permissions to request from the user while logging in
-        mLoginButton.setReadPermissions(Arrays.asList(EMAIL, USER_POSTS));
+        mLoginButton.setReadPermissions(Arrays.asList(EMAIL, USER_POSTS, USER_FRIENDS));
 
         // Register a callback to respond to the user
         mLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
