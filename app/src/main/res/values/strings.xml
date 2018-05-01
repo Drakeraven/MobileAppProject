@@ -7,7 +7,7 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="facebook_app_id">176032896559037</string>
     <string name="fb_login_protocol_scheme">fb176032896559037</string>
+    <string name="FriendGroup">Groups and Friends</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sel_group_hangout">Select Friend Group</string>
 </resources>

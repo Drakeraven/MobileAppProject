@@ -129,6 +129,12 @@ public class SplashActivity extends AppCompatActivity {
         startActivity(fGroup);
     }
 
+    //TODO: Remove when have proper connection to the Start Hangout
+    public void openHangout(View view) {
+        Intent hangout = new Intent(this, HangoutActivity.class);
+        startActivity(hangout);
+    }
+
 
 
     //TODO: Add a log out button for facebook
