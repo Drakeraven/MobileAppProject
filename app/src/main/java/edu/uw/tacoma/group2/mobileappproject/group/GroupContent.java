@@ -50,6 +50,7 @@ public class GroupContent {
         return builder.toString();
     }
 
+    //TODO: Define what we want in the group object
     /**
      * A group item representing a piece of content.
      */
