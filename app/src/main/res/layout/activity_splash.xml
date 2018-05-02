@@ -35,8 +35,9 @@
         android:layout_height="wrap_content"
         android:onClick="openFriendGroup"
         android:text="TempFriends"
-        tools:layout_editor_absoluteX="148dp"
-        tools:layout_editor_absoluteY="16dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="35dp" />
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button"
