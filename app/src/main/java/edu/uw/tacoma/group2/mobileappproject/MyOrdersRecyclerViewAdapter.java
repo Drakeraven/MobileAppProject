@@ -8,20 +8,14 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import edu.uw.tacoma.group2.mobileappproject.FriendFragment.FriendTabListener;
-import edu.uw.tacoma.group2.mobileappproject.friend.FriendContent;
+import edu.uw.tacoma.group2.mobileappproject.order.OrdersContent.OrderItem;
+import edu.uw.tacoma.group2.mobileappproject.OrdersFragment.OrdersTabListener;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link FriendContent} and makes a call to the
- * specified {@link FriendTabListener}.
- * TODO: Replace the implementation with code for your data type.
- */
-public class MyFriendRecyclerViewAdapter extends RecyclerView.Adapter<MyFriendRecyclerViewAdapter.ViewHolder> {
+public class MyOrdersRecyclerViewAdapter extends RecyclerView.Adapter<MyOrdersRecyclerViewAdapter.ViewHolder>{
+    private final List<OrderItem> mValues;
+    private final OrdersTabListener mListener;
 
-    private final List<FriendContent> mValues;
-    private final FriendTabListener mListener;
-
-    public MyFriendRecyclerViewAdapter(List<FriendContent> items, FriendTabListener listener) {
+    public MyOrdersRecyclerViewAdapter(List<OrderItem> items, OrdersTabListener listener){
         mValues = items;
         mListener = listener;
     }
@@ -29,15 +23,15 @@ public class MyFriendRecyclerViewAdapter extends RecyclerView.Adapter<MyFriendRe
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_friend, parent, false);
+                .inflate(R.layout.fragment_orders, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-//        holder.mIdView.setText(mValues.get(position));
-//        holder.mContentView.setText(mValues.get(position));
+        holder.mIdView.setText(mValues.get(position).id);
+        holder.mContentView.setText(mValues.get(position).content);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,7 +39,7 @@ public class MyFriendRecyclerViewAdapter extends RecyclerView.Adapter<MyFriendRe
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.friendTabListener(holder.mItem);
+                    mListener.orderTabListener(holder.mItem);
                 }
             }
         });
@@ -60,7 +54,7 @@ public class MyFriendRecyclerViewAdapter extends RecyclerView.Adapter<MyFriendRe
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public FriendContent mItem;
+        public OrderItem mItem;
 
         public ViewHolder(View view) {
             super(view);
@@ -73,5 +67,6 @@ public class MyFriendRecyclerViewAdapter extends RecyclerView.Adapter<MyFriendRe
         public String toString() {
             return super.toString() + " '" + mContentView.getText() + "'";
         }
+
     }
 }

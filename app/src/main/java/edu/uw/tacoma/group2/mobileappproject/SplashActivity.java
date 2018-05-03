@@ -9,20 +9,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+
+import org.json.JSONObject;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+
+import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
 
 public class SplashActivity extends AppCompatActivity {
     private static final String EMAIL = "email";
@@ -79,7 +84,7 @@ public class SplashActivity extends AppCompatActivity {
                 Log.i(TAG, "onSuccess: " + loginResult.getAccessToken().getToken());
                 //Intent i = new Intent(LogInScreen.this, SplashActivity.class);
                 //startActivity(i);
-                finish();
+                //finish();
             }
 
             @Override
@@ -95,24 +100,26 @@ public class SplashActivity extends AppCompatActivity {
             }
         });
 
-        LoginManager.getInstance().registerCallback(mCallbackManager,
-                new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        Log.i(TAG, "onSuccess: " + loginResult.getAccessToken().getUserId());
-                        Log.i(TAG, "onSuccess: " + loginResult.getAccessToken().getToken());
-                    }
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        /*if (accessToken != null) {
+            Toast.makeText(this, AccessToken.getCurrentAccessToken().toString(), Toast.LENGTH_LONG).show();
+        }*/
 
+        GraphRequest request = GraphRequest.newMeRequest(
+                accessToken,
+                new GraphRequest.GraphJSONObjectCallback() {
                     @Override
-                    public void onCancel() {
-                        // App code
-                    }
-
-                    @Override
-                    public void onError(FacebookException exception) {
-                        Log.i(TAG, "onError: ");
+                            public void onCompleted(
+                                    JSONObject object,
+                            GraphResponse response) {
+                        new UserContent(response.getJSONObject());
+                        Log.d(TAG, response.toString());
                     }
                 });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id, name, picture, email");
+        request.setParameters(parameters);
+        request.executeAsync();
     }
 
     @Override
@@ -127,6 +134,11 @@ public class SplashActivity extends AppCompatActivity {
     public void openFriendGroup(View view) {
         Intent fGroup = new Intent(this, FriendGroupActivity.class);
         startActivity(fGroup);
+    }
+
+    public void openFavorites(View view){
+        Intent favorites = new Intent(this,FavoritesActivity.class);
+        startActivity(favorites);
     }
 
     //TODO: Remove when have proper connection to the Start Hangout

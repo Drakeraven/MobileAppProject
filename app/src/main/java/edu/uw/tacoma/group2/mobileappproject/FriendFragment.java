@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import edu.uw.tacoma.group2.mobileappproject.friend.FriendContent;
-import edu.uw.tacoma.group2.mobileappproject.friend.FriendContent.FriendItem;
 
 /**
  * A fragment representing a list of Items.
@@ -67,7 +66,7 @@ public class FriendFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyFriendRecyclerViewAdapter(FriendContent.ITEMS, mListener));
+            //recyclerView.setAdapter(new MyFriendRecyclerViewAdapter(FriendContent.ITEMS, mListener));
         }
         return view;
     }
@@ -102,6 +101,6 @@ public class FriendFragment extends Fragment {
      */
     public interface FriendTabListener {
         // TODO: Update argument type and name
-        void friendTabListener(FriendItem item);
+        void friendTabListener(FriendContent item);
     }
 }
