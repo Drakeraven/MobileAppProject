@@ -27,6 +27,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
+import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
+
 public class SplashActivity extends AppCompatActivity {
     private static final String EMAIL = "email";
     private static final String USER_POSTS = "user_posts";
@@ -82,7 +84,7 @@ public class SplashActivity extends AppCompatActivity {
                 Log.i(TAG, "onSuccess: " + loginResult.getAccessToken().getToken());
                 //Intent i = new Intent(LogInScreen.this, SplashActivity.class);
                 //startActivity(i);
-                finish();
+                //finish();
             }
 
             @Override
@@ -107,14 +109,15 @@ public class SplashActivity extends AppCompatActivity {
                 accessToken,
                 new GraphRequest.GraphJSONObjectCallback() {
                     @Override
-                    public void onCompleted(
-                            JSONObject object,
+                            public void onCompleted(
+                                    JSONObject object,
                             GraphResponse response) {
+                        new UserContent(response.getJSONObject());
                         Log.d(TAG, response.toString());
                     }
                 });
         Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,name,picture");
+        parameters.putString("fields", "id, name, picture, email");
         request.setParameters(parameters);
         request.executeAsync();
     }

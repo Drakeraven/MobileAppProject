@@ -97,7 +97,7 @@ public class FriendGroupActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void friendTabListener(FriendContent.FriendItem item) {
+    public void friendTabListener(FriendContent item) {
 
     }
 

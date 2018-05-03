@@ -53,9 +53,9 @@ public class FavoritesActivity extends AppCompatActivity implements FriendFragme
     }
 
     @Override
-    public void friendTabListener(FriendContent.FriendItem item) {
+    public void friendTabListener(FriendContent item) {
 
-    }
+   }
 
     @Override
     public void orderTabListener(OrdersContent.OrderItem item) {
