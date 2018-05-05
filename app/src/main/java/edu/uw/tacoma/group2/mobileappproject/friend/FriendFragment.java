@@ -1,16 +1,28 @@
-package edu.uw.tacoma.group2.mobileappproject;
+package edu.uw.tacoma.group2.mobileappproject.friend;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import edu.uw.tacoma.group2.mobileappproject.friend.FriendContent;
+import org.json.JSONException;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.List;
+
+import edu.uw.tacoma.group2.mobileappproject.R;
+import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
 
 /**
  * A fragment representing a list of Items.
@@ -19,12 +31,15 @@ import edu.uw.tacoma.group2.mobileappproject.friend.FriendContent;
  * interface.
  */
 public class FriendFragment extends Fragment {
-
-    // TODO: Customize parameter argument names
+    private static final String TAG = "Friend List";
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
     private FriendTabListener mListener;
+    private List<FriendContent> mFriendList;
+    private RecyclerView mRecyclerView;
+    private static final String FRIENDS_URL =
+            "http://stephd27.000webhostapp.com/list.php?cmd=friends&uid=" + UserContent.userID;
+
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -33,7 +48,7 @@ public class FriendFragment extends Fragment {
     public FriendFragment() {
     }
 
-    // TODO: Customize parameter initialization
+
     @SuppressWarnings("unused")
     public static FriendFragment newInstance(int columnCount) {
         FriendFragment fragment = new FriendFragment();
@@ -60,13 +75,14 @@ public class FriendFragment extends Fragment {
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            mRecyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+                mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            //recyclerView.setAdapter(new MyFriendRecyclerViewAdapter(FriendContent.ITEMS, mListener));
+            GetFriendsTask task = new GetFriendsTask();
+            task.execute(new String[]{FRIENDS_URL});
         }
         return view;
     }
@@ -100,7 +116,58 @@ public class FriendFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface FriendTabListener {
-        // TODO: Update argument type and name
         void friendTabListener(FriendContent item);
+    }
+
+    private class GetFriendsTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... urls) {
+            String response = "";
+
+            HttpURLConnection urlConnection = null;
+
+            for (String url : urls) {
+                try {
+                    URL urlObject = new URL(url);
+                    urlConnection = (HttpURLConnection) urlObject.openConnection();
+
+                    InputStream content = urlConnection.getInputStream();
+
+                    BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
+                    String s = "";
+
+                    while ((s = buffer.readLine()) != null) {
+                        response += s;
+                    }
+                } catch (Exception e) {
+                    response = "Unable to give friends, Reason: " + e.getMessage();
+                } finally {
+                    if (urlConnection != null)
+                        urlConnection.disconnect();
+                }
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.i(TAG, "onPostExecute");
+
+            if (result.startsWith("Unable to")) {
+                Log.e(TAG, result);
+                return;
+            }
+            try {
+                mFriendList = FriendContent.giveMeFriends(result);
+
+            }catch (JSONException e) {
+                Log.e(TAG, e.getMessage());
+                return;
+            }
+            if (!mFriendList.isEmpty()) {
+                mRecyclerView.setAdapter(new MyFriendRecyclerViewAdapter(mFriendList, mListener));
+            }
+        }
     }
 }

@@ -1,4 +1,4 @@
-package edu.uw.tacoma.group2.mobileappproject;
+package edu.uw.tacoma.group2.mobileappproject.group;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import edu.uw.tacoma.group2.mobileappproject.R;
 import edu.uw.tacoma.group2.mobileappproject.group.GroupContent.GroupItem;
 
 /**

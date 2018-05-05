@@ -1,4 +1,4 @@
-package edu.uw.tacoma.group2.mobileappproject;
+package edu.uw.tacoma.group2.mobileappproject.restaurant;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,8 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import edu.uw.tacoma.group2.mobileappproject.R;
 import edu.uw.tacoma.group2.mobileappproject.restaurant.RestaurantsContent.RestaurantItem;
-import edu.uw.tacoma.group2.mobileappproject.RestaurantsFragment.RestaurantsTabListener;
+import edu.uw.tacoma.group2.mobileappproject.restaurant.RestaurantsFragment.RestaurantsTabListener;
 
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
 public class MyRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<MyRestaurantRecyclerViewAdapter.ViewHolder> {
 
     private final List<RestaurantItem> mValues;
-    private final RestaurantsFragment.RestaurantsTabListener mListener;
+    private final RestaurantsTabListener mListener;
 
     public MyRestaurantRecyclerViewAdapter(List<RestaurantItem> items, RestaurantsTabListener listener) {
         mValues = items;

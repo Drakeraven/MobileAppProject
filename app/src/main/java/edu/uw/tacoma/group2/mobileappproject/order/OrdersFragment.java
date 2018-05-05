@@ -1,4 +1,4 @@
-package edu.uw.tacoma.group2.mobileappproject;
+package edu.uw.tacoma.group2.mobileappproject.order;
 
 
 import android.content.Context;
@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import edu.uw.tacoma.group2.mobileappproject.order.OrdersContent;
+import edu.uw.tacoma.group2.mobileappproject.R;
 import edu.uw.tacoma.group2.mobileappproject.order.OrdersContent.OrderItem;
 
 

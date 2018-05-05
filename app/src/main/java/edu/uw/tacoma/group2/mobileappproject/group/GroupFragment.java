@@ -1,4 +1,4 @@
-package edu.uw.tacoma.group2.mobileappproject;
+package edu.uw.tacoma.group2.mobileappproject.group;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import edu.uw.tacoma.group2.mobileappproject.group.GroupContent;
+import edu.uw.tacoma.group2.mobileappproject.R;
 import edu.uw.tacoma.group2.mobileappproject.group.GroupContent.GroupItem;
 
 /**

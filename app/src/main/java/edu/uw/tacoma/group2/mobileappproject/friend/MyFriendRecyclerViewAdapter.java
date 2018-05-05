@@ -1,4 +1,4 @@
-package edu.uw.tacoma.group2.mobileappproject;
+package edu.uw.tacoma.group2.mobileappproject.friend;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,8 +8,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import edu.uw.tacoma.group2.mobileappproject.FriendFragment.FriendTabListener;
-import edu.uw.tacoma.group2.mobileappproject.friend.FriendContent;
+import edu.uw.tacoma.group2.mobileappproject.R;
+import edu.uw.tacoma.group2.mobileappproject.friend.FriendFragment.FriendTabListener;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link FriendContent} and makes a call to the
@@ -36,8 +36,8 @@ public class MyFriendRecyclerViewAdapter extends RecyclerView.Adapter<MyFriendRe
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-//        holder.mIdView.setText(mValues.get(position));
-//        holder.mContentView.setText(mValues.get(position));
+        holder.mIdView.setText(mValues.get(position).getFrenName());
+       // holder.mContentView.setText(mValues.get(position).getFrenEmail());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,19 +59,19 @@ public class MyFriendRecyclerViewAdapter extends RecyclerView.Adapter<MyFriendRe
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mIdView;
-        public final TextView mContentView;
+        //public final TextView mContentView;
         public FriendContent mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             mIdView = (TextView) view.findViewById(R.id.item_number);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            //mContentView = (TextView) view.findViewById(R.id.content);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + mIdView.getText() + "'";
         }
     }
 }

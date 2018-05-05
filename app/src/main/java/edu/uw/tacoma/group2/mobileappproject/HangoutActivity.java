@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import edu.uw.tacoma.group2.mobileappproject.group.GroupContent;
+import edu.uw.tacoma.group2.mobileappproject.group.GroupFragment;
 
 public class HangoutActivity extends AppCompatActivity implements
         GroupFragment.GroupTabListener {

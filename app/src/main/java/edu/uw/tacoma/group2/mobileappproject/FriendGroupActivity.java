@@ -15,7 +15,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import edu.uw.tacoma.group2.mobileappproject.friend.FriendContent;
+import edu.uw.tacoma.group2.mobileappproject.friend.FriendDetails;
+import edu.uw.tacoma.group2.mobileappproject.friend.FriendFragment;
 import edu.uw.tacoma.group2.mobileappproject.group.GroupContent;
+import edu.uw.tacoma.group2.mobileappproject.group.GroupFragment;
 
 public class FriendGroupActivity extends AppCompatActivity implements
         FriendFragment.FriendTabListener,
@@ -95,9 +98,20 @@ public class FriendGroupActivity extends AppCompatActivity implements
 
         return super.onOptionsItemSelected(item);
     }
-
+    //TODO:Properly flip to the details fragment, out of the list
     @Override
     public void friendTabListener(FriendContent item) {
+        FriendDetails friendDetails = new FriendDetails();
+        Bundle args = new Bundle();
+        args.putSerializable(FriendDetails.FRIEND_SELECTED, item);
+        friendDetails.setArguments(args);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.Friend_List, friendDetails)
+                .addToBackStack(null)
+                .commit();
+
+
 
     }
 
