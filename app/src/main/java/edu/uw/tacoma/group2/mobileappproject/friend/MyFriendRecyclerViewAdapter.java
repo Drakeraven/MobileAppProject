@@ -66,11 +66,9 @@ public class MyFriendRecyclerViewAdapter extends RecyclerView.Adapter<MyFriendRe
         final TextView mIdView;
         //public final TextView mContentView;
         public FriendContent mItem;
-        LinearLayout friend_clicked;
 
         ViewHolder(View view) {
             super(view);
-            friend_clicked = view.findViewById(R.id.Friend_List_Item);
             mView = view;
             mIdView = view.findViewById(R.id.item_number);
             //mContentView = (TextView) view.findViewById(R.id.content);

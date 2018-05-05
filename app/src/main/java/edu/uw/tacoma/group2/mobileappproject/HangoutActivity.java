@@ -15,7 +15,7 @@ public class HangoutActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hangout);
         //setting up the toolbar for the frame
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarHangout);
+        Toolbar toolbar = findViewById(R.id.toolbarHangout);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -30,7 +30,7 @@ public class HangoutActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void groupTabListener(GroupContent.GroupItem item) {
+    public void groupTabListener(GroupContent item) {
         /*Activated when the user selects a group to use for their
         * Hangry hangout.
         *
