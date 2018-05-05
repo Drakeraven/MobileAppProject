@@ -1,12 +1,13 @@
 package edu.uw.tacoma.group2.mobileappproject.restaurant;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RestaurantsContent {
-
+public class RestaurantsContent implements Serializable {
+    public static final String NAME = "name";
     /**
      * An array of sample (friend) items.
      */
