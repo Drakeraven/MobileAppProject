@@ -1,5 +1,6 @@
 package edu.uw.tacoma.group2.mobileappproject;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,9 +14,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import edu.uw.tacoma.group2.mobileappproject.friend.FriendContent;
-import edu.uw.tacoma.group2.mobileappproject.friend.FriendDetails;
 import edu.uw.tacoma.group2.mobileappproject.friend.FriendFragment;
 import edu.uw.tacoma.group2.mobileappproject.group.GroupContent;
 import edu.uw.tacoma.group2.mobileappproject.group.GroupFragment;
@@ -33,6 +34,7 @@ public class FriendGroupActivity extends AppCompatActivity implements
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
+    private Dialog friendPopUp;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -44,23 +46,23 @@ public class FriendGroupActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_group);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        // Create the adapter that will return a fragment for each of the three
+        // Create the adapter that will return a fragment for each of the 2
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        final TabLayout tabLayout = findViewById(R.id.tabs);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,6 +75,8 @@ public class FriendGroupActivity extends AppCompatActivity implements
                 }
             }
         });
+
+        createFriendPopUp();
 
     }
 
@@ -98,26 +102,24 @@ public class FriendGroupActivity extends AppCompatActivity implements
 
         return super.onOptionsItemSelected(item);
     }
-    //TODO:Properly flip to the details fragment, out of the list
+
     @Override
     public void friendTabListener(FriendContent item) {
-        FriendDetails friendDetails = new FriendDetails();
-        Bundle args = new Bundle();
-        args.putSerializable(FriendDetails.FRIEND_SELECTED, item);
-        friendDetails.setArguments(args);
-
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.Friend_List, friendDetails)
-                .addToBackStack(null)
-                .commit();
-
-
-
+        TextView popUpName = friendPopUp.findViewById(R.id.friend_name);
+        TextView popUpEmail = friendPopUp.findViewById(R.id.friend_email);
+        popUpName.setText(item.getFrenName());
+        popUpEmail.setText(item.getFrenEmail());
+        friendPopUp.show();
     }
 
     @Override
     public void groupTabListener(GroupContent.GroupItem item) {
 
+    }
+
+    private void createFriendPopUp() {
+        friendPopUp = new Dialog(this);
+        friendPopUp.setContentView(R.layout.fragment_friend_details);
     }
 
     /**
@@ -126,7 +128,7 @@ public class FriendGroupActivity extends AppCompatActivity implements
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
@@ -134,11 +136,9 @@ public class FriendGroupActivity extends AppCompatActivity implements
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    Fragment friend = FriendFragment.newInstance(1);
-                    return friend;
+                    return FriendFragment.newInstance(1);
                 case 1:
-                    Fragment group = GroupFragment.newInstance(1);
-                    return group;
+                    return GroupFragment.newInstance(1);
                 default:
                     return null;
             }
