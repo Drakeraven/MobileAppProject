@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import edu.uw.tacoma.group2.mobileappproject.restaurant.RestaurantsContent.RestaurantItem;
+import edu.uw.tacoma.group2.mobileappproject.restaurant.Restaurant;
 import edu.uw.tacoma.group2.mobileappproject.RestaurantsFragment.RestaurantsTabListener;
 
 
@@ -15,11 +15,11 @@ import java.util.List;
 
 public class MyRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<MyRestaurantRecyclerViewAdapter.ViewHolder> {
 
-    private final List<RestaurantItem> mValues;
+    private final List<Restaurant> mRestaurants;
     private final RestaurantsFragment.RestaurantsTabListener mListener;
 
-    public MyRestaurantRecyclerViewAdapter(List<RestaurantItem> items, RestaurantsTabListener listener) {
-        mValues = items;
+    public MyRestaurantRecyclerViewAdapter(List<Restaurant> restaurants, RestaurantsTabListener listener) {
+        mRestaurants = restaurants;
         mListener = listener;
     }
 
@@ -32,9 +32,8 @@ public class MyRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<MyRest
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mItem = mRestaurants.get(position);
+        holder.mIdView.setText(mRestaurants.get(position).getmName());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,14 +49,14 @@ public class MyRestaurantRecyclerViewAdapter extends RecyclerView.Adapter<MyRest
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return mRestaurants.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public RestaurantItem mItem;
+        public Restaurant mItem;
 
         public ViewHolder(View view) {
             super(view);

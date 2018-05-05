@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Helper class for providing sample content for user interfaces created by
+ * Helper class for providing sample name for user interfaces created by
  * Android template wizards.
  * <p>
  * TODO: Replace all uses of this class before publishing your app.
@@ -52,7 +52,7 @@ public class FriendContent {
 
     //TODO: Define what we need to know for a friend from fb API
     /**
-     * A friend item representing a piece of content.
+     * A friend item representing a piece of name.
      */
     public static class FriendItem {
         public final String id;

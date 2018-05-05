@@ -11,14 +11,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import edu.uw.tacoma.group2.mobileappproject.restaurant.RestaurantsContent;
-import edu.uw.tacoma.group2.mobileappproject.restaurant.RestaurantsContent.RestaurantItem;
+import java.util.List;
+
+import edu.uw.tacoma.group2.mobileappproject.restaurant.Restaurant;
+
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class RestaurantsFragment extends Fragment {
+    private List<Restaurant> mRestaurantList;
+    private RecyclerView mRecyclerView;
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
@@ -53,13 +57,13 @@ public class RestaurantsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_restaurant_list, container, false);
         if(view instanceof RecyclerView){
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            mRecyclerView = (RecyclerView) view;
             if(mColumnCount <=1){
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else{
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+                mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyRestaurantRecyclerViewAdapter(RestaurantsContent.ITEMS, mListener));
+            mRecyclerView.setAdapter(new MyRestaurantRecyclerViewAdapter(mRestaurantList, mListener));
         }
         return view;
     }
@@ -81,7 +85,7 @@ public class RestaurantsFragment extends Fragment {
         mListener = null;
     }
     public interface RestaurantsTabListener {
-        void restaurantsTabListener(RestaurantItem item);
+        void restaurantsTabListener(Restaurant restaurant);
     }
 
 }

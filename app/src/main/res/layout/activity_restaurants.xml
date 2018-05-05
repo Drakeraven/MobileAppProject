@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="RadioButton"
-            tools:text="@string/restaurants_nearme" />
+            tools:text="@string/restaurants_near_me" />
 
     </android.support.design.widget.AppBarLayout>
 
