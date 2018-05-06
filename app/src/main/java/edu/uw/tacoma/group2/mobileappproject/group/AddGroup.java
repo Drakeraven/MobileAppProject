@@ -1,8 +1,10 @@
 package edu.uw.tacoma.group2.mobileappproject.group;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,10 +30,12 @@ public class AddGroup {
     private List<FriendContent> currentFriends;
     CharSequence[] friendNames;
     private static int GroupCount = 2;
+    Activity mContext;
 
-    public AddGroup() {
+    public AddGroup(Activity context) {
+        mContext = context;
         GetFriendsTask task = new GetFriendsTask();
-        task.execute();
+        task.execute(FRIENDS_URL);
     }
     private void setUpAddGroup() {
         List<String> listItems = new ArrayList<String>();
@@ -42,7 +46,6 @@ public class AddGroup {
         friendNames = listItems.toArray(new CharSequence[listItems.size()]);
 
     }
-
 
     private class GetFriendsTask extends AsyncTask<String, Void, String> {
 
@@ -87,52 +90,15 @@ public class AddGroup {
                 currentFriends = FriendContent.giveMeFriends(result);
 
             }catch (JSONException e) {
-                Log.e(TAG, e.getMessage());
+                Log.e(TAG, "Not parsing JSON " + e.getMessage());
                 return;
             }
             if (!currentFriends.isEmpty()) {
                setUpAddGroup();
+               DialogFragment agd = new AddGroupDialog();
+               agd.show(mContext.getFragmentManager(), "add group");
             }
         }
     }
 
-//    public class addGroupDialog extends DialogFragment {
-//
-//        public AddGroup newGroup() {
-//            AddGroup f = new AddGroup();
-//            return f;
-//        }
-//
-//        @Override
-//        public void onCreate(Bundle savedInstanceState) {
-//            super.onCreate(savedInstanceState);
-//        }
-//
-//        @Override
-//        public Dialog onCreateDialog(Bundle savedInstanceState) {
-//            final List mSelectedItems = new ArrayList();
-//            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//
-//            builder.setTitle("Select New Members: ")
-//                    .setMultiChoiceItems(friendNames, null, new DialogInterface.OnMultiChoiceClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-//
-//                            if (isChecked) {
-//                                mSelectedItems.add(which);
-//                            }else if (mSelectedItems.contains(which)) {
-//                                mSelectedItems.remove(Integer.valueOf(which));
-//                            }
-//                        }
-//                    })
-//                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            //TODO: handle choices here, basically send for the thing to be added.
-//                        }
-//                    });
-//
-//            return builder.create();
-////        }
-//    }
 }

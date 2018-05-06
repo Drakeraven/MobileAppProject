@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import edu.uw.tacoma.group2.mobileappproject.friend.FriendContent;
 import edu.uw.tacoma.group2.mobileappproject.friend.FriendFragment;
 import edu.uw.tacoma.group2.mobileappproject.group.AddGroup;
+import edu.uw.tacoma.group2.mobileappproject.group.AddGroupDialog;
 import edu.uw.tacoma.group2.mobileappproject.group.GroupContent;
 import edu.uw.tacoma.group2.mobileappproject.group.GroupFragment;
 import edu.uw.tacoma.group2.mobileappproject.group.GroupMemberFragment;
@@ -77,6 +78,10 @@ public class FriendGroupActivity extends AppCompatActivity implements
                 } else {
 //                    Snackbar.make(view, "Replace with Create Group", Snackbar.LENGTH_LONG)
 //                            .setAction("Action", null).show();
+                    new AddGroup(FriendGroupActivity.this);
+//                    DialogFragment agd = new AddGroupDialog();
+//                    agd.show(getFragmentManager(), "add group");
+
                 }
             }
         });
