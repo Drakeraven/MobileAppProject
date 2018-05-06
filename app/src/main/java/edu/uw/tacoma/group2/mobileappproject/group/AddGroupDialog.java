@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,14 +13,20 @@ import java.util.List;
 public class AddGroupDialog extends DialogFragment {
     CharSequence[] friendNames;
 
-        public AddGroupDialog newGroup() {
+        public static AddGroupDialog newGroup(CharSequence[] stuff) {
             AddGroupDialog f = new AddGroupDialog();
+            Bundle args = new Bundle();
+            args.putCharSequenceArray("names", stuff);
+            f.setArguments(args);
             return f;
         }
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            if (getArguments() != null) {
+                friendNames = getArguments().getCharSequenceArray("names");
+            }
         }
 
         @Override

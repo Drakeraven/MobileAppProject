@@ -79,8 +79,6 @@ public class FriendGroupActivity extends AppCompatActivity implements
 //                    Snackbar.make(view, "Replace with Create Group", Snackbar.LENGTH_LONG)
 //                            .setAction("Action", null).show();
                     new AddGroup(FriendGroupActivity.this);
-//                    DialogFragment agd = new AddGroupDialog();
-//                    agd.show(getFragmentManager(), "add group");
 
                 }
             }

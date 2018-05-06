@@ -95,7 +95,7 @@ public class AddGroup {
             }
             if (!currentFriends.isEmpty()) {
                setUpAddGroup();
-               DialogFragment agd = new AddGroupDialog();
+               DialogFragment agd = AddGroupDialog.newGroup(friendNames);
                agd.show(mContext.getFragmentManager(), "add group");
             }
         }
