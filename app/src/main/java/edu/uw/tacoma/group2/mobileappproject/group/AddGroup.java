@@ -1,13 +1,8 @@
 package edu.uw.tacoma.group2.mobileappproject.group;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -29,7 +24,6 @@ public class AddGroup {
     private static final String TAG = "Adding Group";
     private List<FriendContent> currentFriends;
     CharSequence[] friendNames;
-    private static int GroupCount = 2;
     Activity mContext;
 
     public AddGroup(Activity context) {
@@ -94,6 +88,7 @@ public class AddGroup {
                 return;
             }
             if (!currentFriends.isEmpty()) {
+                //TODO: send friend content to group dialog in order to add the group
                setUpAddGroup();
                DialogFragment agd = AddGroupDialog.newGroup(friendNames);
                agd.show(mContext.getFragmentManager(), "add group");

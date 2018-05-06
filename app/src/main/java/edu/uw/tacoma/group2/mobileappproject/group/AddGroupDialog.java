@@ -5,13 +5,13 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AddGroupDialog extends DialogFragment {
     CharSequence[] friendNames;
+    private static int GroupCount = 2;
 
         public static AddGroupDialog newGroup(CharSequence[] stuff) {
             AddGroupDialog f = new AddGroupDialog();
@@ -56,4 +56,12 @@ public class AddGroupDialog extends DialogFragment {
             return builder.create();
         }
 
+
+        private void buildAddingGroupsURL() {
+            //TODO: build the url for adding to general group list and for adding individual members
+
+
+        }
+
+        //TODO: add in async task for adding group members. Repop list?
 }
