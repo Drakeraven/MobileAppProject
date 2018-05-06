@@ -19,6 +19,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.facebook.login.widget.ProfilePictureView;
+
 import org.json.JSONException;
 
 import java.io.BufferedReader;
@@ -37,7 +39,7 @@ import edu.uw.tacoma.group2.mobileappproject.group.GroupMemberFragment;
 public class FriendGroupActivity extends AppCompatActivity implements
         FriendFragment.FriendTabListener,
         GroupFragment.GroupTabListener {
-    private static final String TAG = "Friend Group Activity";
+
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -120,8 +122,10 @@ public class FriendGroupActivity extends AppCompatActivity implements
     public void friendTabListener(FriendContent item) {
         TextView popUpName = friendPopUp.findViewById(R.id.friend_name);
         TextView popUpEmail = friendPopUp.findViewById(R.id.friend_email);
+        //ProfilePictureView popUpIcon = friendPopUp.findViewById(R.id.friend_profile_pic);
         popUpName.setText(item.getFrenName());
         popUpEmail.setText(item.getFrenEmail());
+        //popUpIcon.setProfileId(item.getFrenID());
         friendPopUp.show();
     }
 

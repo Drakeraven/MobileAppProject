@@ -1,6 +1,7 @@
 package edu.uw.tacoma.group2.mobileappproject.friend;
 
 import android.app.Dialog;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.facebook.login.widget.ProfilePictureView;
 
 import java.util.List;
 
@@ -41,6 +44,8 @@ public class MyFriendRecyclerViewAdapter extends RecyclerView.Adapter<MyFriendRe
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).getFrenName());
+        holder.mFriendIcon.setProfileId(mValues.get(position).getFrenID());
+        holder.mFriendIcon.setPresetSize(-2);
        // holder.mContentView.setText(mValues.get(position).getFrenEmail());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -66,11 +71,16 @@ public class MyFriendRecyclerViewAdapter extends RecyclerView.Adapter<MyFriendRe
         final TextView mIdView;
         //public final TextView mContentView;
         public FriendContent mItem;
+        public ProfilePictureView mFriendIcon;
+        LinearLayout friend_clicked;
 
         ViewHolder(View view) {
             super(view);
             mView = view;
             mIdView = view.findViewById(R.id.item_number);
+            mFriendIcon = view.findViewById(R.id.friend_profile_pic);
+
+
             //mContentView = (TextView) view.findViewById(R.id.content);
         }
 

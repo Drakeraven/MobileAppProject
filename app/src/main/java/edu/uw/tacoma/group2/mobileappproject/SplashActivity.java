@@ -85,6 +85,23 @@ public class SplashActivity extends AppCompatActivity {
                 //Intent i = new Intent(LogInScreen.this, SplashActivity.class);
                 //startActivity(i);
                 //finish();
+                AccessToken accessToken = AccessToken.getCurrentAccessToken();
+
+                GraphRequest request = GraphRequest.newMeRequest(
+                        accessToken,
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(
+                                    JSONObject object,
+                                    GraphResponse response) {
+                                new UserContent(response.getJSONObject());
+                                Log.d(TAG, response.toString());
+                            }
+                        });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id, name, picture, email");
+                request.setParameters(parameters);
+                request.executeAsync();
             }
 
             @Override
@@ -100,12 +117,12 @@ public class SplashActivity extends AppCompatActivity {
             }
         });
 
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        //AccessToken accessToken = AccessToken.getCurrentAccessToken();
         /*if (accessToken != null) {
             Toast.makeText(this, AccessToken.getCurrentAccessToken().toString(), Toast.LENGTH_LONG).show();
         }*/
 
-        GraphRequest request = GraphRequest.newMeRequest(
+        /*GraphRequest request = GraphRequest.newMeRequest(
                 accessToken,
                 new GraphRequest.GraphJSONObjectCallback() {
                     @Override
@@ -119,7 +136,7 @@ public class SplashActivity extends AppCompatActivity {
         Bundle parameters = new Bundle();
         parameters.putString("fields", "id, name, picture, email");
         request.setParameters(parameters);
-        request.executeAsync();
+        request.executeAsync();*/
     }
 
     @Override
