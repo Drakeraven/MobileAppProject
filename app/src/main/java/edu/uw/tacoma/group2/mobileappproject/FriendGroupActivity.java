@@ -16,6 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.facebook.login.widget.ProfilePictureView;
+
 import edu.uw.tacoma.group2.mobileappproject.friend.FriendContent;
 import edu.uw.tacoma.group2.mobileappproject.friend.FriendFragment;
 import edu.uw.tacoma.group2.mobileappproject.group.GroupContent;
@@ -107,8 +109,10 @@ public class FriendGroupActivity extends AppCompatActivity implements
     public void friendTabListener(FriendContent item) {
         TextView popUpName = friendPopUp.findViewById(R.id.friend_name);
         TextView popUpEmail = friendPopUp.findViewById(R.id.friend_email);
+        //ProfilePictureView popUpIcon = friendPopUp.findViewById(R.id.friend_profile_pic);
         popUpName.setText(item.getFrenName());
         popUpEmail.setText(item.getFrenEmail());
+        //popUpIcon.setProfileId(item.getFrenID());
         friendPopUp.show();
     }
 
