@@ -9,6 +9,8 @@
     <string name="facebook_app_id">176032896559037</string>
     <string name="fb_login_protocol_scheme">fb176032896559037</string>
     <string name="FriendGroup">Groups and Friends</string>
+    <string name="fb_login_cancel">Facebook login cancelled</string>
+    <string name="fb_login_error">There was an error logging in to facebook</string>
 
     <string name="sel_group_hangout">Select Friend Group</string>
 

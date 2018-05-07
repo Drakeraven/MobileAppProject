@@ -9,30 +9,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
+import com.facebook.login.LoginManager;
 
 import org.json.JSONObject;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
 import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
 
 public class SplashActivity extends AppCompatActivity {
-    private static final String EMAIL = "email";
-    private static final String USER_POSTS = "user_posts";
-    private static final String USER_FRIENDS = "user_friends";
 
     private CallbackManager mCallbackManager;
 
@@ -61,82 +53,30 @@ public class SplashActivity extends AppCompatActivity {
 
         // If MainActivity is reached without the user being logged in, redirect to the Login
         // Activity
-        /*if (AccessToken.getCurrentAccessToken() == null) {
+        if (AccessToken.getCurrentAccessToken() == null) {
             Log.i(TAG, "Facebook Login Token: NULL");
             Intent loginIntent = new Intent(this, LogInScreen.class);
             startActivity(loginIntent);
 
-        }*/
+        } else {
+            AccessToken accessToken = AccessToken.getCurrentAccessToken();
 
-        mCallbackManager = CallbackManager.Factory.create();
-
-        LoginButton mLoginButton = findViewById(R.id.login_button);
-
-        // Set the initial permissions to request from the user while logging in
-        mLoginButton.setReadPermissions(Arrays.asList(EMAIL, USER_POSTS, USER_FRIENDS));
-
-        // Register a callback to respond to the user
-        mLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                setResult(RESULT_OK);
-                Log.i(TAG, "onSuccess: " + loginResult.getAccessToken().getUserId());
-                Log.i(TAG, "onSuccess: " + loginResult.getAccessToken().getToken());
-                //Intent i = new Intent(LogInScreen.this, SplashActivity.class);
-                //startActivity(i);
-                //finish();
-                AccessToken accessToken = AccessToken.getCurrentAccessToken();
-
-                GraphRequest request = GraphRequest.newMeRequest(
-                        accessToken,
-                        new GraphRequest.GraphJSONObjectCallback() {
-                            @Override
-                            public void onCompleted(
-                                    JSONObject object,
-                                    GraphResponse response) {
-                                new UserContent(response.getJSONObject());
-                                Log.d(TAG, response.toString());
-                            }
-                        });
-                Bundle parameters = new Bundle();
-                parameters.putString("fields", "id, name, picture, email");
-                request.setParameters(parameters);
-                request.executeAsync();
-            }
-
-            @Override
-            public void onCancel() {
-                setResult(RESULT_CANCELED);
-                finish();
-            }
-
-            @Override
-            public void onError(FacebookException e) {
-                // Handle exception
-                Log.i(TAG, "onError: ");
-            }
-        });
-
-        //AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        /*if (accessToken != null) {
-            Toast.makeText(this, AccessToken.getCurrentAccessToken().toString(), Toast.LENGTH_LONG).show();
-        }*/
-
-        /*GraphRequest request = GraphRequest.newMeRequest(
-                accessToken,
-                new GraphRequest.GraphJSONObjectCallback() {
-                    @Override
-                            public void onCompleted(
-                                    JSONObject object,
-                            GraphResponse response) {
-                        new UserContent(response.getJSONObject());
-                        Log.d(TAG, response.toString());
-                    }
-                });
-        Bundle parameters = new Bundle();
-        parameters.putString("fields", "id, name, picture, email");
-        request.setParameters(parameters);
-        request.executeAsync();*/
+            GraphRequest request = GraphRequest.newMeRequest(
+                    accessToken,
+                    new GraphRequest.GraphJSONObjectCallback() {
+                        @Override
+                        public void onCompleted(
+                                JSONObject object,
+                                GraphResponse response) {
+                            new UserContent(response.getJSONObject());
+                            Log.d(TAG, response.toString());
+                        }
+                    });
+            Bundle parameters = new Bundle();
+            parameters.putString("fields", "id, name, picture, email");
+            request.setParameters(parameters);
+            request.executeAsync();
+        }
     }
 
     @Override
@@ -164,7 +104,17 @@ public class SplashActivity extends AppCompatActivity {
         startActivity(hangout);
     }
 
+    public void openLogout(View view) {
+        LoginManager.getInstance().logOut();
+        Intent hangout = new Intent(this, LogInScreen.class);
+        startActivity(hangout);
+    }
 
+    public void logoutUser() {
+
+        Intent I = new Intent(this, LogInScreen.class);
+        startActivity(I);
+    }
 
     //TODO: Add a log out button for facebook
 }
