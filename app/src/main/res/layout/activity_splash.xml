@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:gravity="bottom"
             android:onClick="openFavorites"
-            android:text="TempFavorites"
+            android:text="TempRestaurants"
             tools:layout_editor_absoluteX="148dp"
             tools:layout_editor_absoluteY="96dp" />
 
