@@ -11,6 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.uw.tacoma.group2.mobileappproject.restaurant.Restaurant;
@@ -21,7 +26,7 @@ import edu.uw.tacoma.group2.mobileappproject.restaurant.Restaurant;
  * A simple {@link Fragment} subclass.
  */
 public class RestaurantsFragment extends Fragment {
-    private List<Restaurant> mRestaurantList;
+    private static List<Restaurant> mRestaurantList;
     private RecyclerView mRecyclerView;
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -39,6 +44,20 @@ public class RestaurantsFragment extends Fragment {
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         frag.setArguments(args);
         return frag;
+
+    }
+
+    public static void parseRestaurantJSON(String restaurantJSON) throws JSONException {
+        List<Restaurant> restaurantList = new ArrayList<Restaurant>();
+        if (restaurantJSON != null) {
+            JSONArray arr = new JSONArray(restaurantJSON);
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject obj = arr.getJSONObject(i);
+                Restaurant restaurant = new Restaurant(obj.getString(Restaurant.NAME));
+                restaurantList.add(restaurant);
+            }
+            mRestaurantList = restaurantList;
+        }
 
     }
 

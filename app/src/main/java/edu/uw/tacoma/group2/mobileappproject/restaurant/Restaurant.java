@@ -26,18 +26,7 @@ public class Restaurant implements Serializable {
     }
 
 
-    public static List<Restaurant> parseRestaurantJSON(String restaurantJSON) throws JSONException {
-        List<Restaurant> restaurantList = new ArrayList<Restaurant>();
-        if (restaurantJSON != null) {
-            JSONArray arr = new JSONArray(restaurantJSON);
-            for (int i = 0; i < arr.length(); i++) {
-                JSONObject obj = arr.getJSONObject(i);
-                Restaurant restaurant = new Restaurant(obj.getString(Restaurant.NAME));
-                restaurantList.add(restaurant);
-            }
-        }
-        return restaurantList;
-    }
+
 }
 
 
