@@ -1,12 +1,8 @@
 package edu.uw.tacoma.group2.mobileappproject;
 
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -17,14 +13,11 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
 import org.json.JSONObject;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
@@ -66,9 +59,6 @@ public class LogInScreen extends AppCompatActivity {
                 setResult(RESULT_OK);
                 Log.i(TAG, "onSuccess: " + loginResult.getAccessToken().getUserId());
                 Log.i(TAG, "onSuccess: " + loginResult.getAccessToken().getToken());
-                //Intent i = new Intent(LogInScreen.this, SplashActivity.class);
-                //startActivity(i);
-                //finish();
                 AccessToken accessToken = AccessToken.getCurrentAccessToken();
 
                 GraphRequest request = GraphRequest.newMeRequest(
