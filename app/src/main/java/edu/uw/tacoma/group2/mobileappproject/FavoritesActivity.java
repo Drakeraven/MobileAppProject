@@ -13,12 +13,12 @@ import android.support.v7.widget.Toolbar;
 import edu.uw.tacoma.group2.mobileappproject.friend.FriendContent;
 import edu.uw.tacoma.group2.mobileappproject.friend.FriendFragment;
 import edu.uw.tacoma.group2.mobileappproject.order.OrdersContent;
+import edu.uw.tacoma.group2.mobileappproject.restaurant.Restaurant;
 import edu.uw.tacoma.group2.mobileappproject.order.OrdersFragment;
 import edu.uw.tacoma.group2.mobileappproject.restaurant.RestaurantsContent;
 import edu.uw.tacoma.group2.mobileappproject.restaurant.RestaurantsFragment;
 
-public class FavoritesActivity extends AppCompatActivity implements FriendFragment.FriendTabListener,
-    RestaurantsFragment.RestaurantsTabListener, OrdersFragment.OrdersTabListener {
+public class FavoritesActivity extends AppCompatActivity implements FriendFragment.FriendTabListener, OrdersFragment.OrdersTabListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -62,10 +62,6 @@ public class FavoritesActivity extends AppCompatActivity implements FriendFragme
 
     }
 
-    @Override
-    public void restaurantsTabListener(RestaurantsContent.RestaurantItem item) {
-
-    }
 
 
     /**
@@ -93,8 +89,8 @@ public class FavoritesActivity extends AppCompatActivity implements FriendFragme
                     Fragment friends = FriendFragment.newInstance(1);
                     return friends;
                 case 1:
-                    Fragment restaurants = RestaurantsFragment.newInstance(1);
-                    return restaurants;
+                    //Fragment restaurants = RestaurantsFragment.newInstance(1);
+                    return null;
                 case 2:
                     Fragment orders = OrdersFragment.newInstance(1);
                     return orders;

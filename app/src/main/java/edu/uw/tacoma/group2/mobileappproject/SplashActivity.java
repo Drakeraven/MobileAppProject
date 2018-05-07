@@ -94,7 +94,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void openFavorites(View view){
-        Intent favorites = new Intent(this,FavoritesActivity.class);
+        Intent favorites = new Intent(this,RestaurantsActivity.class);
         startActivity(favorites);
     }
 
