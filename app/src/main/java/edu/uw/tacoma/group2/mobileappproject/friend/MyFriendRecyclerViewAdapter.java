@@ -76,7 +76,6 @@ public class MyFriendRecyclerViewAdapter extends RecyclerView.Adapter<MyFriendRe
 
         ViewHolder(View view) {
             super(view);
-            friend_clicked = view.findViewById(R.id.Friend_List_Item);
             mView = view;
             mIdView = view.findViewById(R.id.item_number);
             mFriendIcon = view.findViewById(R.id.friend_profile_pic);

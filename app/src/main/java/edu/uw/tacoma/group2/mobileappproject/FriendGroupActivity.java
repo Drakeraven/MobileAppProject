@@ -1,6 +1,7 @@
 package edu.uw.tacoma.group2.mobileappproject;
 
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,12 +17,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.facebook.login.widget.ProfilePictureView;
-
 import edu.uw.tacoma.group2.mobileappproject.friend.FriendContent;
 import edu.uw.tacoma.group2.mobileappproject.friend.FriendFragment;
+import edu.uw.tacoma.group2.mobileappproject.group.AddGroup;
 import edu.uw.tacoma.group2.mobileappproject.group.GroupContent;
 import edu.uw.tacoma.group2.mobileappproject.group.GroupFragment;
+import edu.uw.tacoma.group2.mobileappproject.group.GroupMemberFragment;
 
 public class FriendGroupActivity extends AppCompatActivity implements
         FriendFragment.FriendTabListener,
@@ -72,8 +73,7 @@ public class FriendGroupActivity extends AppCompatActivity implements
                     Snackbar.make(view, "Replace with Add Friend", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                 } else {
-                    Snackbar.make(view, "Replace with Create Group", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    new AddGroup(FriendGroupActivity.this);
                 }
             }
         });
@@ -117,13 +117,16 @@ public class FriendGroupActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void groupTabListener(GroupContent.GroupItem item) {
+    public void groupTabListener(GroupContent item) {
+        DialogFragment memberDetail = GroupMemberFragment.newInstance(item.getGroupID());
+        memberDetail.show(getFragmentManager(), "Mem detail");
+
 
     }
 
     private void createFriendPopUp() {
         friendPopUp = new Dialog(this);
-        friendPopUp.setContentView(R.layout.fragment_friend_details);
+        friendPopUp.setContentView(R.layout.friend_group_details_popup);
     }
 
     /**
@@ -154,4 +157,5 @@ public class FriendGroupActivity extends AppCompatActivity implements
             return 2;
         }
     }
+
 }

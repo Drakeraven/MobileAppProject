@@ -1,73 +1,105 @@
 package edu.uw.tacoma.group2.mobileappproject.group;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import edu.uw.tacoma.group2.mobileappproject.friend.FriendContent;
+
 /**
  * Helper class for providing sample content for user interfaces created by
  * Android template wizards.
  * <p>
- * TODO: Replace all uses of this class before publishing your app.
  */
 public class GroupContent {
+    /**
+     * Variables used to parse JSON queries
+     */
+    private static final String GROUP_NAME = "GroupName";
+    private static final String MEMBER_COUNT = "memcount";
+    private static final String FRIEND_ID = "fid";
+    private static final String GROUP_ID = "groupid";
+
+    private String groupName;
+    private String groupCount;
+    private List<String> friendIDs;
+    private String groupID;
+
+    private GroupContent(String groupName, String groupCount, String groupID) {
+        this.groupName = groupName;
+        this.groupCount = groupCount;
+        this.groupID = groupID;
+    }
 
     /**
-     * An array of sample (group) items.
+     * A method that parses a JSON variable to generate individual Group items
+     * @param groupJSON
+     * @return
+     * @throws JSONException
      */
-    public static final List<GroupItem> ITEMS = new ArrayList<GroupItem>();
+    public static List<GroupContent> parseGroupList(String groupJSON) throws JSONException {
+        List<GroupContent> groupList = new ArrayList<>();
+        if (groupJSON != null) {
+            JSONArray arr = new JSONArray(groupJSON);
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject obj = arr.getJSONObject(i);
+                GroupContent course = new GroupContent(obj.getString(GroupContent.GROUP_NAME),
+                        obj.getString(GroupContent.MEMBER_COUNT), obj.getString(GroupContent.GROUP_ID));
+                groupList.add(course);
+            }
 
-    /**
-     * A map of sample (group) items, by ID.
-     */
-    public static final Map<String, GroupItem> ITEM_MAP = new HashMap<String, GroupItem>();
-
-    private static final int COUNT = 25;
-
-    static {
-        // Add some sample items.
-        for (int i = 1; i <= COUNT; i++) {
-            addItem(createDummyItem(i));
         }
+        return groupList;
     }
 
-    private static void addItem(GroupItem item) {
-        ITEMS.add(item);
-        ITEM_MAP.put(item.id, item);
+    public static List<String> parseGroupMembers(String membersJSON) throws JSONException {
+            List<String> members = new ArrayList<>();
+        if (membersJSON != null) {
+            JSONArray array = new JSONArray(membersJSON);
+
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject object = array.getJSONObject(i);
+                members.add(object.getString(GroupContent.FRIEND_ID));
+            }
+        }
+        return members;
     }
 
-    private static GroupItem createDummyItem(int position) {
-        return new GroupItem(String.valueOf(position), "Item " + position, makeDetails(position));
+    public String getGroupID() {
+        return groupID;
     }
 
-    private static String makeDetails(int position) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Details about Item: ").append(position);
-        for (int i = 0; i < position; i++) {
-            builder.append("\nMore details information here.");
-        }
-        return builder.toString();
+    public void setGroupID(String groupID) {
+        this.groupID = groupID;
     }
 
-    //TODO: Define what we want in the group object
-    /**
-     * A group item representing a piece of content.
-     */
-    public static class GroupItem {
-        public final String id;
-        public final String content;
-        public final String details;
+    public String getGroupName() {
+        return groupName;
+    }
 
-        public GroupItem(String id, String content, String details) {
-            this.id = id;
-            this.content = content;
-            this.details = details;
-        }
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
 
-        @Override
-        public String toString() {
-            return content;
-        }
+    public String getGroupCount() {
+        return groupCount;
+    }
+
+    public void setGroupCount(String groupCount) {
+        this.groupCount = groupCount;
+    }
+
+    public List<String> getFriendIDs() {
+        return friendIDs;
+    }
+
+    public void setFriendIDs(List<String> friendIDs) {
+        this.friendIDs = friendIDs;
     }
 }
