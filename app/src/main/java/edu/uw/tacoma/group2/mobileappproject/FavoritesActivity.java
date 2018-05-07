@@ -14,8 +14,7 @@ import edu.uw.tacoma.group2.mobileappproject.friend.FriendContent;
 import edu.uw.tacoma.group2.mobileappproject.order.OrdersContent;
 import edu.uw.tacoma.group2.mobileappproject.restaurant.Restaurant;
 
-public class FavoritesActivity extends AppCompatActivity implements FriendFragment.FriendTabListener,
-    RestaurantsFragment.RestaurantsTabListener, OrdersFragment.OrdersTabListener {
+public class FavoritesActivity extends AppCompatActivity implements FriendFragment.FriendTabListener, OrdersFragment.OrdersTabListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -59,10 +58,6 @@ public class FavoritesActivity extends AppCompatActivity implements FriendFragme
 
     }
 
-    @Override
-    public void restaurantsTabListener(Restaurant item) {
-
-    }
 
 
     /**
@@ -90,8 +85,8 @@ public class FavoritesActivity extends AppCompatActivity implements FriendFragme
                     Fragment friends = FriendFragment.newInstance(1);
                     return friends;
                 case 1:
-                    Fragment restaurants = RestaurantsFragment.newInstance(1);
-                    return restaurants;
+                    //Fragment restaurants = RestaurantsFragment.newInstance(1);
+                    return null;
                 case 2:
                     Fragment orders = OrdersFragment.newInstance(1);
                     return orders;
