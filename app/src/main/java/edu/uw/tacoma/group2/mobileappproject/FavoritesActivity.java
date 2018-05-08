@@ -15,8 +15,8 @@ import edu.uw.tacoma.group2.mobileappproject.friend.FriendFragment;
 import edu.uw.tacoma.group2.mobileappproject.order.OrdersContent;
 import edu.uw.tacoma.group2.mobileappproject.restaurant.Restaurant;
 import edu.uw.tacoma.group2.mobileappproject.order.OrdersFragment;
-import edu.uw.tacoma.group2.mobileappproject.restaurant.RestaurantsContent;
-import edu.uw.tacoma.group2.mobileappproject.restaurant.RestaurantsFragment;
+//import edu.uw.tacoma.group2.mobileappproject.restaurant.RestaurantsContent;
+//import edu.uw.tacoma.group2.mobileappproject.restaurant.RestaurantsFragment;
 
 public class FavoritesActivity extends AppCompatActivity implements FriendFragment.FriendTabListener, OrdersFragment.OrdersTabListener {
 
