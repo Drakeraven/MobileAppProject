@@ -5,10 +5,13 @@
     <string name="tab_text_2">Groups</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
-    <string name="restaurants_nearme">Find Restaurants near me.</string>
+    <string name="restaurants_near_me">Find Restaurants near me.</string>
     <string name="facebook_app_id">176032896559037</string>
     <string name="fb_login_protocol_scheme">fb176032896559037</string>
     <string name="FriendGroup">Groups and Friends</string>
+    <string name="fb_login_cancel">Facebook login cancelled</string>
+    <string name="fb_login_error">There was an error logging in to facebook</string>
 
     <string name="sel_group_hangout">Select Friend Group</string>
+
 </resources>

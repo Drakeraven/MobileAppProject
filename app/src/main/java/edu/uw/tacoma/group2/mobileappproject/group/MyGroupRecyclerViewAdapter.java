@@ -1,5 +1,6 @@
-package edu.uw.tacoma.group2.mobileappproject;
+package edu.uw.tacoma.group2.mobileappproject.group;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,35 +9,36 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import edu.uw.tacoma.group2.mobileappproject.group.GroupContent.GroupItem;
+import edu.uw.tacoma.group2.mobileappproject.R;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link GroupItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link GroupContent} and makes a call to the
  * specified {@link GroupFragment.GroupTabListener}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class MyGroupRecyclerViewAdapter extends RecyclerView.Adapter<MyGroupRecyclerViewAdapter.ViewHolder> {
 
-    private final List<GroupItem> mValues;
+    private final List<GroupContent> mValues;
     private final GroupFragment.GroupTabListener mListener;
 
-    public MyGroupRecyclerViewAdapter(List<GroupItem> items, GroupFragment.GroupTabListener listener) {
+    MyGroupRecyclerViewAdapter(List<GroupContent> items, GroupFragment.GroupTabListener listener) {
         mValues = items;
         mListener = listener;
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_group, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mIdView.setText(mValues.get(position).getGroupName());
+        holder.mContentView.setText(mValues.get(position).getGroupCount());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,16 +58,16 @@ public class MyGroupRecyclerViewAdapter extends RecyclerView.Adapter<MyGroupRecy
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public GroupItem mItem;
+        final View mView;
+        final TextView mIdView;
+        final TextView mContentView;
+        public GroupContent mItem;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.item_number);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mIdView = view.findViewById(R.id.item_number);
+            mContentView = view.findViewById(R.id.content);
         }
 
         @Override

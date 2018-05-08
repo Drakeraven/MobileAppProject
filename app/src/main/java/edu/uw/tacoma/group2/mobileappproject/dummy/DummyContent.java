@@ -1,21 +1,27 @@
-package edu.uw.tacoma.group2.mobileappproject.restaurant;
+package edu.uw.tacoma.group2.mobileappproject.dummy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RestaurantsContent {
+/**
+ * Helper class for providing sample name for user interfaces created by
+ * Android template wizards.
+ * <p>
+ * TODO: Replace all uses of this class before publishing your app.
+ */
+public class DummyContent {
 
     /**
-     * An array of sample (friend) items.
+     * An array of sample (dummy) items.
      */
-    public static final List<RestaurantItem> ITEMS = new ArrayList<RestaurantItem>();
+    public static final List<DummyItem> ITEMS = new ArrayList<DummyItem>();
 
     /**
-     * A map of sample (friend) items, by ID.
+     * A map of sample (dummy) items, by ID.
      */
-    public static final Map<String, RestaurantItem> ITEM_MAP = new HashMap<String, RestaurantItem>();
+    public static final Map<String, DummyItem> ITEM_MAP = new HashMap<String, DummyItem>();
 
     private static final int COUNT = 25;
 
@@ -26,13 +32,13 @@ public class RestaurantsContent {
         }
     }
 
-    private static void addItem(RestaurantItem item) {
+    private static void addItem(DummyItem item) {
         ITEMS.add(item);
         ITEM_MAP.put(item.id, item);
     }
 
-    private static RestaurantItem createDummyItem(int position) {
-        return new RestaurantItem(String.valueOf(position), "Item " + position, makeDetails(position));
+    private static DummyItem createDummyItem(int position) {
+        return new DummyItem(String.valueOf(position), "Item " + position, makeDetails(position));
     }
 
     private static String makeDetails(int position) {
@@ -45,14 +51,14 @@ public class RestaurantsContent {
     }
 
     /**
-     * A friend item representing a piece of content.
+     * A dummy item representing a piece of name.
      */
-    public static class RestaurantItem {
+    public static class DummyItem {
         public final String id;
         public final String content;
         public final String details;
 
-        public RestaurantItem(String id, String content, String details) {
+        public DummyItem(String id, String content, String details) {
             this.id = id;
             this.content = content;
             this.details = details;

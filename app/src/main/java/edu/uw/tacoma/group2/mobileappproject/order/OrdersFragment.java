@@ -1,4 +1,4 @@
-package edu.uw.tacoma.group2.mobileappproject;
+package edu.uw.tacoma.group2.mobileappproject.order;
 
 
 import android.content.Context;
@@ -11,26 +11,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import edu.uw.tacoma.group2.mobileappproject.restaurant.RestaurantsContent;
-import edu.uw.tacoma.group2.mobileappproject.restaurant.RestaurantsContent.RestaurantItem;
+import edu.uw.tacoma.group2.mobileappproject.R;
+import edu.uw.tacoma.group2.mobileappproject.order.OrdersContent.OrderItem;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RestaurantsFragment extends Fragment {
+public class OrdersFragment extends Fragment {
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
-    private RestaurantsTabListener mListener;
+    private OrdersTabListener mListener;
 
-    public RestaurantsFragment() {
+    public OrdersFragment() {
         // Required empty public constructor
     }
 
-    public static RestaurantsFragment newInstance(int columnCount){
-        RestaurantsFragment frag = new RestaurantsFragment();
+    public static OrdersFragment newInstance(int columnCount){
+        OrdersFragment frag = new OrdersFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         frag.setArguments(args);
@@ -47,19 +47,21 @@ public class RestaurantsFragment extends Fragment {
     }
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_restaurant_list, container, false);
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_orders_list, container, false);
         if(view instanceof RecyclerView){
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
-            if(mColumnCount <=1){
+            if(mColumnCount <= 1){
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else{
+            }else{
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyRestaurantRecyclerViewAdapter(RestaurantsContent.ITEMS, mListener));
+            recyclerView.setAdapter(new MyOrdersRecyclerViewAdapter(OrdersContent.ITEMS, mListener));
         }
         return view;
     }
@@ -67,11 +69,11 @@ public class RestaurantsFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof RestaurantsTabListener) {
-            mListener = (RestaurantsTabListener) context;
+        if (context instanceof OrdersTabListener) {
+            mListener = (OrdersTabListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement RestaurantsTabListener");
+                    + " must implement OrdersTabListener");
         }
     }
 
@@ -80,8 +82,8 @@ public class RestaurantsFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-    public interface RestaurantsTabListener {
-        void restaurantsTabListener(RestaurantItem item);
-    }
 
+    public interface  OrdersTabListener {
+        void orderTabListener(OrderItem item);
+    }
 }
