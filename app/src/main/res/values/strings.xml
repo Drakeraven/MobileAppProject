@@ -14,4 +14,6 @@
 
     <string name="sel_group_hangout">Select Friend Group</string>
 
+    <string name="group_formatting">%1s Members</string>
+
 </resources>
