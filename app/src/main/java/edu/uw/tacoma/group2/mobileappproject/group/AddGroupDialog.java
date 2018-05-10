@@ -160,6 +160,12 @@ public class AddGroupDialog extends DialogFragment {
         }
 
 
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+            Toast.makeText(getApplicationContext(), "Adding Group..", Toast.LENGTH_LONG).show();
+        }
+
         /**
          * It checks to see if there was a problem with the URL(Network) which is when an
          * exception is caught. It tries to call the parse Method and checks to see if it was successful.

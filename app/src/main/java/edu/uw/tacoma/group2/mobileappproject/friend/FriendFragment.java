@@ -1,5 +1,7 @@
 package edu.uw.tacoma.group2.mobileappproject.friend;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -39,6 +41,8 @@ public class FriendFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private static final String FRIENDS_URL =
             "http://stephd27.000webhostapp.com/list.php?cmd=friends&uid=" + UserContent.userID;
+    private View mLoadingView;
+    private int mLongAnimDuration;
 
 
     /**
@@ -71,6 +75,8 @@ public class FriendFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_friend_list, container, false);
+        mLoadingView = getActivity().findViewById(R.id.loading_spinner);
+        mLongAnimDuration= getResources().getInteger(android.R.integer.config_longAnimTime);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -107,6 +113,36 @@ public class FriendFragment extends Fragment {
 
     public List<FriendContent> getmFriendList() {
         return mFriendList;
+    }
+
+    private void crossfade() {
+
+
+
+        // Animate the loading view to 0% opacity. After the animation ends,
+        // set its visibility to GONE as an optimization step (it won't
+        // participate in layout passes, etc.)
+        mLoadingView.animate()
+                .alpha(0f)
+                .setDuration(mLongAnimDuration)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mLoadingView.setVisibility(View.GONE);
+                    }
+                });
+
+        // Set the content view to 0% opacity but visible, so that it is visible
+        // (but fully transparent) during the animation.
+        mRecyclerView.setAlpha(0f);
+        mRecyclerView.setVisibility(View.VISIBLE);
+
+        // Animate the content view to 100% opacity, and clear any animation
+        // listener set on the view.
+        mRecyclerView.animate()
+                .alpha(1f)
+                .setDuration(mLongAnimDuration)
+                .setListener(null);
     }
 
     /**
@@ -170,6 +206,7 @@ public class FriendFragment extends Fragment {
                 return;
             }
             if (!mFriendList.isEmpty()) {
+                crossfade();
                 mRecyclerView.setAdapter(new MyFriendRecyclerViewAdapter(mFriendList, mListener));
             }
         }
