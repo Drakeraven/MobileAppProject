@@ -18,4 +18,6 @@
     <string name="hangout_btn">Start a Hangout</string>
     <string name="logout_btn">Log Out</string>
 
+    <string name="group_formatting">%1s Members</string>
+
 </resources>

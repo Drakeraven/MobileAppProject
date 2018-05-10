@@ -38,7 +38,7 @@ public class MyGroupRecyclerViewAdapter extends RecyclerView.Adapter<MyGroupRecy
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).getGroupName());
-        holder.mContentView.setText(mValues.get(position).getGroupCount());
+        holder.mContentView.setText(mValues.get(position).getGroupCount() + " Members");
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
