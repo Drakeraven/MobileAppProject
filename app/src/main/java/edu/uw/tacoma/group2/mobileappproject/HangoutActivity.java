@@ -7,9 +7,19 @@ import android.support.v7.widget.Toolbar;
 import edu.uw.tacoma.group2.mobileappproject.group.GroupContent;
 import edu.uw.tacoma.group2.mobileappproject.group.GroupFragment;
 
+/**
+ * Activity that will be used for hang out event later. Mostly unused.
+ * @author Stephanie Day
+ * @version 1.0
+ */
 public class HangoutActivity extends AppCompatActivity implements
         GroupFragment.GroupTabListener {
 
+    /**
+     * Creates the activity, sets first fragment to be picking
+     * group for the hangout
+     * @param savedInstanceState Any saved information
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +39,10 @@ public class HangoutActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * Listener for when user picks a group to start hangout event
+     * @param item Group selected.
+     */
     @Override
     public void groupTabListener(GroupContent item) {
         /*Activated when the user selects a group to use for their

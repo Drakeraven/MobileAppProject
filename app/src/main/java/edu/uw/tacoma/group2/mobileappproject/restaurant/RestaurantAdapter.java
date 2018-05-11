@@ -1,4 +1,4 @@
-package edu.uw.tacoma.group2.mobileappproject;
+package edu.uw.tacoma.group2.mobileappproject.restaurant;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +13,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import edu.uw.tacoma.group2.mobileappproject.restaurant.Restaurant;
+import edu.uw.tacoma.group2.mobileappproject.R;
 
 /**
  * RecyclerView adapter used to gather the information created by the Restaurant class fields and display

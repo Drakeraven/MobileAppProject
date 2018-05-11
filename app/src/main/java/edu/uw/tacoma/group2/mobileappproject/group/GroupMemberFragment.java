@@ -18,6 +18,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
+/**
+ * Fragment for displaying the Members in a group.
+ * @author Stephanie Day
+ * @version 1.0
+ */
 public class GroupMemberFragment extends DialogFragment {
 
     private final String TAG = "Group Member Fragment";
@@ -28,6 +33,12 @@ public class GroupMemberFragment extends DialogFragment {
     private String GroupQ;
 
 
+    /**
+     * Instantiates a version of the dialog,
+     * getting the group in question to query for its memebers
+     * @param param1
+     * @return
+     */
     public static GroupMemberFragment newInstance(String param1) {
         GroupMemberFragment f = new GroupMemberFragment();
 
@@ -38,12 +49,21 @@ public class GroupMemberFragment extends DialogFragment {
         return f;
     }
 
+    /**
+     * Sets the group ID for querying for the members
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GroupQ = getArguments().getString("name");
     }
 
+    /**
+     * Creates the dialog to display the list of group members
+     * @param savedInstanceState Any saved information
+     * @return Created dialog
+     */
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         mRecyclerView = new RecyclerView(getActivity());
@@ -58,8 +78,16 @@ public class GroupMemberFragment extends DialogFragment {
 
     }
 
+    /**
+     * Web service for retrieving Members of a particular group
+     */
     private class getMembersTask extends AsyncTask<String, Void, String> {
 
+        /**
+         * Kicks off getting the group's members
+         * @param urls query for getting group's members
+         * @return Web service response
+         */
         @Override
         protected String doInBackground(String... urls) {
             String response = "";
@@ -89,6 +117,11 @@ public class GroupMemberFragment extends DialogFragment {
             return response;
         }
 
+        /**
+         * Populates group members list with parsed result on success,
+         * or logs error when it fails
+         * @param result Web Service response
+         */
         @Override
         protected void onPostExecute(String result) {
             Log.i(TAG, "onPostExecute");

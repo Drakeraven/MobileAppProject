@@ -18,31 +18,57 @@ import java.util.List;
 import edu.uw.tacoma.group2.mobileappproject.friend.FriendContent;
 import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
 
+/**
+ * <p>populates a display of a user's friends</p>
+ * So a user can then create a new group.
+ * @author Stephanie Day
+ * @version 1.0
+ */
 public class AddGroup {
+
     private static final String FRIENDS_URL =
-            "http://stephd27.000webhostapp.com/list.php?cmd=friends&uid=" + UserContent.userID;
+            "http://stephd27.000webhostapp.com/list.php?cmd=friends&uid=" + UserContent.sUserID;
     private static final String TAG = "Adding Group";
-    private List<FriendContent> currentFriends;
-    CharSequence[] friendNames;
+
+    private List<FriendContent> mCurrentFriends;
+    CharSequence[] mFriendNames;
     Activity mContext;
 
+    /**
+     * Create an add group object to retrieve friends list
+     * @param context Context of the app, for the later dialog.
+     */
     public AddGroup(Activity context) {
         mContext = context;
         GetFriendsTask task = new GetFriendsTask();
         task.execute(FRIENDS_URL);
     }
+
+    /**
+     * Takes in the friend objects to retrieve
+     * Just a list of names for display
+     */
     private void setUpAddGroup() {
         List<String> listItems = new ArrayList<String>();
 
-            for (FriendContent friend : currentFriends) {
+            for (FriendContent friend : mCurrentFriends) {
                 listItems.add(friend.getFrenName());
             }
-        friendNames = listItems.toArray(new CharSequence[listItems.size()]);
+        mFriendNames = listItems.toArray(new CharSequence[listItems.size()]);
 
     }
 
+    /**
+     * Web Service for retrieving the group of friends,
+     * then kicks off the adding dialog on completion.
+     */
     private class GetFriendsTask extends AsyncTask<String, Void, String> {
 
+        /**
+         * Retrieves User's friends from web service
+         * @param urls query for user's friends
+         * @return Web Service Response
+         */
         @Override
         protected String doInBackground(String... urls) {
             String response = "";
@@ -72,6 +98,11 @@ public class AddGroup {
             return response;
         }
 
+        /**
+         * Parses returned query, generating friends list and
+         * starting creation of add group dialog.
+         * @param result Web service's response.
+         */
         @Override
         protected void onPostExecute(String result) {
             Log.i(TAG, "onPostExecute");
@@ -81,16 +112,15 @@ public class AddGroup {
                 return;
             }
             try {
-                currentFriends = FriendContent.giveMeFriends(result);
+                mCurrentFriends = FriendContent.giveMeFriends(result);
 
             }catch (JSONException e) {
                 Log.e(TAG, "Not parsing JSON " + e.getMessage());
                 return;
             }
-            if (!currentFriends.isEmpty()) {
-                //TODO: send friend content to group dialog in order to add the group
+            if (!mCurrentFriends.isEmpty()) {
                setUpAddGroup();
-               DialogFragment agd = AddGroupDialog.newGroup(friendNames);
+               DialogFragment agd = AddGroupDialog.newGroup(mFriendNames);
                agd.show(mContext.getFragmentManager(), "add group");
             }
         }

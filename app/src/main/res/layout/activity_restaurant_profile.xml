@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:padding="16dp"
     android:orientation="vertical"
-    tools:context=".RestaurantProfile">
+    tools:context=".restaurant.RestaurantProfile">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"

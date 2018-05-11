@@ -27,20 +27,24 @@ import edu.uw.tacoma.group2.mobileappproject.R;
 import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
 
 /**
- * A fragment representing a list of Items.
+ * A fragment representing one person in a list of Friends.
  * <p/>
  * Activities containing this fragment MUST implement the {@link FriendTabListener}
  * interface.
+ * @author Stephanie Day
+ * @version 1.0
  */
 public class FriendFragment extends Fragment {
+    /**Constants for debugging, sending queries*/
     private static final String TAG = "Friend List";
     private static final String ARG_COLUMN_COUNT = "column-count";
+    private static final String FRIENDS_URL =
+            "http://stephd27.000webhostapp.com/list.php?cmd=friends&uid=" + UserContent.sUserID;
+
     private int mColumnCount = 1;
     private FriendTabListener mListener;
     private List<FriendContent> mFriendList;
     private RecyclerView mRecyclerView;
-    private static final String FRIENDS_URL =
-            "http://stephd27.000webhostapp.com/list.php?cmd=friends&uid=" + UserContent.userID;
     private View mLoadingView;
     private int mLongAnimDuration;
 
@@ -53,6 +57,11 @@ public class FriendFragment extends Fragment {
     }
 
 
+    /**
+     * For generating a new Friend Fragment
+     * @param columnCount How many columns to view friends by
+     * @return New Friend List populated with user's friends
+     */
     @SuppressWarnings("unused")
     public static FriendFragment newInstance(int columnCount) {
         FriendFragment fragment = new FriendFragment();
@@ -62,6 +71,10 @@ public class FriendFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Called when fragment is created to set how many columns in list.
+     * @param savedInstanceState Any saved information
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +84,14 @@ public class FriendFragment extends Fragment {
         }
     }
 
+    /**
+     * <p>Creates the layout for the friends in the list,</p>
+     * and prompts loading of user's friends from server.
+     * @param inflater inflates fragment inside view
+     * @param container view to inflate fragment in
+     * @param savedInstanceState any saved information
+     * @return View associated with fragment
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -94,6 +115,11 @@ public class FriendFragment extends Fragment {
     }
 
 
+    /**
+     * <p>Called when Fragment is attached to an activity</p>
+     * Binds listener to fragment.
+     * @param context Context of the app
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -105,20 +131,16 @@ public class FriendFragment extends Fragment {
         }
     }
 
+    /**Called if/when fragment is removed from activity*/
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
 
-    public List<FriendContent> getmFriendList() {
-        return mFriendList;
-    }
 
+    /**Gives our friendlist kick ass fading animations!     */
     private void crossfade() {
-
-
-
         // Animate the loading view to 0% opacity. After the animation ends,
         // set its visibility to GONE as an optimization step (it won't
         // participate in layout passes, etc.)
@@ -159,8 +181,16 @@ public class FriendFragment extends Fragment {
         void friendTabListener(FriendContent item);
     }
 
+    /**
+     * Web Service used to retrieve a User's friends.
+     */
     private class GetFriendsTask extends AsyncTask<String, Void, String> {
 
+        /**
+         * Kicks off getting friends
+         * @param urls query url for retrieving friends
+         * @return Response from web service
+         */
         @Override
         protected String doInBackground(String... urls) {
             String response = "";
@@ -190,6 +220,10 @@ public class FriendFragment extends Fragment {
             return response;
         }
 
+        /**
+         * Handles response from web service, populates the user's friends.
+         * @param result Response from the web service
+         */
         @Override
         protected void onPostExecute(String result) {
             Log.i(TAG, "onPostExecute");

@@ -24,26 +24,24 @@ import edu.uw.tacoma.group2.mobileappproject.group.GroupContent;
 import edu.uw.tacoma.group2.mobileappproject.group.GroupFragment;
 import edu.uw.tacoma.group2.mobileappproject.group.GroupMemberFragment;
 
+/**
+ * Tabbed Activity that shows the User's friends and groups
+ * @author Stephanie Day
+ * @version 1.0
+ */
 public class FriendGroupActivity extends AppCompatActivity implements
         FriendFragment.FriendTabListener,
         GroupFragment.GroupTabListener {
 
     /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     * Shows detailed information for each friend when clicked on.
      */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
     private Dialog friendPopUp;
 
     /**
-     * The {@link ViewPager} that will host the section contents.
+     * Sets up the tabbed activity
+     * @param savedInstanceState any saved information
      */
-    private ViewPager mViewPager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,10 +52,20 @@ public class FriendGroupActivity extends AppCompatActivity implements
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Create the adapter that will return a fragment for each of the 2
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = findViewById(R.id.container);
+        /*
+      The {@link android.support.v4.view.PagerAdapter} that will provide
+      fragments for each of the sections. We use a
+      {@link FragmentPagerAdapter} derivative, which will keep every
+      loaded fragment in memory. If this becomes too memory intensive, it
+      may be best to switch to a
+      {@link android.support.v4.app.FragmentStatePagerAdapter}.*/
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+        /* Set up the ViewPager with the sections adapter.
+       The {@link ViewPager} that will host the section contents.
+        */
+        ViewPager mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         final TabLayout tabLayout = findViewById(R.id.tabs);
@@ -83,6 +91,11 @@ public class FriendGroupActivity extends AppCompatActivity implements
     }
 
 
+    /**
+     * Generates the optional menu on the tabbed activity, not used really.
+     * @param menu Menu attached to the activity
+     * @return Whether menu inflates correctly
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -90,6 +103,11 @@ public class FriendGroupActivity extends AppCompatActivity implements
         return true;
     }
 
+    /**
+     * Handles clicks to the menu items, again not really used.
+     * @param item item in the menu that was clicked
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -105,6 +123,10 @@ public class FriendGroupActivity extends AppCompatActivity implements
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * For the friend clicked, generates a dialog to show detailed info.
+     * @param item friend that was clicked.
+     */
     @Override
     public void friendTabListener(FriendContent item) {
         TextView popUpName = friendPopUp.findViewById(R.id.friend_name);
@@ -116,6 +138,10 @@ public class FriendGroupActivity extends AppCompatActivity implements
         friendPopUp.show();
     }
 
+    /**
+     * For the group clicked, generates a dialog to show members.
+     * @param item group that was clicked.
+     */
     @Override
     public void groupTabListener(GroupContent item) {
         DialogFragment memberDetail = GroupMemberFragment.newInstance(item.getGroupID());
@@ -124,6 +150,9 @@ public class FriendGroupActivity extends AppCompatActivity implements
 
     }
 
+    /**
+     * Initializes the friend details pop up for later use.
+     */
     private void createFriendPopUp() {
         friendPopUp = new Dialog(this);
         friendPopUp.setContentView(R.layout.friend_group_details_popup);
@@ -135,10 +164,20 @@ public class FriendGroupActivity extends AppCompatActivity implements
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+        /**
+         * Default constructor
+         * @param fm Fragment being used in a tab
+         */
         SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
+        /**
+         * reads which tab is in view to display proper fragment,
+         * groups or friends
+         * @param position The tab that is in view
+         * @return
+         */
         @Override
         public Fragment getItem(int position) {
             switch (position) {
@@ -151,6 +190,10 @@ public class FriendGroupActivity extends AppCompatActivity implements
             }
         }
 
+        /**
+         * gets Number of tabs in the activity
+         * @return Number of tabs in activity
+         */
         @Override
         public int getCount() {
             // Show 2 total pages.
