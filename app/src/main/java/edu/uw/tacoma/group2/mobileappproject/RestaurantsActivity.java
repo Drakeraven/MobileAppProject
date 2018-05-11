@@ -36,8 +36,8 @@ public class RestaurantsActivity extends AppCompatActivity {
     private static final String URL = "https://developers.zomato.com/api/v2.1/geocode?lat=47.244580&lon=-122.437103";
     private static final String API_KEY = "1b66bc58a591877d162b63cb4ebcb5de";
     private RecyclerView mRecycler;
-    private RestaurantAdapter adapter;
-    private List<Restaurant> restaurantsList;
+    private RestaurantAdapter mAdapter;
+    private List<Restaurant> mRestaurantList;
 
     /**
      * This method is used to request data from the Zomato api curl request service.
@@ -56,9 +56,9 @@ public class RestaurantsActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         progressDialog.dismiss();
                         try{
-                            restaurantsList = Restaurant.getRestaurants(response);
-                            adapter = new RestaurantAdapter(restaurantsList, getApplicationContext());
-                            mRecycler.setAdapter(adapter);
+                            mRestaurantList = Restaurant.getRestaurants(response);
+                            mAdapter = new RestaurantAdapter(mRestaurantList, getApplicationContext());
+                            mRecycler.setAdapter(mAdapter);
                         }catch (JSONException e){
                             Log.e("JEXCEPTION", e.getMessage());
                         }
@@ -91,7 +91,7 @@ public class RestaurantsActivity extends AppCompatActivity {
         mRecycler = (RecyclerView) findViewById(R.id.recycler_restaurants);
         mRecycler.setHasFixedSize(true);
         mRecycler.setLayoutManager(new LinearLayoutManager(getParent()));
-        restaurantsList = new ArrayList<Restaurant>();
+        mRestaurantList = new ArrayList<Restaurant>();
         loadZomatoData();
     }
 

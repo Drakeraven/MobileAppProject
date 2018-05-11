@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * Class to represent a Restaurant object and its respective fields to hold the values
- * for the restaurant's name, thumbnail image(if provided), and its aggregrate user rating.
+ * for the restaurant's mName, thumbnail mImage(if provided), and its aggregrate user mRating.
  * @author Harlan Stewart
  * @version 1.0
  */
@@ -16,45 +16,45 @@ public class Restaurant {
     public static final String NAME = "name";
     public static final String IMAGE = "thumb";
     public static final String RATING = "user_rating";
-    private String name;
-    private String image;
-    private String rating;
+    private String mName;
+    private String mImage;
+    private String mRating;
 
 
     public String getName() {
-        return name;
+        return mName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.mName = name;
     }
 
     public String getImage() {
-        return image;
+        return mImage;
     }
 
     public void setImage(String image) {
-        this.image = image;
+        this.mImage = image;
     }
 
     public String getRating() {
-        return rating;
+        return mRating;
     }
 
     public void setRating(String rating) {
-        this.rating = rating;
+        this.mRating = rating;
     }
 
     /**
      * Public constructor for creating a Restaurant object.
-     * @param name The name of the restaurant.
-     * @param image The thumbnail image(if available).
-     * @param rating The aggregate user rating of the restaurant.
+     * @param name The mName of the restaurant.
+     * @param image The thumbnail mImage(if available).
+     * @param rating The aggregate user mRating of the restaurant.
      */
     public Restaurant(String name, String image, String rating){
-        this.name = name;
-        this.image = image;
-        this.rating = rating;
+        this.mName = name;
+        this.mImage = image;
+        this.mRating = rating;
     }
 
     /**
