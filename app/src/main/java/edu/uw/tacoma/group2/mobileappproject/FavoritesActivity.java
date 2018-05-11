@@ -13,7 +13,6 @@ import android.support.v7.widget.Toolbar;
 import edu.uw.tacoma.group2.mobileappproject.friend.FriendContent;
 import edu.uw.tacoma.group2.mobileappproject.friend.FriendFragment;
 import edu.uw.tacoma.group2.mobileappproject.order.OrdersContent;
-import edu.uw.tacoma.group2.mobileappproject.restaurant.Restaurant;
 import edu.uw.tacoma.group2.mobileappproject.order.OrdersFragment;
 
 public class FavoritesActivity extends AppCompatActivity implements FriendFragment.FriendTabListener, OrdersFragment.OrdersTabListener {

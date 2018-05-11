@@ -1,13 +1,17 @@
 package edu.uw.tacoma.group2.mobileappproject.restaurant;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class to represent a Restaurant object and its respective fields to hold the values
+ * for the restaurant's name, thumbnail image(if provided), and its aggregrate user rating.
+ * @author Harlan Stewart
+ * @version 1.0
+ */
 public class Restaurant {
     public static final String NAME = "name";
     public static final String IMAGE = "thumb";
@@ -40,30 +44,30 @@ public class Restaurant {
     public void setRating(String rating) {
         this.rating = rating;
     }
+
+    /**
+     * Public constructor for creating a Restaurant object.
+     * @param name The name of the restaurant.
+     * @param image The thumbnail image(if available).
+     * @param rating The aggregate user rating of the restaurant.
+     */
     public Restaurant(String name, String image, String rating){
         this.name = name;
         this.image = image;
         this.rating = rating;
     }
 
+    /**
+     * Parsing method to create a list of restaurant objects from the data of the JSONObject
+     * returned by a Curl request to the Zomato API.
+     * @param restaurantsJSON JSON object returned by request to Zomato API.
+     * @return A list of of restaurant objects.
+     * @throws JSONException
+     */
     public static List<Restaurant> getRestaurants(JSONObject restaurantsJSON) throws JSONException{
         List<Restaurant> restaurantList = new ArrayList<>();
-
-        /*JSONObject inputJ = new JSONObject("{\"nearby_restaurants\"");
-        String prefString = inputJ.getString("nearby_restaurants");
-        JSONObject prefJ = new JSONObject(prefString);
-        Iterator<String> it = restaurantsJSON.keys();
-        while(it.hasNext()){
-            String key = (String)it.next();
-            String valueStr = prefJ.getString(key);
-            Log.e("JSON VAL", valueStr);
-
-        }*/
-
         if(restaurantsJSON != null) {
-
                 JSONArray arrJSON = restaurantsJSON.getJSONArray("nearby_restaurants");
-
                 for(int i = 0; i < arrJSON.length(); i++){
                     Restaurant restaurant = new Restaurant(arrJSON.getJSONObject(i).getJSONObject("restaurant").getString(Restaurant.NAME),
                             arrJSON.getJSONObject(i).getJSONObject("restaurant").getString(Restaurant.IMAGE),
@@ -71,34 +75,7 @@ public class Restaurant {
                             restaurantList.add(restaurant);
                     //Log.e("JSON OUTPUT: ",arrJSON.getJSONObject(i).getJSONObject("restaurant").getString("thumb"));
                 }
-
-
-
-            //String name = arrJSON.getJSONObject(1).toString();
-
-           // String name = restaurantsJSON.getJSONArray("nearby_restaurants").getJSONObject(0).getJSONObject("restaurant").getString("name");
-
-            //Log.e("JSON",restaurantsJSON.getJSONArray("nearby_restaurants").getJSONObject(0).getJSONObject("restaurant").getString("featured_image"));
-            /*String[] arr = new String[arrJSON.length()];
-            for(int i = 0; i < arrJSON.length(); i++){
-
-                Log.e("JSON", arrJSON.getString(i));
-                //Log.e("JSON ARR", "Key: " + k + ", value: " + obj.getString(k));
-                *//*Restaurant restaurant = new Restaurant(obj.getString(Restaurant.NAME),
-                        obj.getString(Restaurant.IMAGE), obj.getString(Restaurant.RATING));
-                restaurantList.add(restaurant);*//*
-            }*/
         }
         return restaurantList;
     }
 }
-
-
-
-
-
-
-
-
-
-

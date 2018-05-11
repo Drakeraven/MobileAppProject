@@ -1,6 +1,5 @@
 package edu.uw.tacoma.group2.mobileappproject.order;
 
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,30 +13,39 @@ import android.view.ViewGroup;
 import edu.uw.tacoma.group2.mobileappproject.R;
 import edu.uw.tacoma.group2.mobileappproject.order.OrdersContent.OrderItem;
 
-
 /**
- * A simple {@link Fragment} subclass.
+ * Order Fragment used for displaying information about an Order object.
+ * @author Harlan Stewart
+ * @version 1.0
  */
 public class OrdersFragment extends Fragment {
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
     private OrdersTabListener mListener;
 
+    /**
+     * Required empty public constructor.
+     */
     public OrdersFragment() {
-        // Required empty public constructor
     }
 
+    /**
+     * Creates a new instance of an OrderFragment.
+     * @param columnCount number of columns for this fragment
+     * @return an OrdersFragment.
+     */
     public static OrdersFragment newInstance(int columnCount){
         OrdersFragment frag = new OrdersFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         frag.setArguments(args);
         return frag;
-
     }
 
+    /**
+     * Setup for an OrderFragment when its created.
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -46,12 +54,14 @@ public class OrdersFragment extends Fragment {
         }
     }
 
-
-
+    /**
+     * Creates the layout for displaying an Order Fragment and also sets the RecyclerView
+     * adapter to either display an empty list, or if the OrdersContent list has been populated
+     * it will tell the adapter to use this list to display information about an order.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_orders_list, container, false);
         if(view instanceof RecyclerView){
             Context context = view.getContext();
@@ -66,6 +76,11 @@ public class OrdersFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Sets up the listener to handle the event when a user clicks on the Order tab of the favorite
+     * activity.
+     * @param context the context using this
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -77,12 +92,18 @@ public class OrdersFragment extends Fragment {
         }
     }
 
+    /**
+     * Sets the order tab listener to null if the fragment is detached.
+     */
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
 
+    /**
+     * Public interface for setting up an OrderTabListener.
+     */
     public interface  OrdersTabListener {
         void orderTabListener(OrderItem item);
     }
