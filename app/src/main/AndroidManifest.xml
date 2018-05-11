@@ -28,7 +28,7 @@
             android:name=".FriendGroupActivity"
             android:label="@string/title_activity_main"
             android:parentActivityName=".SplashActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/hangryTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.uw.tacoma.group2.mobileappproject.SplashActivity" />

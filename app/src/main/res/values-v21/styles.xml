@@ -1,0 +1,24 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="hangryTheme" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:colorPrimary">@color/hangryOrange</item>
+        <item name="android:colorPrimaryDark">@color/hangryRed</item>
+        <item name="android:colorAccent">@color/hangryRed</item>
+        <item name="android:windowBackground">@color/hangryPeach</item>
+        <item name="colorButtonNormal">@color/hangryOrange</item>
+        <item name="windowActionBar">@color/hangryOrange</item>
+
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+</resources>

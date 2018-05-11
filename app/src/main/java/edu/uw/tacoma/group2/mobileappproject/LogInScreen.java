@@ -115,6 +115,8 @@ public class LogInScreen extends AppCompatActivity {
         parameters.putString("fields", "id, name, picture, email");
         request.setParameters(parameters);
         request.executeAsync();*/
+
+        finish();
     }
 
     @Override
