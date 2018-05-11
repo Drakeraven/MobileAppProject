@@ -10,32 +10,29 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
-import edu.uw.tacoma.group2.mobileappproject.friend.FriendContent;
 import edu.uw.tacoma.group2.mobileappproject.friend.FriendFragment;
 import edu.uw.tacoma.group2.mobileappproject.order.OrdersContent;
 import edu.uw.tacoma.group2.mobileappproject.order.OrdersFragment;
 
-public class FavoritesActivity extends AppCompatActivity implements FriendFragment.FriendTabListener, OrdersFragment.OrdersTabListener {
-
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    //private SectionsPagerAdapter mSectionsPagerAdapter;
-
+/**
+ * This class is used to setup and display the Activity which will display the users favorite orders
+ * and restaurants.
+ * @author Harlan Stewart
+ * @version 1.0
+ */
+public class FavoritesActivity extends AppCompatActivity implements  OrdersFragment.OrdersTabListener {
     private ViewPager mViewPager;
     private TabPagerAdapter mAdapter;
 
-
+    /**
+     * Creates the toolbar, tab layout, and establishes the tabPageradapter to
+     * handle the event based on the users tab choice.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_fav);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -45,15 +42,14 @@ public class FavoritesActivity extends AppCompatActivity implements FriendFragme
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs_fav);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
-        // may need to add onclick listener for fab
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_fav);
     }
 
-    @Override
-    public void friendTabListener(FriendContent item) {
-
-   }
-
+    /**
+     * Not yet implemented: Will handle the functionality for when a user chooses the order
+     * tab.
+     * @param item
+     */
     @Override
     public void orderTabListener(OrdersContent.OrderItem item) {
 
@@ -93,15 +89,16 @@ public class FavoritesActivity extends AppCompatActivity implements FriendFragme
                     return orders;
                 default:
                     return null;
-
-
-
             }
         }
 
+        /**
+         * Returns the number of tabs for the activity.
+         * @return
+         */
         @Override
         public int getCount() {
-            return 3;
+            return 2;
         }
     }
 }
