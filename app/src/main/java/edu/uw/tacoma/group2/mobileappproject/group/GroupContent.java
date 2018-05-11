@@ -4,18 +4,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.acl.Group;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import edu.uw.tacoma.group2.mobileappproject.friend.FriendContent;
 
 /**
- * Helper class for providing sample content for user interfaces created by
- * Android template wizards.
- * <p>
+ * Model of the User's groups for displaying purposes.
+ * @author Stephanie Day
+ * @version 1.0
  */
 public class GroupContent {
     /**
@@ -26,22 +21,28 @@ public class GroupContent {
     private static final String FRIEND_ID = "fid";
     private static final String GROUP_ID = "groupid";
 
-    private String groupName;
-    private String groupCount;
-    private List<String> friendIDs;
-    private String groupID;
+    private String mGroupName;
+    private String mGroupCount;
+    private List<String> mFriendIDs;
+    private String mGroupID;
 
-    private GroupContent(String groupName, String groupCount, String groupID) {
-        this.groupName = groupName;
-        this.groupCount = groupCount;
-        this.groupID = groupID;
+    /**
+     * Creates new Group Object
+     * @param mGroupName Group's name
+     * @param mGroupCount Group's email
+     * @param mGroupID Group's ID
+     */
+    private GroupContent(String mGroupName, String mGroupCount, String mGroupID) {
+        this.mGroupName = mGroupName;
+        this.mGroupCount = mGroupCount;
+        this.mGroupID = mGroupID;
     }
 
     /**
      * A method that parses a JSON variable to generate individual Group items
-     * @param groupJSON
-     * @return
-     * @throws JSONException
+     * @param groupJSON Result from the web service request for user's groups
+     * @return List of group objects for display
+     * @throws JSONException In case malformed JSON
      */
     public static List<GroupContent> parseGroupList(String groupJSON) throws JSONException {
         List<GroupContent> groupList = new ArrayList<>();
@@ -58,6 +59,12 @@ public class GroupContent {
         return groupList;
     }
 
+    /**
+     * Parses a  JSON to generate a group's member's
+     * @param membersJSON Result from a web service request for a group's members
+     * @return List of the names of group members
+     * @throws JSONException In case malformed JSON
+     */
     public static List<String> parseGroupMembers(String membersJSON) throws JSONException {
             List<String> members = new ArrayList<>();
         if (membersJSON != null) {
@@ -72,34 +79,34 @@ public class GroupContent {
     }
 
     public String getGroupID() {
-        return groupID;
+        return mGroupID;
     }
 
     public void setGroupID(String groupID) {
-        this.groupID = groupID;
+        this.mGroupID = groupID;
     }
 
     public String getGroupName() {
-        return groupName;
+        return mGroupName;
     }
 
     public void setGroupName(String groupName) {
-        this.groupName = groupName;
+        this.mGroupName = groupName;
     }
 
     public String getGroupCount() {
-        return groupCount;
+        return mGroupCount;
     }
 
     public void setGroupCount(String groupCount) {
-        this.groupCount = groupCount;
+        this.mGroupCount = groupCount;
     }
 
     public List<String> getFriendIDs() {
-        return friendIDs;
+        return mFriendIDs;
     }
 
     public void setFriendIDs(List<String> friendIDs) {
-        this.friendIDs = friendIDs;
+        this.mFriendIDs = friendIDs;
     }
 }

@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.uw.tacoma.group2.mobileappproject.restaurant.Restaurant;
+import edu.uw.tacoma.group2.mobileappproject.restaurant.RestaurantAdapter;
 
 /**
  * This class represents the Restaurants activity. The purpose of the activity is

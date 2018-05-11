@@ -64,7 +64,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.uw.tacoma.group2.mobileappproject.SplashActivity" />
         </activity>
-        <activity android:name=".RestaurantProfile"></activity>
+        <activity android:name=".restaurant.RestaurantProfile"></activity>
     </application>
 
 </manifest>

@@ -6,39 +6,44 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
- * Helper class for providing sample content for user interfaces created by
- * Android template wizards.
- * <p>
+ * Model of a user's friends, for populating and interaction.
+ * @author Stephanie Day
+ * @version 1.0
  */
 public class FriendContent implements Serializable {
-    //defined JSON tags for parsing and storage:
+    /**Defined JSON tags for parsing and storage*/
     private static final String ID = "fid";
     private static final String NAME = "fname";
     private static final String PIC = "fimage";
     private static final String EMAIL = "femail";
 
-    private String frenID;
-    private String frenName;
-    private String frenImage;
-    private String frenEmail;
+    private String mFrenID;
+    private String mFrenName;
+    private String mFrenImage;
+    private String mFrenEmail;
 
-    private FriendContent(String frenID, String frenName, String frenImage, String frenEmail) {
-        this.frenID = frenID;
-        this.frenName = frenName;
-        this.frenImage = frenImage;
-        this.frenEmail = frenEmail;
+    /**
+     * Constructor to build a friend object.
+     * @param mFrenID Friend's Facebook ID.
+     * @param mFrenName Friend's Name
+     * @param mFrenImage Link to picture of the friend
+     * @param mFrenEmail Friend's email
+     */
+    private FriendContent(String mFrenID, String mFrenName, String mFrenImage, String mFrenEmail) {
+        this.mFrenID = mFrenID;
+        this.mFrenName = mFrenName;
+        this.mFrenImage = mFrenImage;
+        this.mFrenEmail = mFrenEmail;
     }
 
     /**
      * A method that parses a JSON variable to generate individual friend items
-     * @param friendsJSON
-     * @return
-     * @throws JSONException
+     * @param friendsJSON Returned query from web service database
+     * @return List of constructed friend objects
+     * @throws JSONException In case malformed JSONS
      */
     public static List<FriendContent> giveMeFriends(String friendsJSON) throws JSONException {
         List<FriendContent> FriendList = new ArrayList<FriendContent>();
@@ -60,34 +65,34 @@ public class FriendContent implements Serializable {
 
 
     public String getFrenID() {
-        return frenID;
+        return mFrenID;
     }
 
     public void setFrenID(String frenID) {
-        this.frenID = frenID;
+        this.mFrenID = frenID;
     }
 
     public String getFrenName() {
-        return frenName;
+        return mFrenName;
     }
 
-    public void setFrenName(String frenName) {
-        this.frenName = frenName;
+    public void setmFrenName(String mFrenName) {
+        this.mFrenName = mFrenName;
     }
 
     public String getFrenImage() {
-        return frenImage;
+        return mFrenImage;
     }
 
     public void setFrenImage(String frenImage) {
-        this.frenImage = frenImage;
+        this.mFrenImage = frenImage;
     }
 
     public String getFrenEmail() {
-        return frenEmail;
+        return mFrenEmail;
     }
 
     public void setFrenEmail(String frenEmail) {
-        this.frenEmail = frenEmail;
+        this.mFrenEmail = frenEmail;
     }
 }

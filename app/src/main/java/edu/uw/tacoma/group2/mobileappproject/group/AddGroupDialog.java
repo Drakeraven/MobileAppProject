@@ -27,16 +27,26 @@ import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
+/**
+ * Dialog that displays User's friends,
+ * prompts for adding group,
+ * then performs webservice to add group.
+ * @author Stephanie Day
+ * @version 1.0
+ */
 public class AddGroupDialog extends DialogFragment {
 
     private static final String ADD_GROUP_URL =
             "http://stephd27.000webhostapp.com/gross.php?";
 
+    CharSequence[] mFriendNames;
+    EditText mGroupName;
 
-    CharSequence[] friendNames;
-    EditText groupName;
-    private static int GroupCount = 2;
-
+    /**
+     * Retrieves list of friend's names for populating dialog.
+     * @param stuff List of user's friend's names
+     * @return New Dialog for adding group.
+     */
         public static AddGroupDialog newGroup(CharSequence[] stuff) {
             AddGroupDialog f = new AddGroupDialog();
             Bundle args = new Bundle();
@@ -45,26 +55,35 @@ public class AddGroupDialog extends DialogFragment {
             return f;
         }
 
+    /**
+     * Called when fragment is created, gets friend's names
+     * @param savedInstanceState any saved information
+     */
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             if (getArguments() != null) {
-                friendNames = getArguments().getCharSequenceArray("names");
+                mFriendNames = getArguments().getCharSequenceArray("names");
             }
         }
 
+    /**
+     * Creates checkbox list, listener logs user's choices for adding to group.
+     * @param savedInstanceState Saved information
+     * @return Checkbox dialog for adding groups.
+     */
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
 
             LayoutInflater layoutInflater = getActivity().getLayoutInflater();
             View v = layoutInflater.inflate(R.layout.add_group_fields, null);
-            groupName = v.findViewById(R.id.add_group_name);
+            mGroupName = v.findViewById(R.id.add_group_name);
             final List mSelectedItems = new ArrayList();
 
             final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("Select New Members: ")
                     .setView(v)
-                    .setMultiChoiceItems(friendNames, null, new DialogInterface.OnMultiChoiceClickListener() {
+                    .setMultiChoiceItems(mFriendNames, null, new DialogInterface.OnMultiChoiceClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which, boolean isChecked) {
 
@@ -78,10 +97,10 @@ public class AddGroupDialog extends DialogFragment {
                     .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
+                            //Retrieves user's selected friends, sends off web service to add group.
                             List<String> selFriends = new ArrayList<>();
                             for (int i = 0; i < mSelectedItems.size(); i++) {
-                                selFriends.add(friendNames[(int) mSelectedItems.get(i)].toString());
+                                selFriends.add(mFriendNames[(int) mSelectedItems.get(i)].toString());
                             }
                             String url = buildAddingGroupsURL(selFriends);
                             if (url != null) {
@@ -95,19 +114,23 @@ public class AddGroupDialog extends DialogFragment {
         }
 
 
+    /**
+     * Builds the query url for adding a group and its members
+     * @param selFriends User's selected for new group
+     * @return URL for adding the group
+     */
     private String buildAddingGroupsURL(List<String> selFriends) {
-            //TODO: build the url for adding to general group list and for adding individual members
             StringBuilder sb = new StringBuilder(ADD_GROUP_URL);
 
-        sb.append("uid=").append(UserContent.userID);
+        sb.append("uid=").append(UserContent.sUserID);
 
-            if (!groupName.getText().toString().isEmpty()) {
-                sb.append("&groupname=" + groupName.getText().toString());
+            if (!mGroupName.getText().toString().isEmpty()) {
+                sb.append("&groupname=" + mGroupName.getText().toString());
             } else {
                 sb.append("&groupname=Groupies");
             }
 
-        sb.append("&memcount=").append(Integer.toString(friendNames.length));
+        sb.append("&memcount=").append(Integer.toString(mFriendNames.length));
 
         if (selFriends.size() < 2) {
             Toast.makeText(getApplicationContext(), "Must have at least two members",
@@ -123,14 +146,16 @@ public class AddGroupDialog extends DialogFragment {
         return sb.toString();
         }
 
+    /**
+     * Web service for adding the group
+     */
     private static class addGroupTask extends AsyncTask<String, Void, String> {
 
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
+        /**
+         * queries web service to add new group
+         * @param urls
+         * @return
+         */
         @Override
         protected String doInBackground(String... urls) {
             String response = "";
@@ -160,6 +185,10 @@ public class AddGroupDialog extends DialogFragment {
         }
 
 
+        /**
+         * Lets user know if add is taking some time.
+         * @param values any values retrieved when in progress
+         */
         @Override
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
@@ -168,8 +197,8 @@ public class AddGroupDialog extends DialogFragment {
 
         /**
          * It checks to see if there was a problem with the URL(Network) which is when an
-         * exception is caught. It tries to call the parse Method and checks to see if it was successful.
-         * If not, it displays the exception.
+         * exception is caught. It parses the result, and notifies user of success.
+         * If not successful, it displays the exception.
          *
          * @param result The JSON detailing resulsts of group add.
          */
