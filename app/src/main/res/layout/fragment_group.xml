@@ -6,6 +6,7 @@
 
     <TextView
         android:id="@+id/item_number"
+        android:textColor="@color/hangryGrey"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
@@ -15,6 +16,7 @@
 
     <TextView
         android:id="@+id/content"
+        android:textColor="@color/hangryGrey"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
