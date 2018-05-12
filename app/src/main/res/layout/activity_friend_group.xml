@@ -8,11 +8,13 @@
     android:fitsSystemWindows="true"
     tools:context=".FriendGroupActivity">
 
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/appbar_padding_top"
+        android:background="@color/hangryOrange"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
@@ -20,13 +22,13 @@
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
             android:layout_weight="1"
-            android:background="@color/hangryOrange"
+
             android:minHeight="183dp"
-            android:theme="@style/Base.Theme.AppCompat.Light.DarkActionBar"
+            android:theme="@style/Base.Theme.AppCompat.Light"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:title="@string/FriendGroup">
+
 
         </android.support.v7.widget.Toolbar>
 
@@ -34,7 +36,7 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/hangryOrange"
+
             android:theme="@style/Base.Theme.AppCompat.Light.DarkActionBar"
             app:tabIndicatorColor="@color/hangryRed">
 
