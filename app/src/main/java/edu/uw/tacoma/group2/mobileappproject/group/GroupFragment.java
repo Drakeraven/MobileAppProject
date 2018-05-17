@@ -27,21 +27,25 @@ import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
 
 
 /**
- * A fragment representing a list of Items.
+ * A fragment representing a list of Groups
  * <p/>
  * Activities containing this fragment MUST implement the {@link GroupTabListener}
  * interface.
+ * @author Stephanie Day
+ * @version 1.0
  */
 public class GroupFragment extends Fragment {
 
     private static final String TAG = "Group List";
     private static final String ARG_COLUMN_COUNT = "column-count";
+    private static final String GROUPS_URL =
+            "http://stephd27.000webhostapp.com/list.php?cmd=groups&uid=" + UserContent.sUserID;
+
     private int mColumnCount = 1;
     private GroupTabListener mListener;
     private List<GroupContent> mGroupList;
     private RecyclerView mRecyclerView;
-    private static final String GROUPS_URL =
-            "http://stephd27.000webhostapp.com/list.php?cmd=groups&uid=" + UserContent.userID;
+
 
 
     /**
@@ -51,6 +55,11 @@ public class GroupFragment extends Fragment {
     public GroupFragment() {
     }
 
+    /**
+     * For generating a new Group Fragment
+     * @param columnCount How many columns to view groups by
+     * @return New Friend List populated with user's groups
+     */
     @SuppressWarnings("unused")
     public static GroupFragment newInstance(int columnCount) {
         GroupFragment fragment = new GroupFragment();
@@ -60,6 +69,10 @@ public class GroupFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Called when fragment is created to set how many columns in list.
+     * @param savedInstanceState Any saved information
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +81,14 @@ public class GroupFragment extends Fragment {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
     }
-
+    /**
+     * <p>Creates the layout for the groups in the list,</p>
+     * and prompts loading of user's groups from server.
+     * @param inflater inflates fragment inside view
+     * @param container view to inflate fragment in
+     * @param savedInstanceState any saved information
+     * @return View associated with fragment
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -89,7 +109,11 @@ public class GroupFragment extends Fragment {
         return view;
     }
 
-
+    /**
+     * <p>Called when Fragment is attached to an activity</p>
+     * Binds listener to fragment.
+     * @param context Context of the app
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -101,6 +125,7 @@ public class GroupFragment extends Fragment {
         }
     }
 
+    /**Called if/when fragment is removed from activity*/
     @Override
     public void onDetach() {
         super.onDetach();
@@ -121,8 +146,16 @@ public class GroupFragment extends Fragment {
         void groupTabListener(GroupContent item);
     }
 
+    /**
+     * Web Service used to retrieve a User's Groups.
+     */
     private class GetGroupInfoTask extends AsyncTask<String, Void, String> {
 
+        /**
+         * Kicks off getting groups
+         * @param urls query url for retrieving groups
+         * @return Response from web service
+         */
         @Override
         protected String doInBackground(String... urls) {
             String response = "";
@@ -152,6 +185,10 @@ public class GroupFragment extends Fragment {
             return response;
         }
 
+        /**
+         * Handles response from web service, populates the user's groups.
+         * @param result Response from the web service
+         */
         @Override
         protected void onPostExecute(String result) {
             Log.i(TAG, "onPostExecute");

@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3D7068</color>
-    <color name="colorPrimaryDark">#14453D</color>
-    <color name="colorAccent">#3DFAFF</color>
+    <color name="colorPrimary">#FF6210</color>
+    <color name="colorPrimaryDark">#0A5D5f</color>
+    <color name="colorAccent">#EA212D</color>
+    <color name="bgGrey">#1F2121</color>
+    <color name="colorPeach">#FCF7C4</color>
+
+    <color name="hangryOrange">#CF4F36</color>
+    <color name="hangryTeal">#0A5D5f</color>
+    <color name="hangryRed">#CB3D3C</color>
+    <color name="hangryGrey">#1F2121</color>
+    <color name="hangryPeach">#D6C5A9</color>
+
+    <color name="just">#D6C5A9</color>
+    <color name="please">#CF4F36</color>
+    <color name="top">#CB3D3C</color>
 </resources>

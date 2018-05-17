@@ -24,12 +24,29 @@ import java.security.NoSuchAlgorithmException;
 
 import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
 
+/**
+ * This class is used to display the application logo and allow the user to sign in to the application
+ * It uses facebook for the log in.
+ * @author Cassie Renz
+ * @version 1.0
+ */
+
 public class SplashActivity extends AppCompatActivity {
 
     private CallbackManager mCallbackManager;
 
     private static final String TAG = "Splash Activity";
 
+    /**
+     * Main page for the application.  Contains the redirect to each of the main parts of the application
+     * Friends/groups, restaurants, hangouts, and log out.
+     *
+     * This page is the opening screen the user sees if they are already logged in to facebook.
+     *
+     * If the user skips the initial log in screen, then their user information is accessed here.
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +96,7 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -87,34 +105,43 @@ public class SplashActivity extends AppCompatActivity {
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
+    /**
+     * Opens the friend/group activity
+     * @param view
+     */
     //TODO:Remove when have proper connection to the Friend/List Group
     public void openFriendGroup(View view) {
         Intent fGroup = new Intent(this, FriendGroupActivity.class);
         startActivity(fGroup);
     }
 
+    /**
+     * Opens the favorites/restaurants activity
+     * @param view
+     */
     public void openFavorites(View view){
         Intent favorites = new Intent(this,RestaurantsActivity.class);
         startActivity(favorites);
     }
 
+    /**
+     * Opens the hangout activity
+     * @param view
+     */
     //TODO: Remove when have proper connection to the Start Hangout
     public void openHangout(View view) {
         Intent hangout = new Intent(this, HangoutActivity.class);
         startActivity(hangout);
     }
 
+    /**
+     * Logs the user out of the application, and sends them back to the log in page.
+     * @param view
+     */
     public void openLogout(View view) {
         LoginManager.getInstance().logOut();
-        Intent hangout = new Intent(this, LogInScreen.class);
-        startActivity(hangout);
+        Intent logIn = new Intent(this, LogInScreen.class);
+        startActivity(logIn);
     }
 
-    public void logoutUser() {
-
-        Intent I = new Intent(this, LogInScreen.class);
-        startActivity(I);
-    }
-
-    //TODO: Add a log out button for facebook
 }

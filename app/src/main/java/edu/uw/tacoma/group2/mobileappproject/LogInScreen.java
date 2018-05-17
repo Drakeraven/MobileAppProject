@@ -22,6 +22,13 @@ import java.util.Arrays;
 
 import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
 
+/**
+ * This class is used to display the application logo and allow the user to sign in to the application
+ * It uses facebook for the log in.
+ * @author Cassie Renz
+ * @version 1.0
+ */
+
 public class LogInScreen extends AppCompatActivity {
     private static final String EMAIL = "email";
     private static final String USER_POSTS = "user_posts";
@@ -29,21 +36,18 @@ public class LogInScreen extends AppCompatActivity {
 
     private CallbackManager mCallbackManager;
 
+    /**
+     * Used to begin the log in process.  Facebook SDK initilization and user information grabbing
+     * happen here.  Facebook permissions are also gathered here.
+     *
+     * On successful log in, begin the SplashActivity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_log_in_screen);
-
-
-        // If MainActivity is reached without the user being logged in, redirect to the Login
-        // Activity
-        /*if (AccessToken.getCurrentAccessToken() == null) {
-            Log.i(TAG, "Facebook Login Token: NULL");
-            Intent loginIntent = new Intent(this, LogInScreen.class);
-            startActivity(loginIntent);
-
-        }*/
 
         mCallbackManager = CallbackManager.Factory.create();
 
@@ -115,6 +119,7 @@ public class LogInScreen extends AppCompatActivity {
         parameters.putString("fields", "id, name, picture, email");
         request.setParameters(parameters);
         request.executeAsync();*/
+
     }
 
     @Override
@@ -123,6 +128,7 @@ public class LogInScreen extends AppCompatActivity {
 
         // Pass the activity result back to the Facebook SDK
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
+        finish();
     }
 }
 

@@ -13,5 +13,11 @@
     <string name="fb_login_error">There was an error logging in to facebook</string>
 
     <string name="sel_group_hangout">Select Friend Group</string>
+    <string name="friends_btn">Friends and Groups</string>
+    <string name="restaurants_btn">Find a Restaurant</string>
+    <string name="hangout_btn">Start a Hangout</string>
+    <string name="logout_btn">Log Out</string>
+
+    <string name="group_formatting">%1s Members</string>
 
 </resources>

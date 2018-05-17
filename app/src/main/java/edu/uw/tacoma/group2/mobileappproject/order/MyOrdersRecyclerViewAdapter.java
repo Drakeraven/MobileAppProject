@@ -12,15 +12,32 @@ import edu.uw.tacoma.group2.mobileappproject.R;
 import edu.uw.tacoma.group2.mobileappproject.order.OrdersContent.OrderItem;
 import edu.uw.tacoma.group2.mobileappproject.order.OrdersFragment.OrdersTabListener;
 
+/**
+ * RecyclerView adapter used to gather the information created by the Order Class fields and display
+ * a list of the users favorite orders.
+ * @author Harlan Stewart
+ * @version 1.0
+ */
 public class MyOrdersRecyclerViewAdapter extends RecyclerView.Adapter<MyOrdersRecyclerViewAdapter.ViewHolder>{
     private final List<OrderItem> mValues;
     private final OrdersTabListener mListener;
 
+    /**
+     * Public constructor used to create instance of an Order RecyclerView adapter.
+     * @param items An order from the list of OrderItems.
+     * @param listener Listener for individual items in the order list.
+     */
     public MyOrdersRecyclerViewAdapter(List<OrderItem> items, OrdersTabListener listener){
         mValues = items;
         mListener = listener;
     }
 
+    /**
+     * Creates a ViewHolder to hold an order fragment.
+     * @param parent The parent Viewgroup that will hold this viewholder.
+     * @param viewType unknown...
+     * @return A viewholder for an order fragment.
+     */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -28,12 +45,16 @@ public class MyOrdersRecyclerViewAdapter extends RecyclerView.Adapter<MyOrdersRe
         return new ViewHolder(view);
     }
 
+    /**
+     * Binds a orders values to the viewholder.
+     * @param holder The viewholder the order will bind too.
+     * @param position The position of the order list to bind.
+     */
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).id);
         holder.mContentView.setText(mValues.get(position).content);
-
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,17 +67,28 @@ public class MyOrdersRecyclerViewAdapter extends RecyclerView.Adapter<MyOrdersRe
         });
     }
 
+    /**
+     * The total number of orders currently in the order list.
+     * @return
+     */
     @Override
     public int getItemCount() {
         return mValues.size();
     }
 
+    /**
+     * Inner class to represent an order objects ViewHolder for the RecyclerView
+     */
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
         public OrderItem mItem;
 
+        /**
+         * Public constructor used to create an order ViewHolder.
+         * @param view
+         */
         public ViewHolder(View view) {
             super(view);
             mView = view;

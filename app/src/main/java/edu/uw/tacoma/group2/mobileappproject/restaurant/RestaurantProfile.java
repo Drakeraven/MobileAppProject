@@ -1,4 +1,4 @@
-package edu.uw.tacoma.group2.mobileappproject;
+package edu.uw.tacoma.group2.mobileappproject.restaurant;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -8,8 +8,17 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-public class RestaurantProfile extends AppCompatActivity {
+import edu.uw.tacoma.group2.mobileappproject.R;
+import edu.uw.tacoma.group2.mobileappproject.restaurant.RestaurantAdapter;
 
+/**
+ * This class will be used to display more detailed information about a restaurant when
+ * the user clicks on a restaurant from the returned list of nearby restaurants. Currently
+ * not implemented.
+ * @author Harlan Stewart
+ * @version 1.0
+ */
+public class RestaurantProfile extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,11 +31,8 @@ public class RestaurantProfile extends AppCompatActivity {
         final String restName = intent.getStringExtra(RestaurantAdapter.KEY_NAME);
         String image = intent.getStringExtra(RestaurantAdapter.KEY_IMAGE);
         final String rating = intent.getStringExtra(RestaurantAdapter.KEY_RATING);
-
         Picasso.with(this).load(image).into(restaurantImg);
-
         restaurantName.setText(restName);
         restaurantRating.setText(rating);
-
     }
 }

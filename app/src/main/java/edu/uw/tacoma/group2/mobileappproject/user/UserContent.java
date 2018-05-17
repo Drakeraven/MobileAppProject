@@ -2,8 +2,6 @@ package edu.uw.tacoma.group2.mobileappproject.user;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,15 +9,9 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Our App's User Content, currently retrieved via facebook log in.
@@ -37,43 +29,52 @@ public class UserContent {
     private final static String USER_ADD_URL
             = "http://stephd27.000webhostapp.com/addUsers.php?";
 
-    public static String userID;
-    public static String userName;
-    public static String userPic;
-    public static String userEmail;
+    public static String sUserID;
+    public static String sUserName;
+    public static String sUserPic;
+    public static String sUserEmail;
 
-    //Called at start of the app to initialize the user, DO NOT MAKE MULTIPLE USERS.
+
+    /**
+     * Called at the start of the app to create the user profile.
+     * Just one version!
+     * @param userJSON Web service to retrieve this particular user using fb login
+     */
     public UserContent(JSONObject userJSON) {
         try {
-            userID = userJSON.getString(ID);
-            userName = userJSON.getString(NAME);
+            sUserID = userJSON.getString(ID);
+            sUserName = userJSON.getString(NAME);
             JSONObject picture = userJSON.getJSONObject(PIC).getJSONObject(PIC_DATA);
-            userPic = picture.getString(PIC_URL);
-            userEmail = userJSON.getString(EMAIL);
+            sUserPic = picture.getString(PIC_URL);
+            sUserEmail = userJSON.getString(EMAIL);
 
         } catch (JSONException ex) {
             Log.e(TAG, "Couldn't parse the JSON Request into User Content.");
         }
         AddUserTask task = new AddUserTask();
-        task.execute(new String[]{buildUserURL()});
+        task.execute(buildUserURL());
 
     }
 
+    /**
+     * Builds a query url for adding the user to our list of users
+     * @return
+     */
     private String buildUserURL() {
         StringBuilder sb = new StringBuilder(USER_ADD_URL);
 
         try {
             sb.append("id=");
-            sb.append(URLEncoder.encode(userID, "UTF-8"));
+            sb.append(URLEncoder.encode(sUserID, "UTF-8"));
 
             sb.append("&email=");
-            sb.append(URLEncoder.encode(userEmail, "UTF-8"));
+            sb.append(URLEncoder.encode(sUserEmail, "UTF-8"));
 
             sb.append("&name=");
-            sb.append(URLEncoder.encode(userName, "UTF-8"));
+            sb.append(URLEncoder.encode(sUserName, "UTF-8"));
 
             sb.append("&picture=");
-            sb.append(URLEncoder.encode(userPic, "UTF-8"));
+            sb.append(URLEncoder.encode(sUserPic, "UTF-8"));
 
             Log.d(TAG, "Adding user by url: " + sb.toString());
 
@@ -84,7 +85,15 @@ public class UserContent {
         return sb.toString();
     }
 
+    /**
+     * Web service for taking fb log in information and saving user data,
+     * needed for other things
+     */
     private class AddUserTask extends AsyncTask<String, Void, String> {
+        /**
+         * @param urls query url for adding a new user
+         * @return webservice response
+         */
         @Override
         protected String doInBackground(String... urls) {
             String response = "";
@@ -114,6 +123,11 @@ public class UserContent {
             return response;
         }
 
+        /**
+         * debug logging for if it add the user successfully.
+         * Not a big deal if it fails because we already know the user.
+         * @param s Webservice response
+         */
         @Override
         protected void onPostExecute(String s) {
             try {
