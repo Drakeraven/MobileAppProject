@@ -17,7 +17,7 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name=".SplashActivity">
+        <activity android:name=".LogInScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,7 +35,7 @@
         </activity>
         <activity android:name=".FavoritesActivity" />
         <activity android:name=".RestaurantsActivity" />
-        <activity android:name=".LogInScreen" />
+        <activity android:name=".SplashActivity" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
