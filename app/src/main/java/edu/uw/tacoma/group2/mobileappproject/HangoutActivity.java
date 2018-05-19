@@ -31,12 +31,6 @@ public class HangoutActivity extends AppCompatActivity implements
 
         //Starts the hangout by having user select a group.
         getSupportActionBar().setTitle(R.string.sel_group_hangout);
-
-        if (findViewById(R.id.hangout_container) != null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.hangout_container, GroupFragment.newInstance(1))
-                    .commit();
-        }
     }
 
     /**

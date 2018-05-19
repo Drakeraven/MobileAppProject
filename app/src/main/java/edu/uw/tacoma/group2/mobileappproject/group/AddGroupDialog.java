@@ -130,7 +130,7 @@ public class AddGroupDialog extends DialogFragment {
                 sb.append("&groupname=Groupies");
             }
 
-        sb.append("&memcount=").append(Integer.toString(mFriendNames.length));
+        sb.append("&memcount=").append(Integer.toString(selFriends.size()));
 
         if (selFriends.size() < 2) {
             Toast.makeText(getApplicationContext(), "Must have at least two members",

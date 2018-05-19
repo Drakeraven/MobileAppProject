@@ -9,10 +9,10 @@
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbarHangout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/appbar_padding_top"
-        android:theme="@style/AppTheme.AppBarOverlay">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/appbar_padding_top"
+    android:theme="@style/AppTheme.AppBarOverlay">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbarHangout"
@@ -25,6 +25,6 @@
         app:title="@string/app_name">
 
     </android.support.v7.widget.Toolbar>
-    </android.support.design.widget.AppBarLayout>
+</android.support.design.widget.AppBarLayout>
 
 </FrameLayout>
