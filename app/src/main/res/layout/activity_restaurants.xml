@@ -9,6 +9,12 @@
     tools:context="edu.uw.tacoma.group2.mobileappproject.RestaurantsActivity"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Search Near Me"
+        android:id="@+id/btn_search"
+        />
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
