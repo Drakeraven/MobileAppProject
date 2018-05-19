@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -36,10 +36,12 @@
         <activity android:name=".FavoritesActivity" />
         <activity
             android:name=".RestaurantsActivity"
-            android:parentActivityName=".SplashActivity"/>
+            android:parentActivityName=".SplashActivity" />
+
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value="edu.uw.tacoma.group2.mobileappproject.SplashActivity" />
+
         <activity android:name=".LogInScreen" />
 
         <meta-data
@@ -62,14 +64,16 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+        <activity android:name=".restaurant.RestaurantProfile" />
         <activity
             android:name=".HangoutActivity"
-            android:parentActivityName=".SplashActivity">
+            android:label="@string/title_activity_hangout"
+            android:parentActivityName=".SplashActivity"
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.uw.tacoma.group2.mobileappproject.SplashActivity" />
         </activity>
-        <activity android:name=".restaurant.RestaurantProfile"></activity>
     </application>
 
 </manifest>
