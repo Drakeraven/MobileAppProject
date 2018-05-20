@@ -3,7 +3,6 @@ package edu.uw.tacoma.group2.mobileappproject;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,26 +13,34 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import edu.uw.tacoma.group2.mobileappproject.order.OrderMenu.FoodContent;
+import edu.uw.tacoma.group2.mobileappproject.order.OrderMenu.OrderMenuFragment;
 import edu.uw.tacoma.group2.mobileappproject.order.OrdersContent;
 import edu.uw.tacoma.group2.mobileappproject.order.OrdersFragment;
 
 public class HangoutActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        OrdersFragment.OrdersTabListener{
+        OrdersFragment.OrdersTabListener, OrderMenuFragment.onOrderMenuListener{
     FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hangout);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+                //TODO: Just for making order thing
+                toolbar.setTitle("Order Item: ");
+                fab.setVisibility(View.GONE);
+                FragmentManager fm = getSupportFragmentManager();
+                fm.beginTransaction().replace(R.id.content_frame, new OrderMenuFragment())
+                        .commit();
             }
         });
 
@@ -103,6 +110,11 @@ public class HangoutActivity extends AppCompatActivity
 
     @Override
     public void orderTabListener(OrdersContent.OrderItem item) {
+
+    }
+
+    @Override
+    public void onOrderMenuInteraction(FoodContent.FoodItem item) {
 
     }
 }
