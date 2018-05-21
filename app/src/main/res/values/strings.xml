@@ -17,7 +17,7 @@
     <string name="restaurants_btn">Find a Restaurant</string>
     <string name="hangout_btn">Start a Hangout</string>
     <string name="logout_btn">Log Out</string>
-
+    <string name="google_app_id">10</string>
     <string name="group_formatting">%1s Members</string>
     <string name="title_activity_hangout">HangoutActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
