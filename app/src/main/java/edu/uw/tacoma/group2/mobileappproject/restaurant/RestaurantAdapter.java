@@ -14,6 +14,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import edu.uw.tacoma.group2.mobileappproject.R;
+import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
 
 /**
  * RecyclerView adapter used to gather the information created by the Restaurant class fields and display
@@ -74,6 +75,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                UserContent.sUserRestaurant = restaurantList.getName();
                 /*Restaurant restaurantList1 = mRestaurantsList.get(position);
                 Intent skipIntent = new Intent(v.getContext(), RestaurantProfile.class);
                 skipIntent.putExtra(KEY_NAME, restaurantList1.getName());
@@ -112,6 +114,10 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
             image = (ImageView) itemView.findViewById(R.id.imageView);
             rating = (TextView) itemView.findViewById(R.id.rating);
             linearLayout = (LinearLayout) itemView.findViewById(R.id.linearLayout);
+        }
+
+        public String getName(){
+            return ((String) name.getText()).toString();
         }
     }
 }
