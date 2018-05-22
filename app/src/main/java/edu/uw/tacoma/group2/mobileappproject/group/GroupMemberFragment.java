@@ -16,6 +16,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -29,7 +31,7 @@ public class GroupMemberFragment extends DialogFragment {
     private static final String MEMBERS_URL =
             "http://stephd27.000webhostapp.com/list.php?cmd=members&group=";
     private RecyclerView mRecyclerView;
-    private List<String> mMembers;
+    private HashMap<String,String> mMembers;
     private String GroupQ;
 
 
@@ -138,7 +140,9 @@ public class GroupMemberFragment extends DialogFragment {
                 return;
             }
             if (!mMembers.isEmpty()) {
-                mRecyclerView.setAdapter(new GroupMemberRecyclerViewAdapter(mMembers));
+                List<String> memNames = new ArrayList<>();
+                memNames.addAll(mMembers.keySet());
+                mRecyclerView.setAdapter(new GroupMemberRecyclerViewAdapter(memNames));
             }
         }
     }
