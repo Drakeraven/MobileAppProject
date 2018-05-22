@@ -1,5 +1,8 @@
 package edu.uw.tacoma.group2.mobileappproject;
 
+import android.content.Intent;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +16,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.util.List;
 
 import edu.uw.tacoma.group2.mobileappproject.order.OrdersContent;
 import edu.uw.tacoma.group2.mobileappproject.order.OrdersFragment;
@@ -94,7 +99,29 @@ public class HangoutActivity extends AppCompatActivity
                     .commit();
                 fab.setVisibility(View.GONE);
         } else if (id == R.id.nav_share) {
+            String shareURL = "https://github.com/Drakeraven/MobileAppProject";
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, shareURL);
 
+            // See if official Facebook app is found
+            boolean facebookAppFound = false;
+            List<ResolveInfo> matches = getPackageManager().queryIntentActivities(intent, 0);
+            for (ResolveInfo info : matches) {
+                if (info.activityInfo.packageName.toLowerCase().startsWith("com.facebook.katana")) {
+                    intent.setPackage(info.activityInfo.packageName);
+                    facebookAppFound = true;
+                    break;
+                }
+            }
+
+            // As fallback, launch sharer.php in a browser
+            if (!facebookAppFound) {
+                String sharerUrl = "https://www.facebook.com/sharer/sharer.php?u=" + shareURL;
+                intent = new Intent(Intent.ACTION_VIEW, Uri.parse(sharerUrl));
+            }
+
+            startActivity(intent);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
