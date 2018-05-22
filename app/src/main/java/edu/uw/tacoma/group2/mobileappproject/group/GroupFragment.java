@@ -103,10 +103,15 @@ public class GroupFragment extends Fragment {
             } else {
                 mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-           GetGroupInfoTask task = new GetGroupInfoTask();
-            task.execute(GROUPS_URL);
         }
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        GetGroupInfoTask task = new GetGroupInfoTask();
+        task.execute(GROUPS_URL);
     }
 
     /**

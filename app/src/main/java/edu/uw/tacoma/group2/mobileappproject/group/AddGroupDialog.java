@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -20,7 +21,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.uw.tacoma.group2.mobileappproject.R;
 import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
@@ -40,17 +43,19 @@ public class AddGroupDialog extends DialogFragment {
             "http://stephd27.000webhostapp.com/gross.php?";
 
     CharSequence[] mFriendNames;
+    private HashMap mFriendIdPairs;
     EditText mGroupName;
 
     /**
      * Retrieves list of friend's names for populating dialog.
-     * @param stuff List of user's friend's names
+     * @param names List of user's friend's names
      * @return New Dialog for adding group.
      */
-        public static AddGroupDialog newGroup(CharSequence[] stuff) {
+        public static AddGroupDialog newGroup(CharSequence[] names, HashMap<String, String> nameIdPair) {
             AddGroupDialog f = new AddGroupDialog();
             Bundle args = new Bundle();
-            args.putCharSequenceArray("names", stuff);
+            args.putCharSequenceArray("names", names);
+            args.putSerializable("pairs", nameIdPair);
             f.setArguments(args);
             return f;
         }
@@ -64,6 +69,7 @@ public class AddGroupDialog extends DialogFragment {
             super.onCreate(savedInstanceState);
             if (getArguments() != null) {
                 mFriendNames = getArguments().getCharSequenceArray("names");
+                mFriendIdPairs = (HashMap) getArguments().getSerializable("pairs");
             }
         }
 
@@ -104,6 +110,7 @@ public class AddGroupDialog extends DialogFragment {
                             }
                             String url = buildAddingGroupsURL(selFriends);
                             if (url != null) {
+                                Log.e("Built add group url", url);
                                 addGroupTask task = new addGroupTask();
                                 task.execute(url);
                             }
@@ -138,10 +145,13 @@ public class AddGroupDialog extends DialogFragment {
             return null;
 
         }
-        sb.append("&members=").append(selFriends.get(0));
+        sb.append("&members=").append(selFriends.get(0)).append("\', \'")
+                .append(mFriendIdPairs.get(selFriends.get(0)));
         for (int i = 1; i < selFriends.size(); i++) {
-                sb.append(',');
+                sb.append('-');
             sb.append(selFriends.get(i));
+            sb.append("\', \'");
+            sb.append(mFriendIdPairs.get(selFriends.get(i)));
             }
         return sb.toString();
         }

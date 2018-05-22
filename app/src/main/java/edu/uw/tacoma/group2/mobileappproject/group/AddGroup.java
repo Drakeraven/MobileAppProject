@@ -13,7 +13,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.uw.tacoma.group2.mobileappproject.friend.FriendContent;
 import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
@@ -32,6 +34,7 @@ public class AddGroup {
 
     private List<FriendContent> mCurrentFriends;
     CharSequence[] mFriendNames;
+    private HashMap<String,String> mFriendIdPairs;
     Activity mContext;
 
     /**
@@ -40,6 +43,7 @@ public class AddGroup {
      */
     public AddGroup(Activity context) {
         mContext = context;
+        mFriendIdPairs = new HashMap<>();
         GetFriendsTask task = new GetFriendsTask();
         task.execute(FRIENDS_URL);
     }
@@ -53,6 +57,7 @@ public class AddGroup {
 
             for (FriendContent friend : mCurrentFriends) {
                 listItems.add(friend.getFrenName());
+                mFriendIdPairs.put(friend.getFrenName(), friend.getFrenID());
             }
         mFriendNames = listItems.toArray(new CharSequence[listItems.size()]);
 
@@ -120,7 +125,7 @@ public class AddGroup {
             }
             if (!mCurrentFriends.isEmpty()) {
                setUpAddGroup();
-               DialogFragment agd = AddGroupDialog.newGroup(mFriendNames);
+               DialogFragment agd = AddGroupDialog.newGroup(mFriendNames, mFriendIdPairs);
                agd.show(mContext.getFragmentManager(), "add group");
             }
         }

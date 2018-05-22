@@ -81,6 +81,7 @@ public class LogInScreen extends AppCompatActivity {
                 request.setParameters(parameters);
                 request.executeAsync();
                 Intent i = new Intent(LogInScreen.this, SplashActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
             }
 
@@ -98,6 +99,30 @@ public class LogInScreen extends AppCompatActivity {
                 Log.i(TAG, "onError: ");
             }
         });
+
+        if(AccessToken.getCurrentAccessToken() != null) {
+            AccessToken accessToken = AccessToken.getCurrentAccessToken();
+
+            GraphRequest request = GraphRequest.newMeRequest(
+                    accessToken,
+                    new GraphRequest.GraphJSONObjectCallback() {
+                        @Override
+                        public void onCompleted(
+                                JSONObject object,
+                                GraphResponse response) {
+                            new UserContent(response.getJSONObject());
+                            Log.d(TAG, response.toString());
+                        }
+                    });
+            Bundle parameters = new Bundle();
+            parameters.putString("fields", "id, name, picture, email");
+            request.setParameters(parameters);
+            request.executeAsync();
+
+            Intent i = new Intent(LogInScreen.this, SplashActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+        }
 
         //AccessToken accessToken = AccessToken.getCurrentAccessToken();
         /*if (accessToken != null) {

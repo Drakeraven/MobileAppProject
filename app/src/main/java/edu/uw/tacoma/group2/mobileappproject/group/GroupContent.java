@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -18,7 +19,8 @@ public class GroupContent {
      */
     private static final String GROUP_NAME = "GroupName";
     private static final String MEMBER_COUNT = "memcount";
-    private static final String FRIEND_ID = "fid";
+    private static final String FRIEND_NAME = "fid";
+    private static final String FRIEND_ID = "fname";
     private static final String GROUP_ID = "groupid";
 
     private String mGroupName;
@@ -65,14 +67,14 @@ public class GroupContent {
      * @return List of the names of group members
      * @throws JSONException In case malformed JSON
      */
-    public static List<String> parseGroupMembers(String membersJSON) throws JSONException {
-            List<String> members = new ArrayList<>();
+    public static HashMap<String, String> parseGroupMembers(String membersJSON) throws JSONException {
+            HashMap<String, String> members = new HashMap<>();
         if (membersJSON != null) {
             JSONArray array = new JSONArray(membersJSON);
 
             for (int i = 0; i < array.length(); i++) {
                 JSONObject object = array.getJSONObject(i);
-                members.add(object.getString(GroupContent.FRIEND_ID));
+                members.put(object.getString(GroupContent.FRIEND_NAME), object.getString(GroupContent.FRIEND_ID));
             }
         }
         return members;
