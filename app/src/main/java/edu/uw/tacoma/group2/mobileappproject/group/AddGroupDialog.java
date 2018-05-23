@@ -111,8 +111,10 @@ public class AddGroupDialog extends DialogFragment {
                             String url = buildAddingGroupsURL(selFriends);
                             if (url != null) {
                                 Log.e("Built add group url", url);
-//                                addGroupTask task = new addGroupTask();
-//                                task.execute(url);
+                                addGroupTask task = new addGroupTask();
+                                task.execute(url);
+                                getActivity().finish();
+
                             }
                         }
                     });
