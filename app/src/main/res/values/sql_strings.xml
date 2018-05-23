@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+<string name="CREATE_ORDER_SQL">
+    CREATE TABLE IF NOT EXISTS Order (
+        hid TEXT PRIMARY KEY,
+        foods TEXT,
+        price TEXT )
+</string>
+
+    <string name="DROP_ORDER_SQL">
+        DROP TABLE IF EXISTS Order
+    </string>
+
+</resources>
