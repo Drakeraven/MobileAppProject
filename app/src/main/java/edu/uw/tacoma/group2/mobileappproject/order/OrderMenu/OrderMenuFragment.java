@@ -6,12 +6,16 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import edu.uw.tacoma.group2.mobileappproject.R;
 import edu.uw.tacoma.group2.mobileappproject.order.OrderMenu.FoodContent.FoodItem;
+import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
 
 /**
  * A fragment representing a list of Items.
@@ -20,7 +24,9 @@ import edu.uw.tacoma.group2.mobileappproject.order.OrderMenu.FoodContent.FoodIte
  * interface.
  */
 public class OrderMenuFragment extends Fragment {
-
+    private static final String TAG = "Order Menu Fragment";
+    private static final String UPDATE_ORDER =
+            "http://stephd27.000webhostapp.com/hangoutScript.php?cmd=ordered&user=" + UserContent.sUserID;
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
@@ -66,7 +72,32 @@ public class OrderMenuFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             recyclerView.setAdapter(new MyFoodItemRecyclerViewAdapter(FoodContent.ITEMS, mListener, view));
+
+        Button btn = view.findViewById(R.id.btn_order);
+        final TextView OrderTotal = view.findViewById(R.id.Order_Total);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = buildOrderUrl(OrderTotal.getText().toString());
+                Log.i(TAG, "Generated update order: " + url);
+
+                //TODO: undo when you plug shit in booiiii
+//                OrderMasterTask task = new OrderMasterTask();
+//                task.execute(url);
+            }
+        });
+
         return view;
+    }
+
+    private String buildOrderUrl(String price) {
+        price = price.substring(7);
+        StringBuilder sb = new StringBuilder(UPDATE_ORDER);
+        sb.append("&price=").append(price);
+        //TODO: CHANGE THIS TO TAKE THE HANGOUT ID FROM HARLAN
+        sb.append("&hangout=").append("PLACEHOLDER");
+        return sb.toString();
     }
 
 
@@ -98,7 +129,6 @@ public class OrderMenuFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface onOrderMenuListener {
-        // TODO: Update argument type and name
         void onOrderMenuInteraction(FoodItem item);
     }
 }
