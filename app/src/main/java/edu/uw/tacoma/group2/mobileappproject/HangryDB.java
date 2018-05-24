@@ -59,7 +59,8 @@ public class HangryDB {
             String hid = c.getString(0);
             String foods = c.getString(1);
             String price = c.getString(2);
-            //TODO: Create new orders content object here
+            OrdersContent order = new OrdersContent(hid, foods, price);
+            list.add(order);
 
             c.moveToNext();
         }
