@@ -23,6 +23,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -45,10 +50,13 @@ public class HangoutActivity extends AppCompatActivity
     private static final String TAG_FOUR = "MEMBER TASK === ";
     private static final String ADD_HANGOUT_URL =
             "http://hangryfoodiehangout.000webhostapp.com/hangout.php?cmd=hangout";
-    private static final String ADD_HANGOUT_MEM_URL =
+    private static final String ADD_HANGOUT_MEMBER_URL =
             "http://hangryfoodiehangout.000webhostapp.com/hangout.php?cmd=members";
+    private static final String GET_MEMBERS_URL =
+            "http://stephd27.000webhostapp.com/list.php?cmd=members&group=";
     private GroupFragment myGroupFrag;
     private HashMap<String, String> mMemberMap;
+    private Date mDate;
     FloatingActionButton fab;
 
     @Override
@@ -57,6 +65,7 @@ public class HangoutActivity extends AppCompatActivity
         setContentView(R.layout.activity_hangout);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        mMemberMap = new HashMap<>();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -143,55 +152,83 @@ public class HangoutActivity extends AppCompatActivity
 
     }
 
+
+
     public void groupTabListener(GroupContent item) {
-        Toast.makeText(getApplicationContext(), "CLICKED ON " + item.getGroupName(),
-                Toast.LENGTH_LONG).show();
-        String infoURL =
-                "http://stephd27.000webhostapp.com/list.php?cmd=groups&uid="
-                + item.getGroupID();
+        /*Toast.makeText(getApplicationContext(), "CLICKED ON " + item.getGroupName(),
+                Toast.LENGTH_LONG).show();*/
+        /*String infoURL =
+                "http://stephd27.000webhostapp.com/list.php?cmd=groupsuid="
+                + item.getGroupID();*/
         GetMemberInfoTask memInfoTask = new GetMemberInfoTask();
-        memInfoTask.execute(infoURL);
-        Log.i(TAG_ONE,infoURL);
+        memInfoTask.execute(GET_MEMBERS_URL + item.getGroupID());
+        //Log.i(TAG_ONE,ADD_HANGOUT_MEM_URL + item.getGroupID());
+        long sysTime = System.currentTimeMillis();
+        mDate = new Date(sysTime);
+
+
         String mGroupCount = item.getGroupCount();
-        String url = buildHangoutURL(mGroupCount);
-        if(!url.isEmpty()){
+        StringBuilder urlMem = new StringBuilder();
+        urlMem.append(buildHangoutURL(mGroupCount, mDate));
+        /*if(!url.isEmpty()){
             CreateHangoutTask task = new CreateHangoutTask();
             task.execute(url);
-            Log.i(TAG_TWO,url);
+           // Log.i(TAG_TWO,url);
         }
-        /*String urlMem = buildHangoutMembers();
-        if(!urlMem.isEmpty()){
-            CreateHangoutTask taskMem = new CreateHangoutTask();
-            Log.i(TAG_THREE,urlMem);
-            taskMem.execute(urlMem);
-        }*/
+*/
+        //Log.e(TAG_THREE, mMemberMap.toString());
+
+        for(String key : mMemberMap.keySet()){
+            String friendName =mMemberMap.get(key) ;
+            String friendID =key ;
+            urlMem.append(buildHangoutMembers(mDate, friendName, friendID));
+            //urlArr.add(buildHangoutMembers(mDate,friendName,friendID));
+            //Log.i(TAG_THREE,urlMem);
+
+        }
+
+
+        CreateHangoutTask taskMem = new CreateHangoutTask();
+        //Log.i(TAG_THREE, urlMem.toString());
+        taskMem.execute(new String[]{urlMem.toString()});
+
+
 
 
 
     }
 
-    private String buildHangoutURL(String memCount){
+    private String buildHangoutURL(String memCount, Date date){
         StringBuilder sb = new StringBuilder(ADD_HANGOUT_URL);
-        /*if(!UserContent.sUserRestaurant.isEmpty()){
+        sb.append("&hid=").append(date.toString());
+        if(!(UserContent.sUserRestaurant == null)){
             sb.append("&rest_name=" + UserContent.sUserRestaurant);
-        }else {*/
+        }else {
             sb.append("&rest_name=").append("DEFAULT_RESTAURANT");
-        //}
+        }
         sb.append("&num_members=").append(memCount);
         sb.append("&closed_open=").append("0");
+        //Log.e(TAG_TWO, sb.toString());
         return  sb.toString();
     }
 
-    private String buildHangoutMembers(){
-        StringBuilder sb = new StringBuilder(ADD_HANGOUT_MEM_URL);
-        Iterator<Map.Entry<String,String>> it = mMemberMap.entrySet().iterator();
+    private String buildHangoutMembers(Date date, String fName, String fID ){
+        StringBuilder sb = new StringBuilder(ADD_HANGOUT_MEMBER_URL);
+            sb.append("&hid=").append(date.toString());
+            sb.append("&fid=").append(fName);
+            sb.append("&ordered=").append("0");
+            sb.append("&friend_name=").append(fID);
+            sb.append("&price=").append("0");
+
+        /*Iterator<Map.Entry<String,String>> it = mMemberMap.entrySet().iterator();
         while(it.hasNext()){
             Map.Entry<String, String> pair = (Map.Entry<String, String>) it.next();
             sb.append("&fid=").append(pair.getKey().toString());
             sb.append("&ordered=").append("0");
             sb.append("&friend_name=").append(pair.getValue().toString());
             sb.append("&price=").append("0");
-        }
+        }*/
+        //Log.e(TAG_THREE, sb.toString());
         return sb.toString();
     }
 
@@ -213,6 +250,7 @@ public class HangoutActivity extends AppCompatActivity
                     String s;
                     while ((s = buffer.readLine()) != null) {
                         response += s;
+                        //Log.e(TAG_FOUR, response);
                     }
 
                 } catch (Exception e) {
@@ -234,14 +272,15 @@ public class HangoutActivity extends AppCompatActivity
             //Log.i(TAG_FOUR, "onPostExecute");
 
             if (result.startsWith("Unable to")) {
-                Log.e(TAG_FOUR, result);
+                //Log.e(TAG_FOUR, result);
                 return;
             }
             try {
                 mMemberMap = GroupContent.parseGroupMembers(result);
+                Log.i(TAG_FOUR, result);
 
             }catch (JSONException e) {
-                Log.e(TAG_FOUR, e.getMessage());
+                //Log.e(TAG_FOUR, e.getMessage());
                 return;
             }
         }

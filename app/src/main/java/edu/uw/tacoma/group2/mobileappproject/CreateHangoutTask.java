@@ -37,7 +37,7 @@ public class CreateHangoutTask extends AsyncTask<String, Void, String> {
                     urlConnection.disconnect();
             }
         }
-        Log.i(TAG,response);
+        //Log.i(TAG,response);
         return response;
     }
 }
