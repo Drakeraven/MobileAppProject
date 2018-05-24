@@ -166,10 +166,13 @@ public class HangoutActivity extends AppCompatActivity
         long sysTime = System.currentTimeMillis();
         mDate = new Date(sysTime);
 
-
+        CreateHangoutTask taskMem = new CreateHangoutTask();
         String mGroupCount = item.getGroupCount();
         StringBuilder urlMem = new StringBuilder();
-        urlMem.append(buildHangoutURL(mGroupCount, mDate));
+        String urlHangout = buildHangoutURL(mGroupCount, mDate);
+        taskMem.execute(urlHangout);
+
+        //urlMem.append(buildHangoutURL(mGroupCount, mDate));
         /*if(!url.isEmpty()){
             CreateHangoutTask task = new CreateHangoutTask();
             task.execute(url);
@@ -179,7 +182,7 @@ public class HangoutActivity extends AppCompatActivity
         //Log.e(TAG_THREE, mMemberMap.toString());
 
         for(String key : mMemberMap.keySet()){
-            String friendName =mMemberMap.get(key) ;
+            String friendName = mMemberMap.get(key) ;
             String friendID =key ;
             urlMem.append(buildHangoutMembers(mDate, friendName, friendID));
             //urlArr.add(buildHangoutMembers(mDate,friendName,friendID));
@@ -188,7 +191,7 @@ public class HangoutActivity extends AppCompatActivity
         }
 
 
-        CreateHangoutTask taskMem = new CreateHangoutTask();
+
         //Log.i(TAG_THREE, urlMem.toString());
         taskMem.execute(new String[]{urlMem.toString()});
 
@@ -250,7 +253,7 @@ public class HangoutActivity extends AppCompatActivity
                     String s;
                     while ((s = buffer.readLine()) != null) {
                         response += s;
-                        //Log.e(TAG_FOUR, response);
+                        Log.e(TAG_FOUR, response);
                     }
 
                 } catch (Exception e) {
@@ -277,7 +280,7 @@ public class HangoutActivity extends AppCompatActivity
             }
             try {
                 mMemberMap = GroupContent.parseGroupMembers(result);
-                Log.i(TAG_FOUR, result);
+                Log.e(TAG_FOUR, result);
 
             }catch (JSONException e) {
                 //Log.e(TAG_FOUR, e.getMessage());

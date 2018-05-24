@@ -26,7 +26,7 @@ public class CreateHangoutTask extends AsyncTask<String, Void, String> {
                 String s;
                 while ((s = buffer.readLine()) != null) {
                     response += s;
-                    Log.i(TAG,response);
+                    Log.e(TAG,response);
                 }
 
             } catch (Exception e) {
