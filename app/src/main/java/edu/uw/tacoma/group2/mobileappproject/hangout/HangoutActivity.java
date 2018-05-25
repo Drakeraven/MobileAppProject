@@ -37,7 +37,8 @@ import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
 public class HangoutActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         GroupFragment.GroupTabListener,
-        OrdersFragment.OrdersTabListener{
+        OrdersFragment.OrdersTabListener,
+        HangoutFragment.HangoutInteractionListener{
     private static final String TAG_ONE = "GROUP ID URL === ";
     private static final String TAG_TWO = "HANGOUT INSERT === ";
     private static final String TAG_THREE = "MEMBER INSERT === ";
@@ -126,7 +127,7 @@ public class HangoutActivity extends AppCompatActivity
 
         if (id == R.id.nav_hangout) {
             fm.beginTransaction()
-                    .replace(R.id.content_frame, new HangoutFragment())
+                    .replace(R.id.content_frame, HangoutFragment.newInstance(1))
                     .commit();
             fab.setVisibility(View.VISIBLE);
         } else if (id == R.id.nav_oldOrders) {
@@ -237,6 +238,10 @@ public class HangoutActivity extends AppCompatActivity
         return sb.toString();
     }
 
+    @Override
+    public void hangoutListener(Hangout item) {
+
+    }
 
 
     private class GetMemberInfoTask extends AsyncTask<String, Void, String>{

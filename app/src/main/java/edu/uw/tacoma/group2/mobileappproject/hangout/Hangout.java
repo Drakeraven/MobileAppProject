@@ -26,6 +26,8 @@ public class Hangout {
     private String mFriendName;
     private String mPrice;
 
+    public static final List<Hangout> hangList = new ArrayList<>();;
+
     public Hangout(String hid, String restName, String numMems, String closedOpen, String fid, String ordered, String fName, String price){
         this.mHid = hid;
         this.mRestName = restName;
@@ -38,7 +40,7 @@ public class Hangout {
     }
 
     public static List<Hangout> parseHangouts(String hangJSON) throws JSONException {
-        List<Hangout> hangList = new ArrayList<>();
+
         if(hangJSON != null) {
             JSONArray arr = new JSONArray(hangList);
             for(int i = 0; i < arr.length(); i++){
@@ -56,6 +58,8 @@ public class Hangout {
         }
         return hangList;
     }
+
+
 
     public String getHid() {
         return mHid;
@@ -120,4 +124,6 @@ public class Hangout {
     public void setPrice(String mPrice) {
         this.mPrice = mPrice;
     }
+
+
 }

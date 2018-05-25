@@ -32,7 +32,7 @@ public class HangoutAdapter extends RecyclerView.Adapter<HangoutAdapter.ViewHold
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         holder.mHangout = mValues.get(position);
         holder.mHidView.setText(mValues.get(position).getHid());
-        holder.mRestView.setText(mValues.get(position).getNumMembers() + " Members");
+        holder.mRestView.setText(mValues.get(position).getRestName() );
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,6 +58,11 @@ public class HangoutAdapter extends RecyclerView.Adapter<HangoutAdapter.ViewHold
             mView = view;
             mHidView = view.findViewById(R.id.item_hid);
             mRestView = view.findViewById(R.id.rest_name);
+        }
+
+        @Override
+        public String toString(){
+            return super.toString() + " '" + mRestView.getText() + " '";
         }
     }
 }

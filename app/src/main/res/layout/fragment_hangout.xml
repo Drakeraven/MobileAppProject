@@ -11,8 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
         android:textAppearance="?android:attr/textAppearanceListItem"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true" />
+        />
 
     <TextView
         android:id="@+id/rest_name"
@@ -21,7 +20,5 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
         android:textAppearance="?android:attr/textAppearanceListItem"
-        android:layout_gravity="fill_horizontal"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true" />
+         />
 </RelativeLayout>

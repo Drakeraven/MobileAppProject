@@ -33,7 +33,7 @@ import edu.uw.tacoma.group2.mobileappproject.R;
  * create an instance of this fragment.
  */
 public class HangoutFragment extends Fragment {
-    private static final String HANGOUTS_URL = "";
+    private static final String HANGOUTS_URL = "https://hangryfoodiehangout.000webhostapp.com/getHangouts.php";
     private static final String TAG = "Hangout List";
     private static final String  ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
@@ -50,7 +50,6 @@ public class HangoutFragment extends Fragment {
      * this fragment using the provided parameters.
      * @return A new instance of fragment HangoutFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static HangoutFragment newInstance(int columnCount) {
         HangoutFragment fragment = new HangoutFragment();
         Bundle args = new Bundle();
@@ -71,7 +70,7 @@ public class HangoutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_hangout, container, false);
+        View view =  inflater.inflate(R.layout.fragment_hangout_list, container, false);
         if(view instanceof RecyclerView){
             Context context = view.getContext();
             mRecyclerView = (RecyclerView) view;
@@ -80,6 +79,8 @@ public class HangoutFragment extends Fragment {
             }else{
                 mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
+
+
         }
         return view;
     }
@@ -176,6 +177,7 @@ public class HangoutFragment extends Fragment {
             }
             try {
                 mHangoutList = Hangout.parseHangouts(result);
+                Log.e(TAG, result);
 
             }catch (JSONException e) {
                 Log.e(TAG, e.getMessage());
