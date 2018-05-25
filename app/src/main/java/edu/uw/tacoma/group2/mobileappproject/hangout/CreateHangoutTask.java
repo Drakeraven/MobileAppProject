@@ -1,4 +1,4 @@
-package edu.uw.tacoma.group2.mobileappproject;
+package edu.uw.tacoma.group2.mobileappproject.hangout;
 
 import android.os.AsyncTask;
 import android.util.Log;

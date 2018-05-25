@@ -1,4 +1,4 @@
-package edu.uw.tacoma.group2.mobileappproject;
+package edu.uw.tacoma.group2.mobileappproject.hangout;
 
 import android.support.v4.app.FragmentManager;
 import android.os.AsyncTask;
@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import org.json.JSONException;
 
@@ -23,16 +22,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
-import edu.uw.tacoma.group2.mobileappproject.group.MyGroupRecyclerViewAdapter;
+import edu.uw.tacoma.group2.mobileappproject.R;
+import edu.uw.tacoma.group2.mobileappproject.hangout.CreateHangoutTask;
 import edu.uw.tacoma.group2.mobileappproject.order.OrdersContent;
 import edu.uw.tacoma.group2.mobileappproject.order.OrdersFragment;
 import edu.uw.tacoma.group2.mobileappproject.group.GroupContent;
@@ -131,6 +125,9 @@ public class HangoutActivity extends AppCompatActivity
         FragmentManager fm = getSupportFragmentManager();
 
         if (id == R.id.nav_hangout) {
+            fm.beginTransaction()
+                    .replace(R.id.content_frame, new HangoutFragment())
+                    .commit();
             fab.setVisibility(View.VISIBLE);
         } else if (id == R.id.nav_oldOrders) {
             fm.beginTransaction()
@@ -160,18 +157,11 @@ public class HangoutActivity extends AppCompatActivity
         /*String infoURL =
                 "http://stephd27.000webhostapp.com/list.php?cmd=groupsuid="
                 + item.getGroupID();*/
-        GetMemberInfoTask memInfoTask = new GetMemberInfoTask();
-        memInfoTask.execute(GET_MEMBERS_URL + item.getGroupID());
         //Log.i(TAG_ONE,ADD_HANGOUT_MEM_URL + item.getGroupID());
-        long sysTime = System.currentTimeMillis();
-        mDate = new Date(sysTime);
-
-        CreateHangoutTask taskMem = new CreateHangoutTask();
-        String mGroupCount = item.getGroupCount();
-        StringBuilder urlMem = new StringBuilder();
-        String urlHangout = buildHangoutURL(mGroupCount, mDate);
-        taskMem.execute(urlHangout);
-
+        getMembersFromDB(item);
+        insertIntoHangoutTable(item);
+        insertMembersIntoDB();
+        //StringBuilder urlMem = new StringBuilder();
         //urlMem.append(buildHangoutURL(mGroupCount, mDate));
         /*if(!url.isEmpty()){
             CreateHangoutTask task = new CreateHangoutTask();
@@ -180,25 +170,37 @@ public class HangoutActivity extends AppCompatActivity
         }
 */
         //Log.e(TAG_THREE, mMemberMap.toString());
+        //Log.i(TAG_THREE, urlMem.toString());
+        //taskMem.execute(new String[]{urlMem.toString()});
 
+    }
+
+    private void insertMembersIntoDB(){
         for(String key : mMemberMap.keySet()){
             String friendName = mMemberMap.get(key) ;
             String friendID =key ;
-            urlMem.append(buildHangoutMembers(mDate, friendName, friendID));
+            CreateHangoutTask taskMembers = new CreateHangoutTask();
+            String urlMembers = buildHangoutMembers(mDate, friendName, friendID);
+            taskMembers.execute(new String[]{urlMembers});
             //urlArr.add(buildHangoutMembers(mDate,friendName,friendID));
             //Log.i(TAG_THREE,urlMem);
 
         }
+    }
 
+    private void insertIntoHangoutTable(GroupContent group){
+        long sysTime = System.currentTimeMillis();
+        mDate = new Date(sysTime);
+        CreateHangoutTask taskMem = new CreateHangoutTask();
+        String mGroupCount = group.getGroupCount();
+        String urlHangout = buildHangoutURL(mGroupCount, mDate);
+        taskMem.execute(new String[] {urlHangout});
+    }
 
-
-        //Log.i(TAG_THREE, urlMem.toString());
-        taskMem.execute(new String[]{urlMem.toString()});
-
-
-
-
-
+    private void getMembersFromDB(GroupContent group){
+        GetMemberInfoTask memInfoTask = new GetMemberInfoTask();
+        String membersURL = GET_MEMBERS_URL + group.getGroupID();
+        memInfoTask.execute(new String[]{membersURL});
     }
 
     private String buildHangoutURL(String memCount, Date date){
@@ -275,7 +277,7 @@ public class HangoutActivity extends AppCompatActivity
             //Log.i(TAG_FOUR, "onPostExecute");
 
             if (result.startsWith("Unable to")) {
-                //Log.e(TAG_FOUR, result);
+                Log.e(TAG_FOUR, result);
                 return;
             }
             try {
@@ -283,7 +285,7 @@ public class HangoutActivity extends AppCompatActivity
                 Log.e(TAG_FOUR, result);
 
             }catch (JSONException e) {
-                //Log.e(TAG_FOUR, e.getMessage());
+                Log.e(TAG_FOUR, e.getMessage());
                 return;
             }
         }

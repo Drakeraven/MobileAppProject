@@ -38,7 +38,7 @@
         </activity>
         <activity android:name=".FavoritesActivity" />
         <activity
-            android:name=".RestaurantsActivity"
+            android:name=".restaurant.RestaurantsActivity"
             android:parentActivityName=".SplashActivity" />
 
         <meta-data
@@ -69,7 +69,7 @@
         </activity>
         <activity android:name=".restaurant.RestaurantProfile" />
         <activity
-            android:name=".HangoutActivity"
+            android:name=".hangout.HangoutActivity"
             android:label="@string/title_activity_hangout"
             android:parentActivityName=".SplashActivity"
             android:theme="@style/AppTheme">
