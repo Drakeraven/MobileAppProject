@@ -38,7 +38,7 @@ public class GroupFragment extends Fragment {
 
     private static final String TAG = "Group List";
     private static final String ARG_COLUMN_COUNT = "column-count";
-    private static final String GROUPS_URL =
+    public static final String GROUPS_URL =
             "http://stephd27.000webhostapp.com/list.php?cmd=groups&uid=" + UserContent.sUserID;
 
     private int mColumnCount = 1;
@@ -154,7 +154,7 @@ public class GroupFragment extends Fragment {
     /**
      * Web Service used to retrieve a User's Groups.
      */
-    private class GetGroupInfoTask extends AsyncTask<String, Void, String> {
+    public class GetGroupInfoTask extends AsyncTask<String, Void, String> {
 
         /**
          * Kicks off getting groups
