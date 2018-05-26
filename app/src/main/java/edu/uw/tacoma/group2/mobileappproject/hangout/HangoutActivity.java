@@ -219,7 +219,7 @@ public class HangoutActivity extends AppCompatActivity
         StringBuilder sb = new StringBuilder(ADD_HANGOUT_URL);
         sb.append("&hid=").append(date.toString());
         if(!(UserContent.sUserRestaurant == null)){
-            String cleanString = UserContent.sUserRestaurant.replace("'", "\\\\'");
+            String cleanString = UserContent.sUserRestaurant.replace("'", "\\\'");
             cleanString = cleanString.replace("\"", "\\\\\"");
             sb.append("&rest_name=").append(cleanString);
         }else {
