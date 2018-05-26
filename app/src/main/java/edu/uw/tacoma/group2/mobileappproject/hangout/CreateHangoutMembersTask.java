@@ -3,6 +3,8 @@ package edu.uw.tacoma.group2.mobileappproject.hangout;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONException;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -10,8 +12,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.concurrent.CountDownLatch;
 
-public class CreateHangoutTask extends AsyncTask<String, Void, String> {
-    private static final String TAG = "HANGOUT TASK  ";
+import edu.uw.tacoma.group2.mobileappproject.group.GroupContent;
+
+public class CreateHangoutMembersTask extends AsyncTask<String, Void, String> {
+
+    private static final String TAG = "HANGOUT MEMBER TASK  ";
 
     @Override
     protected String doInBackground(String... urls) {
@@ -32,7 +37,7 @@ public class CreateHangoutTask extends AsyncTask<String, Void, String> {
                 }
 
             } catch (Exception e) {
-                response = "Unable to add course, Reason: "
+                response = "Unable to add members, Reason: "
                         + e.getMessage();
             } finally {
                 if (urlConnection != null)
@@ -43,6 +48,8 @@ public class CreateHangoutTask extends AsyncTask<String, Void, String> {
 
         return response;
     }
+
+
 
 
 }

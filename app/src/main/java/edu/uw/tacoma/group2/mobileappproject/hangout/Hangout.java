@@ -26,29 +26,45 @@ public class Hangout {
     private String mFriendName;
     private String mPrice;
 
-    public static final List<Hangout> hangList = new ArrayList<>();;
+    public static final List<Hangout> hangList = new ArrayList<>();
 
-    public Hangout(String hid, String restName, String numMems, String closedOpen, String fid, String ordered, String fName, String price){
+    private Hangout(String hid, String restName, String numMems, String closedOpen){
         this.mHid = hid;
         this.mRestName = restName;
         this.mNumMembers = numMems;
         this.mClosedOpen = closedOpen;
+    }
+
+    private Hangout(String hid, String fid, String ordered, String fName, String price){
+        this.mHid = hid;
         this.mFid = fid;
         this.mOrdered = ordered;
         this.mFriendName = fName;
         this.mPrice = price;
     }
 
-    public static List<Hangout> parseHangouts(String hangJSON) throws JSONException {
-
+    public static List<Hangout> parseHangout(String hangJSON) throws JSONException {
+        List<Hangout> hList = new ArrayList<>();
         if(hangJSON != null) {
-            JSONArray arr = new JSONArray(hangList);
+            JSONArray arr = new JSONArray(hangJSON);
             for(int i = 0; i < arr.length(); i++){
                 JSONObject obj = arr.getJSONObject(i);
                 Hangout hangout = new Hangout(obj.getString(Hangout.HID),
                         obj.getString(Hangout.REST_NAME),
                         obj.getString(Hangout.NUM_MEMBERS),
-                        obj.getString(Hangout.CLOSED_OPEN),
+                        obj.getString(Hangout.CLOSED_OPEN));
+                hangList.add(hangout);
+            }
+        }
+        return hangList;
+    }
+    public static List<Hangout> parseHangoutMems(String hangJSON) throws JSONException {
+        List<Hangout> hList = new ArrayList<>();
+        if(hangJSON != null) {
+            JSONArray arr = new JSONArray(hangList);
+            for(int i = 0; i < arr.length(); i++){
+                JSONObject obj = arr.getJSONObject(i);
+                Hangout hangout = new Hangout(obj.getString(Hangout.HID),
                         obj.getString(Hangout.FID),
                         obj.getString(Hangout.ORDERED),
                         obj.getString(Hangout.FRIEND_NAME),

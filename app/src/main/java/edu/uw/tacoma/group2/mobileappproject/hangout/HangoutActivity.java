@@ -22,8 +22,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import edu.uw.tacoma.group2.mobileappproject.R;
 import edu.uw.tacoma.group2.mobileappproject.hangout.CreateHangoutTask;
@@ -78,6 +81,7 @@ public class HangoutActivity extends AppCompatActivity
                 fm.beginTransaction()
                         .replace(R.id.content_frame, GroupFragment.newInstance(1))
                         .commit();
+                fm.executePendingTransactions();
                 /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
             }
@@ -151,17 +155,24 @@ public class HangoutActivity extends AppCompatActivity
     }
 
 
-
-    public void groupTabListener(GroupContent item) {
+    @Override
+    public void groupTabListener(GroupContent item)  {
         /*Toast.makeText(getApplicationContext(), "CLICKED ON " + item.getGroupName(),
                 Toast.LENGTH_LONG).show();*/
         /*String infoURL =
                 "http://stephd27.000webhostapp.com/list.php?cmd=groupsuid="
                 + item.getGroupID();*/
         //Log.i(TAG_ONE,ADD_HANGOUT_MEM_URL + item.getGroupID());
-        getMembersFromDB(item);
-        insertIntoHangoutTable(item);
-        insertMembersIntoDB();
+
+
+            getMembersFromDB(item);
+            insertIntoHangoutTable(item);
+            insertMembersIntoDB();
+
+
+
+
+
         //StringBuilder urlMem = new StringBuilder();
         //urlMem.append(buildHangoutURL(mGroupCount, mDate));
         /*if(!url.isEmpty()){
@@ -177,19 +188,27 @@ public class HangoutActivity extends AppCompatActivity
     }
 
     private void insertMembersIntoDB(){
+
+        //List<String> groupMems = new ArrayList<>();
         for(String key : mMemberMap.keySet()){
+            CreateHangoutMembersTask taskMembers = new CreateHangoutMembersTask();
             String friendName = mMemberMap.get(key) ;
             String friendID =key ;
-            CreateHangoutTask taskMembers = new CreateHangoutTask();
             String urlMembers = buildHangoutMembers(mDate, friendName, friendID);
+            //groupMems.add(urlMembers);
             taskMembers.execute(new String[]{urlMembers});
             //urlArr.add(buildHangoutMembers(mDate,friendName,friendID));
-            //Log.i(TAG_THREE,urlMem);
 
         }
+        CreateHangoutMembersTask taskUser = new CreateHangoutMembersTask();
+        String userInsert = buildHangoutMembers(mDate, UserContent.sUserID, UserContent.sUserName);
+        //groupMems.add(userInsert);
+        //Log.e(TAG_THREE,groupMems.toString());
+        taskUser.execute(new String[]{userInsert});
+
     }
 
-    private void insertIntoHangoutTable(GroupContent group){
+    private void insertIntoHangoutTable( GroupContent group){
         long sysTime = System.currentTimeMillis();
         mDate = new Date(sysTime);
         CreateHangoutTask taskMem = new CreateHangoutTask();
@@ -198,7 +217,7 @@ public class HangoutActivity extends AppCompatActivity
         taskMem.execute(new String[] {urlHangout});
     }
 
-    private void getMembersFromDB(GroupContent group){
+    private void getMembersFromDB( GroupContent group){
         GetMemberInfoTask memInfoTask = new GetMemberInfoTask();
         String membersURL = GET_MEMBERS_URL + group.getGroupID();
         memInfoTask.execute(new String[]{membersURL});
@@ -234,7 +253,7 @@ public class HangoutActivity extends AppCompatActivity
             sb.append("&friend_name=").append(pair.getValue().toString());
             sb.append("&price=").append("0");
         }*/
-        //Log.e(TAG_THREE, sb.toString());
+        Log.e(TAG_THREE, sb.toString());
         return sb.toString();
     }
 
@@ -245,6 +264,7 @@ public class HangoutActivity extends AppCompatActivity
 
 
     private class GetMemberInfoTask extends AsyncTask<String, Void, String>{
+
         @Override
         protected String doInBackground(String... urls) {
             String response = "";
@@ -260,7 +280,7 @@ public class HangoutActivity extends AppCompatActivity
                     String s;
                     while ((s = buffer.readLine()) != null) {
                         response += s;
-                        Log.e(TAG_FOUR, response);
+                        //Log.e(TAG_FOUR, response);
                     }
 
                 } catch (Exception e) {
@@ -287,7 +307,8 @@ public class HangoutActivity extends AppCompatActivity
             }
             try {
                 mMemberMap = GroupContent.parseGroupMembers(result);
-                Log.e(TAG_FOUR, result);
+                //Log.e(TAG_FOUR, result);
+
 
             }catch (JSONException e) {
                 Log.e(TAG_FOUR, e.getMessage());

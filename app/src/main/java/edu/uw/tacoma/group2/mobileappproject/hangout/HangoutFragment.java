@@ -176,7 +176,7 @@ public class HangoutFragment extends Fragment {
                 return;
             }
             try {
-                mHangoutList = Hangout.parseHangouts(result);
+                mHangoutList = Hangout.parseHangout(result);
                 Log.e(TAG, result);
 
             }catch (JSONException e) {

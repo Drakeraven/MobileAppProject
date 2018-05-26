@@ -204,6 +204,7 @@ public class GroupFragment extends Fragment {
             }
             try {
                 mGroupList = GroupContent.parseGroupList(result);
+                Log.e(TAG, result);
 
             }catch (JSONException e) {
                 Log.e(TAG, e.getMessage());
