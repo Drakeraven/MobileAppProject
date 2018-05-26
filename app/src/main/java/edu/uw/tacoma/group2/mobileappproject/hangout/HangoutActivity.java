@@ -152,7 +152,7 @@ public class HangoutActivity extends AppCompatActivity
 
 
     @Override
-    public void orderTabListener(OrdersContent.OrderItem item) {
+    public void orderTabListener(OrdersContent item) {
 
     }
 
