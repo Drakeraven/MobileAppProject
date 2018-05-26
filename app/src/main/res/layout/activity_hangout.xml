@@ -22,4 +22,6 @@
         app:headerLayout="@layout/nav_header_hangout"
         app:menu="@menu/activity_hangout_drawer" />
 
+
+
 </android.support.v4.widget.DrawerLayout>

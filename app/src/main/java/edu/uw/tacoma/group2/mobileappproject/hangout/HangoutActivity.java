@@ -4,6 +4,8 @@ import android.support.v4.app.FragmentManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -62,7 +64,9 @@ public class HangoutActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hangout);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.current_hangouts);
         setSupportActionBar(toolbar);
+
         mMemberMap = new HashMap<>();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -72,6 +76,8 @@ public class HangoutActivity extends AppCompatActivity
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction().replace(R.id.content_frame, new HangoutFragment()).commit();
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -79,9 +85,8 @@ public class HangoutActivity extends AppCompatActivity
             public void onClick(View view) {
                 FragmentManager fm = getSupportFragmentManager();
                 fm.beginTransaction()
-                        .replace(R.id.content_frame, GroupFragment.newInstance(1))
+                        .replace(R.id.content_frame, new GroupFragment())
                         .commit();
-                fm.executePendingTransactions();
                 /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
             }
@@ -131,9 +136,10 @@ public class HangoutActivity extends AppCompatActivity
 
         if (id == R.id.nav_hangout) {
             fm.beginTransaction()
-                    .replace(R.id.content_frame, HangoutFragment.newInstance(1))
+                    .replace(R.id.content_frame, new HangoutFragment())
                     .commit();
             fab.setVisibility(View.VISIBLE);
+
         } else if (id == R.id.nav_oldOrders) {
             fm.beginTransaction()
                     .replace(R.id.content_frame, new OrdersFragment())
@@ -163,8 +169,6 @@ public class HangoutActivity extends AppCompatActivity
                 "http://stephd27.000webhostapp.com/list.php?cmd=groupsuid="
                 + item.getGroupID();*/
         //Log.i(TAG_ONE,ADD_HANGOUT_MEM_URL + item.getGroupID());
-
-
             getMembersFromDB(item);
             insertIntoHangoutTable(item);
             insertMembersIntoDB();
@@ -273,9 +277,7 @@ public class HangoutActivity extends AppCompatActivity
                 try {
                     URL urlObject = new URL(url);
                     urlConnection = (HttpURLConnection) urlObject.openConnection();
-
                     InputStream content = urlConnection.getInputStream();
-
                     BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
                     String s;
                     while ((s = buffer.readLine()) != null) {

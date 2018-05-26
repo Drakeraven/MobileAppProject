@@ -137,7 +137,7 @@ public class RestaurantsActivity extends AppCompatActivity {
         progressDialog.show();*/
         //RequestQueue queue = Volley.newRequestQueue(this);
         String url = URL + "lat="+  lat + "&lon=" + lon;
-        Log.i(TAG, "URL: " + url);
+        //Log.i(TAG, "URL: " + url);
         ZomatoAsyncTask zomTask = new ZomatoAsyncTask();
         zomTask.execute(new String[]{url});
         /*final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -253,7 +253,7 @@ public class RestaurantsActivity extends AppCompatActivity {
                     String s;
                     while ((s = buffer.readLine()) != null) {
                         response += s;
-                        Log.e(TAG,response);
+                        //Log.e(TAG,response);
                     }
 
                 } catch (Exception e) {
@@ -273,15 +273,11 @@ public class RestaurantsActivity extends AppCompatActivity {
             if (result.startsWith("Unable to")) {
                 Log.e(TAG, result);
                 return;
-
             }
             try {
-
                 mRestaurantList = Restaurant.getRestaurants(result);
-                mAdapter = new RestaurantAdapter(mRestaurantList, getApplicationContext());
+                mAdapter = new RestaurantAdapter(mRestaurantList, getApplicationContext(), mRecycler);
                 mRecycler.setAdapter(mAdapter);
-
-
 
             }catch (JSONException e) {
                 Log.e(TAG, e.getMessage());
