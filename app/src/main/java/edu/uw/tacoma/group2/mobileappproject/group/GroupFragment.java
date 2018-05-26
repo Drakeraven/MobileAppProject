@@ -114,6 +114,7 @@ public class GroupFragment extends Fragment {
         task.execute(GROUPS_URL);
     }
 
+
     /**
      * <p>Called when Fragment is attached to an activity</p>
      * Binds listener to fragment.
