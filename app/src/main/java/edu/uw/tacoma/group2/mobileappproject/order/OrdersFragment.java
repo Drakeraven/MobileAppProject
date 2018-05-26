@@ -9,6 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import java.util.List;
 
 import edu.uw.tacoma.group2.mobileappproject.HangryDB;
 import edu.uw.tacoma.group2.mobileappproject.R;
@@ -73,10 +76,14 @@ public class OrdersFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             if (mHangryDB == null) {
-                mHangryDB = new HangryDB(getActivity());
+                mHangryDB = new HangryDB(getContext());
             }
-
-            recyclerView.setAdapter(new MyOrdersRecyclerViewAdapter(mHangryDB.getOrders(), mListener));
+            List<OrdersContent> prevOrders = mHangryDB.getOrders();
+            if (prevOrders != null) {
+                recyclerView.setAdapter(new MyOrdersRecyclerViewAdapter(prevOrders, mListener));
+            } else {
+                Toast.makeText(getContext(),"No Orders to display.", Toast.LENGTH_LONG).show();
+            }
         }
         return view;
     }

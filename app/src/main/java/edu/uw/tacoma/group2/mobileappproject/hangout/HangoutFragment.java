@@ -4,12 +4,16 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -23,6 +27,7 @@ import java.net.URL;
 import java.util.List;
 
 import edu.uw.tacoma.group2.mobileappproject.R;
+import edu.uw.tacoma.group2.mobileappproject.order.OrderMenu.OrderMenuFragment;
 import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
 
 /**
@@ -76,6 +81,7 @@ public class HangoutFragment extends Fragment {
         if(view instanceof RecyclerView){
             Context context = view.getContext();
             mRecyclerView = (RecyclerView) view;
+            registerForContextMenu(mRecyclerView);
             if(mColumnCount <= 1){
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
             }else{
@@ -89,7 +95,15 @@ public class HangoutFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        FloatingActionButton fab = getActivity().findViewById(R.id.fab);
+        fab.setVisibility(View.VISIBLE);
+        Toolbar tb = getActivity().findViewById(R.id.toolbar);
+        tb.setTitle(R.string.current_hangouts);
 
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -114,6 +128,28 @@ public class HangoutFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        int position = -1;
+        try {
+            position = ((HangoutAdapter)mRecyclerView.getAdapter()).getPosition();
+        } catch (Exception e) {
+            Log.d(TAG, e.getLocalizedMessage(), e);
+            return super.onContextItemSelected(item);
+        }
+        FloatingActionButton fab = getActivity().findViewById(R.id.fab);
+        fab.setVisibility(View.GONE);
+        Toolbar tb = getActivity().findViewById(R.id.toolbar);
+        tb.setTitle("Order Item: ");
+        Hangout hangout = mHangoutList.get(position);
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().replace(R.id.content_frame, OrderMenuFragment.newInstance(1, hangout))
+                .addToBackStack(null)
+                .commit();
+
+        return super.onContextItemSelected(item);
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -125,7 +161,6 @@ public class HangoutFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface HangoutInteractionListener {
-        // TODO: Update argument type and name
         void hangoutListener(Hangout item);
     }
 
@@ -187,7 +222,7 @@ public class HangoutFragment extends Fragment {
             }
             if (!mHangoutList.isEmpty()) {
                 mRecyclerView.setAdapter(null);
-                mRecyclerView.setAdapter(new HangoutAdapter(mHangoutList, mListener));
+                mRecyclerView.setAdapter(new HangoutAdapter(mHangoutList, mListener, getActivity()));
             }
         }
     }

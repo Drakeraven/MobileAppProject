@@ -4,10 +4,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Hangout {
+public class Hangout implements Serializable {
     public static final String HID = "hid";
     public static final String REST_NAME = "rest_name";
     public static final String NUM_MEMBERS = "num_members";

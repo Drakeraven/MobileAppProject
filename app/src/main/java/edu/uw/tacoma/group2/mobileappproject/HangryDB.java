@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +14,8 @@ import edu.uw.tacoma.group2.mobileappproject.order.OrdersContent;
 
 public class HangryDB {
     public static final int DB_VERSION = 1;
-    public static final String DB_NAME = "Order.db";
-    public static final String ORDER_TABLE = "Order";
+    public static final String DB_NAME = "Orders.db";
+    public static final String ORDER_TABLE = "Orders";
 
     private OrderDBHelper mOrderDBHelper;
     private SQLiteDatabase mSqlLiteDatabase;
@@ -30,7 +31,7 @@ public class HangryDB {
         contentValues.put("foods", foods);
         contentValues.put("price", price);
 
-        long rowId = mSqlLiteDatabase.insert("Order", null, contentValues);
+        long rowId = mSqlLiteDatabase.insert(ORDER_TABLE, null, contentValues);
         return rowId != -1;
     }
 
@@ -64,7 +65,7 @@ public class HangryDB {
 
             c.moveToNext();
         }
-        return null;
+        return list;
 
     }
 
@@ -83,14 +84,14 @@ public class HangryDB {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-            mSqlLiteDatabase.execSQL(CREATE_ORDER_SQL);
+            db.execSQL(CREATE_ORDER_SQL);
 
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            mSqlLiteDatabase.execSQL(DROP_ORDER_SQL);
-            onCreate(mSqlLiteDatabase);
+            db.execSQL(DROP_ORDER_SQL);
+            onCreate(db);
         }
     }
 }

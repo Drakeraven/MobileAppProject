@@ -42,7 +42,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginTop="30dp"
-            android:text="Order" />
+            android:layout_marginRight="12dp"
+            android:text="Order"
+            android:background="@drawable/rounded_btn_white"/>
     </RelativeLayout>
 
 </LinearLayout>
