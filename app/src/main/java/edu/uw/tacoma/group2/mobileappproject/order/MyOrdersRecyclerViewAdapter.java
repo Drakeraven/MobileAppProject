@@ -9,7 +9,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import edu.uw.tacoma.group2.mobileappproject.R;
-import edu.uw.tacoma.group2.mobileappproject.order.OrdersContent.OrderItem;
 import edu.uw.tacoma.group2.mobileappproject.order.OrdersFragment.OrdersTabListener;
 
 /**
@@ -19,15 +18,15 @@ import edu.uw.tacoma.group2.mobileappproject.order.OrdersFragment.OrdersTabListe
  * @version 1.0
  */
 public class MyOrdersRecyclerViewAdapter extends RecyclerView.Adapter<MyOrdersRecyclerViewAdapter.ViewHolder>{
-    private final List<OrderItem> mValues;
+    private final List<OrdersContent> mValues;
     private final OrdersTabListener mListener;
 
     /**
      * Public constructor used to create instance of an Order RecyclerView adapter.
-     * @param items An order from the list of OrderItems.
+     * @param items An order from the list of OrdersContents.
      * @param listener Listener for individual items in the order list.
      */
-    public MyOrdersRecyclerViewAdapter(List<OrderItem> items, OrdersTabListener listener){
+    public MyOrdersRecyclerViewAdapter(List<OrdersContent> items, OrdersTabListener listener){
         mValues = items;
         mListener = listener;
     }
@@ -53,8 +52,8 @@ public class MyOrdersRecyclerViewAdapter extends RecyclerView.Adapter<MyOrdersRe
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mIdView.setText(mValues.get(position).mHangoutID);
+        holder.mContentView.setText(mValues.get(position).mPrice);
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,7 +82,7 @@ public class MyOrdersRecyclerViewAdapter extends RecyclerView.Adapter<MyOrdersRe
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public OrderItem mItem;
+        public OrdersContent mItem;
 
         /**
          * Public constructor used to create an order ViewHolder.
