@@ -64,10 +64,12 @@ public class Restaurant {
      * @return A list of of restaurant objects.
      * @throws JSONException
      */
-    public static List<Restaurant> getRestaurants(JSONObject restaurantsJSON) throws JSONException{
+    public static List<Restaurant> getRestaurants(String restaurantsJSON) throws JSONException{
+
         List<Restaurant> restaurantList = new ArrayList<>();
         if(restaurantsJSON != null) {
-                JSONArray arrJSON = restaurantsJSON.getJSONArray("nearby_restaurants");
+                JSONObject jRes = new JSONObject(restaurantsJSON);
+                JSONArray arrJSON = jRes.getJSONArray("nearby_restaurants");
                 for(int i = 0; i < arrJSON.length(); i++){
                     Restaurant restaurant = new Restaurant(arrJSON.getJSONObject(i).getJSONObject("restaurant").getString(Restaurant.NAME),
                             arrJSON.getJSONObject(i).getJSONObject("restaurant").getString(Restaurant.IMAGE),

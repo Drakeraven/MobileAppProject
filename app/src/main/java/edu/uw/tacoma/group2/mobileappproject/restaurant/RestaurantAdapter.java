@@ -1,19 +1,24 @@
 package edu.uw.tacoma.group2.mobileappproject.restaurant;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import edu.uw.tacoma.group2.mobileappproject.R;
+import edu.uw.tacoma.group2.mobileappproject.SplashActivity;
+import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
 
 /**
  * RecyclerView adapter used to gather the information created by the Restaurant class fields and display
@@ -27,6 +32,8 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
     public static final String KEY_RATING = "user_rating";
     private List<Restaurant> mRestaurantsList;
     private Context mContext;
+    private RecyclerView mRecycler;
+
 
     /**
      * public constructore used to create instance of the RecyclerView adapter
@@ -34,9 +41,11 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
      * @param restaurantsList the list of nearby restaurants.
      * @param context the context which is using the adapter.
      */
-    public RestaurantAdapter(List<Restaurant> restaurantsList, Context context){
+    public RestaurantAdapter(List<Restaurant> restaurantsList, Context context, RecyclerView recycler){
         this.mRestaurantsList = restaurantsList;
         this.mContext = context;
+        this.mRecycler = recycler;
+
     }
 
     /**
@@ -49,6 +58,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_restaurant, parent, false);
+
         return new ViewHolder(v);
     }
 
@@ -74,6 +84,11 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                UserContent.sUserRestaurant = restaurantList.getName();
+                Intent skipIntent = new Intent(v.getContext(), SplashActivity.class);
+                v.getContext().startActivity(skipIntent);
+                Toast.makeText(v.getContext(), "You chose " + restaurantList.getName() +" for your hangout",Toast.LENGTH_LONG).show();
+
                 /*Restaurant restaurantList1 = mRestaurantsList.get(position);
                 Intent skipIntent = new Intent(v.getContext(), RestaurantProfile.class);
                 skipIntent.putExtra(KEY_NAME, restaurantList1.getName());
@@ -112,6 +127,10 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
             image = (ImageView) itemView.findViewById(R.id.imageView);
             rating = (TextView) itemView.findViewById(R.id.rating);
             linearLayout = (LinearLayout) itemView.findViewById(R.id.linearLayout);
+        }
+
+        public String getName(){
+            return ((String) name.getText()).toString();
         }
     }
 }

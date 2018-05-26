@@ -18,8 +18,6 @@ import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
-import com.facebook.share.model.ShareHashtag;
-import com.facebook.share.model.ShareLinkContent;
 
 import org.json.JSONObject;
 
@@ -27,6 +25,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+import edu.uw.tacoma.group2.mobileappproject.hangout.HangoutActivity;
+import edu.uw.tacoma.group2.mobileappproject.restaurant.RestaurantsActivity;
 import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
 
 /**
