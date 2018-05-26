@@ -23,6 +23,7 @@ import java.net.URL;
 import java.util.List;
 
 import edu.uw.tacoma.group2.mobileappproject.R;
+import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,7 +34,8 @@ import edu.uw.tacoma.group2.mobileappproject.R;
  * create an instance of this fragment.
  */
 public class HangoutFragment extends Fragment {
-    private static final String HANGOUTS_URL = "https://hangryfoodiehangout.000webhostapp.com/getHangouts.php";
+    private static final String HANGOUTS_URL =
+            "https://hangryfoodiehangout.000webhostapp.com/getHangouts.php?&fid=" + UserContent.sUserID;
     private static final String TAG = "Hangout List";
     private static final String  ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
@@ -79,6 +81,8 @@ public class HangoutFragment extends Fragment {
             }else{
                 mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
+            GetHangoutsTask task = new GetHangoutsTask();
+            task.execute(HANGOUTS_URL);
 
 
         }
@@ -101,8 +105,6 @@ public class HangoutFragment extends Fragment {
     @Override
     public void onStart(){
         super.onStart();
-        GetHangoutsTask task = new GetHangoutsTask();
-        task.execute(HANGOUTS_URL);
 
     }
 
@@ -184,6 +186,7 @@ public class HangoutFragment extends Fragment {
                 return;
             }
             if (!mHangoutList.isEmpty()) {
+                mRecyclerView.setAdapter(null);
                 mRecyclerView.setAdapter(new HangoutAdapter(mHangoutList, mListener));
             }
         }

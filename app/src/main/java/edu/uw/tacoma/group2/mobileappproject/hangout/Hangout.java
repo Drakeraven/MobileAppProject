@@ -53,10 +53,10 @@ public class Hangout {
                         obj.getString(Hangout.REST_NAME),
                         obj.getString(Hangout.NUM_MEMBERS),
                         obj.getString(Hangout.CLOSED_OPEN));
-                hangList.add(hangout);
+                hList.add(hangout);
             }
         }
-        return hangList;
+        return hList;
     }
     public static List<Hangout> parseHangoutMems(String hangJSON) throws JSONException {
         List<Hangout> hList = new ArrayList<>();

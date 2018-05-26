@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import edu.uw.tacoma.group2.mobileappproject.group.GroupContent;
@@ -24,6 +25,7 @@ public class CreateHangoutMembersTask extends AsyncTask<String, Void, String> {
         HttpURLConnection urlConnection = null;
         for (String url : urls) {
             try {
+                Log.e("Executing urls ", url);
                 URL urlObject = new URL(url);
                 urlConnection = (HttpURLConnection) urlObject.openConnection();
 
