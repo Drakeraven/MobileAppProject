@@ -1,4 +1,4 @@
-package edu.uw.tacoma.group2.mobileappproject.restaurant;
+package edu.uw.tacoma.group2.mobileappproject;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -15,9 +15,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -38,7 +38,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.uw.tacoma.group2.mobileappproject.R;
+import edu.uw.tacoma.group2.mobileappproject.restaurant.Restaurant;
+import edu.uw.tacoma.group2.mobileappproject.restaurant.RestaurantAdapter;
 
 /**
  * This class represents the Restaurants activity. The purpose of the activity is
@@ -83,8 +84,18 @@ public class RestaurantsActivity extends AppCompatActivity implements SwipeRefre
         mRecycler = (RecyclerView) findViewById(R.id.recycler_restaurants);
         mRecycler.setHasFixedSize(true);
         mRecycler.setLayoutManager(new LinearLayoutManager(getParent()));
+        mSwipeRefreshLayout = (SwipeRefreshLayout) this.findViewById(R.id.swipe_rests);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        if(mLatitude == null || mLongitude == null){
+            mLatitude = DEFAULT_LAT;
+            mLongitude = DEFAULT_LON;
+            loadZomatoData(mLatitude, mLongitude);
+        } else {
+            loadZomatoData(mLatitude,mLongitude);
+        }
+
         mRestaurantList = new ArrayList<Restaurant>();
-        mSearchBtn = findViewById(R.id.btn_search);
+       /* mSearchBtn = findViewById(R.id.btn_search);
         mSearchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +108,7 @@ public class RestaurantsActivity extends AppCompatActivity implements SwipeRefre
                 }
 
             }
-        });
+        });*/
         mFusedClient = LocationServices.getFusedLocationProviderClient(this);
         mLocationCallback = new LocationCallback(){
             @Override
@@ -303,6 +314,8 @@ public class RestaurantsActivity extends AppCompatActivity implements SwipeRefre
                 Log.e(TAG, e.getMessage());
                 return;
             }
+            mSwipeRefreshLayout.setRefreshing(false);
+
         }
     }
 }

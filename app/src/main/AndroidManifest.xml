@@ -38,7 +38,7 @@
         </activity>
         <activity android:name=".FavoritesActivity" />
         <activity
-            android:name=".restaurant.RestaurantsActivity"
+            android:name=".RestaurantsActivity"
             android:parentActivityName=".SplashActivity" />
 
         <meta-data

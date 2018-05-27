@@ -26,7 +26,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import edu.uw.tacoma.group2.mobileappproject.hangout.HangoutActivity;
-import edu.uw.tacoma.group2.mobileappproject.restaurant.RestaurantsActivity;
 import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
 
 /**
