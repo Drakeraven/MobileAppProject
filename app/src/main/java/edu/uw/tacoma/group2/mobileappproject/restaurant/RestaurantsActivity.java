@@ -10,12 +10,14 @@ import android.os.Build;
 import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -45,7 +47,7 @@ import edu.uw.tacoma.group2.mobileappproject.R;
  * @author Harlan Stewart
  * @version 1.0
  */
-public class RestaurantsActivity extends AppCompatActivity {
+public class RestaurantsActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     private String URL = "https://developers.zomato.com/api/v2.1/geocode?";
     private static final String DEFAULT_LAT = "47.244176";
     private static final String DEFAULT_LON ="-122.436984";
@@ -65,6 +67,7 @@ public class RestaurantsActivity extends AppCompatActivity {
     private RecyclerView mRecycler;
     private RestaurantAdapter mAdapter;
     private List<Restaurant> mRestaurantList;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
 
 
@@ -76,6 +79,7 @@ public class RestaurantsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurants);
+
         mRecycler = (RecyclerView) findViewById(R.id.recycler_restaurants);
         mRecycler.setHasFixedSize(true);
         mRecycler.setLayoutManager(new LinearLayoutManager(getParent()));
@@ -121,6 +125,8 @@ public class RestaurantsActivity extends AppCompatActivity {
         } else {
             mFusedClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
         }
+
+
     }
 
 
@@ -179,6 +185,7 @@ public class RestaurantsActivity extends AppCompatActivity {
         if(mFusedClient != null) {
             mFusedClient.removeLocationUpdates(mLocationCallback);
         }
+
     }
 
     /**
@@ -231,6 +238,17 @@ public class RestaurantsActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onRefresh() {
+        if(mLatitude == null || mLongitude == null){
+            mLatitude = DEFAULT_LAT;
+            mLongitude = DEFAULT_LON;
+            loadZomatoData(mLatitude, mLongitude);
+        } else {
+            loadZomatoData(mLatitude,mLongitude);
+        }
+    }
+
     private class ZomatoAsyncTask extends AsyncTask<String, Void, String>{
 
 
@@ -275,9 +293,11 @@ public class RestaurantsActivity extends AppCompatActivity {
                 return;
             }
             try {
+
                 mRestaurantList = Restaurant.getRestaurants(result);
                 mAdapter = new RestaurantAdapter(mRestaurantList, getApplicationContext(), mRecycler);
                 mRecycler.setAdapter(mAdapter);
+
 
             }catch (JSONException e) {
                 Log.e(TAG, e.getMessage());

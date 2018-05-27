@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,7 +39,7 @@ import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
  * Use the {@link HangoutFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HangoutFragment extends Fragment {
+public class HangoutFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private static final String HANGOUTS_URL =
             "https://hangryfoodiehangout.000webhostapp.com/getHangouts.php?&fid=" + UserContent.sUserID;
     private static final String TAG = "Hangout List";
@@ -47,6 +48,7 @@ public class HangoutFragment extends Fragment {
     private List<Hangout> mHangoutList;
     private HangoutInteractionListener mListener;
     private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public HangoutFragment() {
         // Required empty public constructor
@@ -78,20 +80,23 @@ public class HangoutFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_hangout_list, container, false);
-        if(view instanceof RecyclerView){
-            Context context = view.getContext();
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.list_hangouts);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            /*Context context = view.getContext();
             mRecyclerView = (RecyclerView) view;
             registerForContextMenu(mRecyclerView);
             if(mColumnCount <= 1){
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+
             }else{
                 mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
+            }*/
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_hangs);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
             GetHangoutsTask task = new GetHangoutsTask();
             task.execute(HANGOUTS_URL);
 
-
-        }
         return view;
     }
 
@@ -102,7 +107,6 @@ public class HangoutFragment extends Fragment {
         fab.setVisibility(View.VISIBLE);
         Toolbar tb = getActivity().findViewById(R.id.toolbar);
         tb.setTitle(R.string.current_hangouts);
-
     }
 
     @Override
@@ -150,6 +154,12 @@ public class HangoutFragment extends Fragment {
         return super.onContextItemSelected(item);
     }
 
+    @Override
+    public void onRefresh() {
+        GetHangoutsTask task = new GetHangoutsTask();
+        task.execute(HANGOUTS_URL);
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -172,6 +182,7 @@ public class HangoutFragment extends Fragment {
          */
         @Override
         protected String doInBackground(String... urls) {
+           // mSwipeRefreshLayout.setRefreshing(true);
             String response = "";
 
             HttpURLConnection urlConnection = null;
@@ -223,6 +234,7 @@ public class HangoutFragment extends Fragment {
             if (!mHangoutList.isEmpty()) {
                 mRecyclerView.setAdapter(null);
                 mRecyclerView.setAdapter(new HangoutAdapter(mHangoutList, mListener, getActivity()));
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         }
     }

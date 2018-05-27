@@ -2,6 +2,7 @@ package edu.uw.tacoma.group2.mobileappproject.restaurant;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
     private List<Restaurant> mRestaurantsList;
     private Context mContext;
     private RecyclerView mRecycler;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
 
     /**
