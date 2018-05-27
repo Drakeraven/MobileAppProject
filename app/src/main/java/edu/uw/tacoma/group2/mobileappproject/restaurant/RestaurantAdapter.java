@@ -80,8 +80,8 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
             holder.image.setImageResource(R.mipmap.ic_launcher);
         }
         /**
-         * Sets the action for the when the user clicks on one of the restaurants lists.
-         * Currently not implemented.
+         * When the user picks on a restaurant from the list it will be set to their restaurant choice
+         * for creating a hangout.
          */
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,13 +90,6 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
                 Intent skipIntent = new Intent(v.getContext(), SplashActivity.class);
                 v.getContext().startActivity(skipIntent);
                 Toast.makeText(v.getContext(), "You chose " + restaurantList.getName() +" for your hangout",Toast.LENGTH_LONG).show();
-
-                /*Restaurant restaurantList1 = mRestaurantsList.get(position);
-                Intent skipIntent = new Intent(v.getContext(), RestaurantProfile.class);
-                skipIntent.putExtra(KEY_NAME, restaurantList1.getName());
-                skipIntent.putExtra(KEY_IMAGE, restaurantList1.getImage());
-                skipIntent.putExtra(KEY_RATING, restaurantList1.getRating());
-                v.getContext().startActivity(skipIntent);*/
             }
         });
     }

@@ -65,7 +65,6 @@ public class Restaurant {
      * @throws JSONException
      */
     public static List<Restaurant> getRestaurants(String restaurantsJSON) throws JSONException{
-
         List<Restaurant> restaurantList = new ArrayList<>();
         if(restaurantsJSON != null) {
                 JSONObject jRes = new JSONObject(restaurantsJSON);

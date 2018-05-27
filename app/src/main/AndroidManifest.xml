@@ -67,7 +67,6 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".restaurant.RestaurantProfile" />
         <activity
             android:name=".hangout.HangoutActivity"
             android:label="@string/title_activity_hangout"

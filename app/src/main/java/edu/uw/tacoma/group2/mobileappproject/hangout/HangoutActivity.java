@@ -39,7 +39,13 @@ import edu.uw.tacoma.group2.mobileappproject.order.OrdersContent;
 import edu.uw.tacoma.group2.mobileappproject.order.OrdersFragment;
 import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
 
-
+/**
+ * This class is used for the hangout activity portion of the Hangry Foodie Hangout application.
+ * In this class the user will be able to create new hangouts, view their current hangout, and also
+ * have access to the ordering activity where they can place an order.
+ * @author Harlan Stewart
+ * @version 1.0
+ */
 public class HangoutActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         GroupFragment.GroupTabListener,
@@ -60,6 +66,7 @@ public class HangoutActivity extends AppCompatActivity
     private static final String TAG ="Hangout Activity";
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,9 +74,7 @@ public class HangoutActivity extends AppCompatActivity
         final Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.current_hangouts);
         setSupportActionBar(toolbar);
-
         mMemberMap = new HashMap<>();
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -79,7 +84,6 @@ public class HangoutActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction().replace(R.id.content_frame, new HangoutFragment()).commit();
-
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,13 +92,8 @@ public class HangoutActivity extends AppCompatActivity
                 fm.beginTransaction()
                         .replace(R.id.content_frame, new GroupFragment())
                         .commit();
-                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
             }
         });
-
-
-
     }
 
     @Override
@@ -120,28 +119,30 @@ public class HangoutActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Handles what happens when the user clicks on a particular menu item from the
+     * left side navigation menu.
+     * @param item the item chosen.
+     * @return indicates whether an item was selected.
+     */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         FragmentManager fm = getSupportFragmentManager();
-
         if (id == R.id.nav_hangout) {
             fm.beginTransaction()
                     .replace(R.id.content_frame, new HangoutFragment())
                     .commit();
             fab.setVisibility(View.VISIBLE);
-
         } else if (id == R.id.nav_oldOrders) {
             fm.beginTransaction()
                     .replace(R.id.content_frame, new OrdersFragment())
@@ -155,42 +156,32 @@ public class HangoutActivity extends AppCompatActivity
         return true;
     }
 
-
-
     @Override
     public void orderTabListener(OrdersContent item) {
 
     }
 
-
+    /**
+     * Once the user has chosen to create a new hangout by hitting the floating action button
+     * a list of groups will be displayed and the user can choose one of them to start a new hangout.
+     * This method calls other methods that will handle the async tasks for creating a hangout.
+     * @param item the group item the user has chosen.
+     */
     @Override
     public void groupTabListener(GroupContent item)  {
-        /*Toast.makeText(getApplicationContext(), "CLICKED ON " + item.getGroupName(),
-                Toast.LENGTH_LONG).show();*/
-        /*String infoURL =
-                "http://stephd27.000webhostapp.com/list.php?cmd=groupsuid="
-                + item.getGroupID();*/
-        //Log.i(TAG_ONE,ADD_HANGOUT_MEM_URL + item.getGroupID());
             getMembersFromDB(item);
             insertIntoHangoutTable(item);
         Toast.makeText(this, "Hangout added! Pull to Refresh Hangout.", Toast.LENGTH_SHORT).show();
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction().replace(R.id.content_frame, new HangoutFragment()).commit();
-
-        //StringBuilder urlMem = new StringBuilder();
-        //urlMem.append(buildHangoutURL(mGroupCount, mDate));
-        /*if(!url.isEmpty()){
-            CreateHangoutTask task = new CreateHangoutTask();
-            task.execute(url);
-           // Log.i(TAG_TWO,url);
-        }
-*/
-        //Log.e(TAG_THREE, mMemberMap.toString());
-        //Log.i(TAG_THREE, urlMem.toString());
-        //taskMem.execute(new String[]{urlMem.toString()});
-
     }
 
+    /**
+     * This method calls the methods that will build the string urls for Async tasks. Then it will
+     * create these tasks and pass the created string urls when the created task is executed.
+     * Inserts the people who are in the group the user chose when creating a hangout into the
+     * hangout_mems table as new members of the created hangout.
+     */
     private void insertMembersIntoDB(){
         List<String> groupMems = new ArrayList<>();
         for(String key : mMemberMap.keySet()){
@@ -203,10 +194,16 @@ public class HangoutActivity extends AppCompatActivity
         groupMems.add(userInsert);
         Log.e("INSERTING MEMBERS: ",groupMems.toString());
         taskUser.execute(groupMems.toArray(new String[0]));
-
     }
 
-    private void insertIntoHangoutTable( GroupContent group){
+    /**
+     * This method creates a string url and async task that will use the created url for
+     * inserts to a new hangout into the data base table. The unique id used to identify
+     * a created hangout is the current system time and the group count is set to the number of
+     * people in the group the user has chosen when starting a hangout.
+     * @param group the users group choice.
+     */
+    private void insertIntoHangoutTable(GroupContent group){
         long sysTime = System.currentTimeMillis();
         mDate = new Date(sysTime);
         CreateHangoutTask taskMem = new CreateHangoutTask();
@@ -215,12 +212,24 @@ public class HangoutActivity extends AppCompatActivity
         taskMem.execute(urlHangout);
     }
 
+    /**
+     * This method creates the string url that can be used for getting the information from the database
+     * for members of the group the user has chosen for starting a new hangout.
+     * @param group the users group choice.
+     */
     private void getMembersFromDB( GroupContent group){
         GetMemberInfoTask memInfoTask = new GetMemberInfoTask();
         String membersURL = GET_MEMBERS_URL + group.getGroupID();
         memInfoTask.execute(membersURL);
     }
 
+    /**
+     * Method used for creating the string that will be used as a command to send to the database
+     * when a user has created a new hangout.
+     * @param memCount the number of members in the group the user chose.
+     * @param date the current system date/time for primary key.
+     * @return the string url for creating a new hangout.
+     */
     private String buildHangoutURL(String memCount, Date date){
         StringBuilder sb = new StringBuilder(ADD_HANGOUT_URL);
         sb.append("&hid=").append(date.toString());
@@ -237,6 +246,14 @@ public class HangoutActivity extends AppCompatActivity
         return  sb.toString();
     }
 
+    /**
+     * Method used for creating the string that will be used as a command to send to the database
+     * to insert new values into the hangout_mems table.
+     * @param date the current system date/time for primary key.
+     * @param fName the name of a person in the hangout.
+     * @param fID the friend id of a person in the hangout.
+     * @return the string url that will insert members of the chosen group into the hangout_mems table.
+     */
     private String buildHangoutMembers(Date date, String fName, String fID ){
         StringBuilder sb = new StringBuilder(ADD_HANGOUT_MEMBER_URL);
             sb.append("&hid=").append(date.toString());
@@ -244,31 +261,23 @@ public class HangoutActivity extends AppCompatActivity
             sb.append("&ordered=").append("0");
             sb.append("&friend_name=").append(fID);
             sb.append("&price=").append("0");
-
-        /*Iterator<Map.Entry<String,String>> it = mMemberMap.entrySet().iterator();
-        while(it.hasNext()){
-            Map.Entry<String, String> pair = (Map.Entry<String, String>) it.next();
-            sb.append("&fid=").append(pair.getKey().toString());
-            sb.append("&ordered=").append("0");
-            sb.append("&friend_name=").append(pair.getValue().toString());
-            sb.append("&price=").append("0");
-        }*/
         Log.e(TAG_THREE, sb.toString());
         return sb.toString();
     }
 
     @Override
     public void hangoutListener(Hangout item) {
-
-
     }
 
     @Override
     public void onOrderMenuInteraction(FoodContent.FoodItem item) {
-
     }
 
-
+    /**
+     * Private inner class that represents an AyncTask that is used for getting information based
+     * on the users chosen group. After the background work has been completed and after execution of this
+     * task if the task was successful the values of the members will be placed into the HangoutActivities HashMap.
+     */
     private class GetMemberInfoTask extends AsyncTask<String, Void, String>{
 
         @Override
@@ -286,7 +295,6 @@ public class HangoutActivity extends AppCompatActivity
                         response += s;
                         //Log.e(TAG_FOUR, response);
                     }
-
                 } catch (Exception e) {
                     response = "Unable to add course, Reason: "
                             + e.getMessage();
@@ -297,32 +305,26 @@ public class HangoutActivity extends AppCompatActivity
             }
             return response;
         }
+
         /**
          * Handles response from web service, populates the user's groups.
          * @param result Response from the web service
          */
         @Override
         protected void onPostExecute(String result) {
-            //Log.i(TAG_FOUR, "onPostExecute");
-
             if (result.startsWith("Unable to")) {
                 Log.e(TAG_FOUR, result);
                 return;
             }
             try {
                 mMemberMap = GroupContent.parseGroupMembers(result);
-                //Log.e(TAG_FOUR, result);
-
-
             }catch (JSONException e) {
                 Log.e(TAG_FOUR, e.getMessage());
                 return;
             }
-
             if (!mMemberMap.isEmpty()) {
                 insertMembersIntoDB();
             }
         }
-
     }
 }

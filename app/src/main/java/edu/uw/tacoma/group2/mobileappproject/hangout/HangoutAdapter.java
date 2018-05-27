@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +14,10 @@ import java.util.List;
 
 import edu.uw.tacoma.group2.mobileappproject.R;
 
+/**
+ * This class represents an adapter which is used to populate a list of hangouts that the current
+ * user is a member of.
+ */
 public class HangoutAdapter extends RecyclerView.Adapter<HangoutAdapter.ViewHolder> {
     private int position;
     private final List<Hangout> mValues;
@@ -76,6 +79,7 @@ public class HangoutAdapter extends RecyclerView.Adapter<HangoutAdapter.ViewHold
         final TextView mHidView;
         final TextView mRestView;
         public Hangout mHangout;
+
         public ViewHolder(View view) {
             super(view);
             mView = view;
@@ -83,9 +87,6 @@ public class HangoutAdapter extends RecyclerView.Adapter<HangoutAdapter.ViewHold
             mRestView = view.findViewById(R.id.rest_name);
             view.setOnCreateContextMenuListener(this);
         }
-
-
-
 
         @Override
         public String toString(){

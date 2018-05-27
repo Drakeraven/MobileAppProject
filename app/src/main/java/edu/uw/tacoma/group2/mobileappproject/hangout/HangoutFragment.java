@@ -1,14 +1,12 @@
 package edu.uw.tacoma.group2.mobileappproject.hangout;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -32,12 +30,10 @@ import edu.uw.tacoma.group2.mobileappproject.order.OrderMenu.OrderMenuFragment;
 import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link HangoutInteractionListener} interface
- * to handle interaction events.
- * Use the {@link HangoutFragment#newInstance} factory method to
- * create an instance of this fragment.
+ *This class is used to represent a HangoutFragment which is used to display information about a single hangout.
+ * Any hangouts in which the user is currently a part of will be retrieved from the database in this method.\
+ * @author Harlan Stewart
+ * @version 1.0
  */
 public class HangoutFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private static final String HANGOUTS_URL =
@@ -78,25 +74,14 @@ public class HangoutFragment extends Fragment implements SwipeRefreshLayout.OnRe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_hangout_list, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.list_hangouts);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            /*Context context = view.getContext();
-            mRecyclerView = (RecyclerView) view;
-            registerForContextMenu(mRecyclerView);
-            if(mColumnCount <= 1){
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-
-            }else{
-                mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }*/
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_hangs);
         mSwipeRefreshLayout.setOnRefreshListener(this);
             GetHangoutsTask task = new GetHangoutsTask();
             task.execute(HANGOUTS_URL);
-
         return view;
     }
 
@@ -150,7 +135,6 @@ public class HangoutFragment extends Fragment implements SwipeRefreshLayout.OnRe
         fm.beginTransaction().replace(R.id.content_frame, OrderMenuFragment.newInstance(1, hangout))
                 .addToBackStack(null)
                 .commit();
-
         return super.onContextItemSelected(item);
     }
 
@@ -160,43 +144,32 @@ public class HangoutFragment extends Fragment implements SwipeRefreshLayout.OnRe
         task.execute(HANGOUTS_URL);
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface HangoutInteractionListener {
         void hangoutListener(Hangout item);
     }
 
+    /**
+     * Private inner class used for sending an asynctask to the online database for retrieving a list
+     * of hangouts the user is currently a member of.
+     */
     private class GetHangoutsTask extends AsyncTask<String, Void, String>{
         /**
-         * Kicks off getting groups
-         * @param urls query url for retrieving groups
+         * Kicks off getting hangouts
+         * @param urls query url for retrieving hangouts
          * @return Response from web service
          */
         @Override
         protected String doInBackground(String... urls) {
            // mSwipeRefreshLayout.setRefreshing(true);
             String response = "";
-
             HttpURLConnection urlConnection = null;
-
             for (String url : urls) {
                 try {
                     URL urlObject = new URL(url);
                     urlConnection = (HttpURLConnection) urlObject.openConnection();
-
                     InputStream content = urlConnection.getInputStream();
-
                     BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
                     String s;
-
                     while ((s = buffer.readLine()) != null) {
                         response += s;
                     }
@@ -209,7 +182,6 @@ public class HangoutFragment extends Fragment implements SwipeRefreshLayout.OnRe
             }
             return response;
         }
-
 
         /**
          * Handles response from web service, populates the user's groups.
