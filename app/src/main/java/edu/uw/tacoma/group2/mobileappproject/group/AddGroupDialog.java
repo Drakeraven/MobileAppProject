@@ -113,6 +113,8 @@ public class AddGroupDialog extends DialogFragment {
                                 Log.e("Built add group url", url);
                                 addGroupTask task = new addGroupTask();
                                 task.execute(url);
+                                getActivity().finish();
+
                             }
                         }
                     });

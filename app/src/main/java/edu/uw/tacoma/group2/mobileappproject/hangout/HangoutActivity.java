@@ -1,21 +1,21 @@
 package edu.uw.tacoma.group2.mobileappproject.hangout;
 
-import android.support.v4.app.FragmentManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import org.json.JSONException;
 
@@ -28,14 +28,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 
 import edu.uw.tacoma.group2.mobileappproject.R;
-import edu.uw.tacoma.group2.mobileappproject.hangout.CreateHangoutTask;
-import edu.uw.tacoma.group2.mobileappproject.order.OrdersContent;
-import edu.uw.tacoma.group2.mobileappproject.order.OrdersFragment;
 import edu.uw.tacoma.group2.mobileappproject.group.GroupContent;
 import edu.uw.tacoma.group2.mobileappproject.group.GroupFragment;
+import edu.uw.tacoma.group2.mobileappproject.order.OrderMenu.FoodContent;
+import edu.uw.tacoma.group2.mobileappproject.order.OrderMenu.OrderMenuFragment;
+import edu.uw.tacoma.group2.mobileappproject.order.OrdersContent;
+import edu.uw.tacoma.group2.mobileappproject.order.OrdersFragment;
 import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
 
 
@@ -43,9 +43,8 @@ public class HangoutActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         GroupFragment.GroupTabListener,
         OrdersFragment.OrdersTabListener,
-        HangoutFragment.HangoutInteractionListener{
-    private static final String TAG_ONE = "GROUP ID URL === ";
-    private static final String TAG_TWO = "HANGOUT INSERT === ";
+        HangoutFragment.HangoutInteractionListener,
+        OrderMenuFragment.onOrderMenuListener{
     private static final String TAG_THREE = "MEMBER INSERT === ";
     private static final String TAG_FOUR = "MEMBER TASK === ";
     private static final String ADD_HANGOUT_URL =
@@ -54,22 +53,22 @@ public class HangoutActivity extends AppCompatActivity
             "http://hangryfoodiehangout.000webhostapp.com/hangout.php?cmd=members";
     private static final String GET_MEMBERS_URL =
             "http://stephd27.000webhostapp.com/list.php?cmd=members&group=";
-    private GroupFragment myGroupFrag;
     private HashMap<String, String> mMemberMap;
     private Date mDate;
     FloatingActionButton fab;
+    private static final String TAG ="Hangout Activity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hangout);
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.current_hangouts);
         setSupportActionBar(toolbar);
 
         mMemberMap = new HashMap<>();
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -129,7 +128,7 @@ public class HangoutActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         FragmentManager fm = getSupportFragmentManager();
@@ -148,7 +147,7 @@ public class HangoutActivity extends AppCompatActivity
         } else if (id == R.id.nav_share) {
 
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -156,7 +155,7 @@ public class HangoutActivity extends AppCompatActivity
 
 
     @Override
-    public void orderTabListener(OrdersContent.OrderItem item) {
+    public void orderTabListener(OrdersContent item) {
 
     }
 
@@ -171,11 +170,9 @@ public class HangoutActivity extends AppCompatActivity
         //Log.i(TAG_ONE,ADD_HANGOUT_MEM_URL + item.getGroupID());
             getMembersFromDB(item);
             insertIntoHangoutTable(item);
-            insertMembersIntoDB();
-
-
-
-
+        Toast.makeText(this, "Hangout added! Pull to Refresh Hangout.", Toast.LENGTH_SHORT).show();
+        FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction().replace(R.id.content_frame, new HangoutFragment()).commit();
 
         //StringBuilder urlMem = new StringBuilder();
         //urlMem.append(buildHangoutURL(mGroupCount, mDate));
@@ -192,23 +189,17 @@ public class HangoutActivity extends AppCompatActivity
     }
 
     private void insertMembersIntoDB(){
-
-        //List<String> groupMems = new ArrayList<>();
+        List<String> groupMems = new ArrayList<>();
         for(String key : mMemberMap.keySet()){
-            CreateHangoutMembersTask taskMembers = new CreateHangoutMembersTask();
             String friendName = mMemberMap.get(key) ;
-            String friendID =key ;
-            String urlMembers = buildHangoutMembers(mDate, friendName, friendID);
-            //groupMems.add(urlMembers);
-            taskMembers.execute(new String[]{urlMembers});
-            //urlArr.add(buildHangoutMembers(mDate,friendName,friendID));
-
+            String memUrl = buildHangoutMembers(mDate, friendName, key);
+            groupMems.add(memUrl);
         }
         CreateHangoutMembersTask taskUser = new CreateHangoutMembersTask();
         String userInsert = buildHangoutMembers(mDate, UserContent.sUserID, UserContent.sUserName);
-        //groupMems.add(userInsert);
-        //Log.e(TAG_THREE,groupMems.toString());
-        taskUser.execute(new String[]{userInsert});
+        groupMems.add(userInsert);
+        Log.e("INSERTING MEMBERS: ",groupMems.toString());
+        taskUser.execute(groupMems.toArray(new String[0]));
 
     }
 
@@ -218,20 +209,22 @@ public class HangoutActivity extends AppCompatActivity
         CreateHangoutTask taskMem = new CreateHangoutTask();
         String mGroupCount = group.getGroupCount();
         String urlHangout = buildHangoutURL(mGroupCount, mDate);
-        taskMem.execute(new String[] {urlHangout});
+        taskMem.execute(urlHangout);
     }
 
     private void getMembersFromDB( GroupContent group){
         GetMemberInfoTask memInfoTask = new GetMemberInfoTask();
         String membersURL = GET_MEMBERS_URL + group.getGroupID();
-        memInfoTask.execute(new String[]{membersURL});
+        memInfoTask.execute(membersURL);
     }
 
     private String buildHangoutURL(String memCount, Date date){
         StringBuilder sb = new StringBuilder(ADD_HANGOUT_URL);
         sb.append("&hid=").append(date.toString());
         if(!(UserContent.sUserRestaurant == null)){
-            sb.append("&rest_name=" + UserContent.sUserRestaurant);
+            String cleanString = UserContent.sUserRestaurant.replace("'", "\\\'");
+            cleanString = cleanString.replace("\"", "\\\\\"");
+            sb.append("&rest_name=").append(cleanString);
         }else {
             sb.append("&rest_name=").append("DEFAULT_RESTAURANT");
         }
@@ -263,6 +256,12 @@ public class HangoutActivity extends AppCompatActivity
 
     @Override
     public void hangoutListener(Hangout item) {
+
+
+    }
+
+    @Override
+    public void onOrderMenuInteraction(FoodContent.FoodItem item) {
 
     }
 
@@ -315,6 +314,10 @@ public class HangoutActivity extends AppCompatActivity
             }catch (JSONException e) {
                 Log.e(TAG_FOUR, e.getMessage());
                 return;
+            }
+
+            if (!mMemberMap.isEmpty()) {
+                insertMembersIntoDB();
             }
         }
 

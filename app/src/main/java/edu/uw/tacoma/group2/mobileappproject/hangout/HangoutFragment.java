@@ -4,12 +4,16 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -23,6 +27,8 @@ import java.net.URL;
 import java.util.List;
 
 import edu.uw.tacoma.group2.mobileappproject.R;
+import edu.uw.tacoma.group2.mobileappproject.order.OrderMenu.OrderMenuFragment;
+import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,7 +39,8 @@ import edu.uw.tacoma.group2.mobileappproject.R;
  * create an instance of this fragment.
  */
 public class HangoutFragment extends Fragment {
-    private static final String HANGOUTS_URL = "https://hangryfoodiehangout.000webhostapp.com/getHangouts.php";
+    private static final String HANGOUTS_URL =
+            "https://hangryfoodiehangout.000webhostapp.com/getHangouts.php?&fid=" + UserContent.sUserID;
     private static final String TAG = "Hangout List";
     private static final String  ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
@@ -74,18 +81,29 @@ public class HangoutFragment extends Fragment {
         if(view instanceof RecyclerView){
             Context context = view.getContext();
             mRecyclerView = (RecyclerView) view;
+            registerForContextMenu(mRecyclerView);
             if(mColumnCount <= 1){
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
             }else{
                 mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
+            GetHangoutsTask task = new GetHangoutsTask();
+            task.execute(HANGOUTS_URL);
 
 
         }
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        FloatingActionButton fab = getActivity().findViewById(R.id.fab);
+        fab.setVisibility(View.VISIBLE);
+        Toolbar tb = getActivity().findViewById(R.id.toolbar);
+        tb.setTitle(R.string.current_hangouts);
 
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -101,8 +119,6 @@ public class HangoutFragment extends Fragment {
     @Override
     public void onStart(){
         super.onStart();
-        GetHangoutsTask task = new GetHangoutsTask();
-        task.execute(HANGOUTS_URL);
 
     }
 
@@ -110,6 +126,28 @@ public class HangoutFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        int position = -1;
+        try {
+            position = ((HangoutAdapter)mRecyclerView.getAdapter()).getPosition();
+        } catch (Exception e) {
+            Log.d(TAG, e.getLocalizedMessage(), e);
+            return super.onContextItemSelected(item);
+        }
+        FloatingActionButton fab = getActivity().findViewById(R.id.fab);
+        fab.setVisibility(View.GONE);
+        Toolbar tb = getActivity().findViewById(R.id.toolbar);
+        tb.setTitle("Order Item: ");
+        Hangout hangout = mHangoutList.get(position);
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().replace(R.id.content_frame, OrderMenuFragment.newInstance(1, hangout))
+                .addToBackStack(null)
+                .commit();
+
+        return super.onContextItemSelected(item);
     }
 
     /**
@@ -123,7 +161,6 @@ public class HangoutFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface HangoutInteractionListener {
-        // TODO: Update argument type and name
         void hangoutListener(Hangout item);
     }
 
@@ -184,7 +221,8 @@ public class HangoutFragment extends Fragment {
                 return;
             }
             if (!mHangoutList.isEmpty()) {
-                mRecyclerView.setAdapter(new HangoutAdapter(mHangoutList, mListener));
+                mRecyclerView.setAdapter(null);
+                mRecyclerView.setAdapter(new HangoutAdapter(mHangoutList, mListener, getActivity()));
             }
         }
     }
