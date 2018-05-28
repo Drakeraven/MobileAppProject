@@ -1,6 +1,7 @@
 package edu.uw.tacoma.group2.mobileappproject.order.OrderMenu;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,7 +14,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import edu.uw.tacoma.group2.mobileappproject.HangryDB;
 import edu.uw.tacoma.group2.mobileappproject.R;
+import edu.uw.tacoma.group2.mobileappproject.hangout.Hangout;
 import edu.uw.tacoma.group2.mobileappproject.order.OrderMenu.FoodContent.FoodItem;
 import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
 
@@ -26,12 +38,15 @@ import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
 public class OrderMenuFragment extends Fragment {
     private static final String TAG = "Order Menu Fragment";
     private static final String UPDATE_ORDER =
-            "http://stephd27.000webhostapp.com/hangoutScript.php?cmd=ordered&user=" + UserContent.sUserID;
-    // TODO: Customize parameter argument names
+            "https://hangryfoodiehangout.000webhostapp.com/hangoutScript.php?cmd=ordered&user=" + UserContent.sUserID;
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
     private onOrderMenuListener mListener;
+    private String tempPrice;
+    private String tempHangout;
+    HangryDB mHangryDB;
+    Hangout mHangout;
+
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -42,10 +57,11 @@ public class OrderMenuFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static OrderMenuFragment newInstance(int columnCount) {
+    public static OrderMenuFragment newInstance(int columnCount, Hangout hangout) {
         OrderMenuFragment fragment = new OrderMenuFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
+        args.putSerializable("HANGOUT", hangout);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,6 +72,8 @@ public class OrderMenuFragment extends Fragment {
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+            mHangout = (Hangout) getArguments().getSerializable("HANGOUT");
+
         }
     }
 
@@ -81,10 +99,9 @@ public class OrderMenuFragment extends Fragment {
             public void onClick(View v) {
                 String url = buildOrderUrl(OrderTotal.getText().toString());
                 Log.i(TAG, "Generated update order: " + url);
-
-                //TODO: undo when you plug shit in booiiii
-//                OrderMasterTask task = new OrderMasterTask();
-//                task.execute(url);
+                //TODO: update local db?
+                OrderMasterTask task = new OrderMasterTask();
+                task.execute(url);
             }
         });
 
@@ -95,8 +112,10 @@ public class OrderMenuFragment extends Fragment {
         price = price.substring(7);
         StringBuilder sb = new StringBuilder(UPDATE_ORDER);
         sb.append("&price=").append(price);
-        //TODO: CHANGE THIS TO TAKE THE HANGOUT ID FROM HARLAN
-        sb.append("&hangout=").append("PLACEHOLDER");
+        sb.append("&hangout=").append(mHangout.getHid());
+
+        tempPrice = price;
+        tempHangout = mHangout.getHid();
         return sb.toString();
     }
 
@@ -131,4 +150,74 @@ public class OrderMenuFragment extends Fragment {
     public interface onOrderMenuListener {
         void onOrderMenuInteraction(FoodItem item);
     }
+
+    public class OrderMasterTask extends AsyncTask<String, Void, String> {
+        private final String TAG = "Order Master Task";
+
+        @Override
+        protected String doInBackground(String[] urls) {
+            String response = "";
+
+            HttpURLConnection urlConnection = null;
+
+            for (String url : urls) {
+                try {
+                    URL urlObject = new URL(url);
+                    urlConnection = (HttpURLConnection) urlObject.openConnection();
+
+                    InputStream content = urlConnection.getInputStream();
+
+                    BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
+                    String s;
+
+                    while ((s = buffer.readLine()) != null) {
+                        response += s;
+                    }
+                } catch (Exception e) {
+                    response = "Unable to run order stuff, Reason: " + e.getMessage();
+                } finally {
+                    if (urlConnection != null)
+                        urlConnection.disconnect();
+                }
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.i(TAG, "onPostExecute");
+
+            if (result.startsWith("Unable to")) {
+                Log.e(TAG, result);
+                return;
+            }
+            try {
+
+                JSONObject jsonObject = new JSONObject(result);
+                String status = (String) jsonObject.get("result");
+                if (status.equals("success")) {
+                    Log.i(TAG, "Successfully updated order.");
+                } else {
+                    Log.i(TAG, "Failed to add: "
+                            + jsonObject.get("error"));
+                }
+
+            }catch (JSONException e) {
+                Log.e(TAG, e.getMessage());
+                return;
+            }
+
+            if (mHangryDB == null) {
+                mHangryDB = new HangryDB(getActivity());
+                boolean inserted = mHangryDB.insertOrder(tempHangout, "food", tempPrice);
+                if (!inserted) {
+                    Log.e(TAG, "Didn't insert Order locally");
+                }
+            }
+
+        }
+
+    }
 }
+
+

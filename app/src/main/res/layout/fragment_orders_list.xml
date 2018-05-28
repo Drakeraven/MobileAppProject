@@ -6,8 +6,8 @@
     android:name="edu.uw.tacoma.group2.mobileappproject.OrdersFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
+
     app:layoutManager="android.support.v7.widget.LinearLayoutManager"
     tools:context=".order.OrdersFragment"
-    tools:listitem="@layout/fragment_orders" />
+    tools:listitem="@layout/fragment_orders"
+    android:background="@color/hangryPeach"/>

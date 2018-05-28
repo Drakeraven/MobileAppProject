@@ -14,6 +14,7 @@
         android:layout_height="match_parent" />
 
     <android.support.design.widget.NavigationView
+        android:background="@color/hangryPeach"
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -21,5 +22,7 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_hangout"
         app:menu="@menu/activity_hangout_drawer" />
+
+
 
 </android.support.v4.widget.DrawerLayout>

@@ -21,7 +21,11 @@ import edu.uw.tacoma.group2.mobileappproject.order.OrdersFragment;
 public class HangoutActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         OrdersFragment.OrdersTabListener, OrderMenuFragment.onOrderMenuListener{
+
     FloatingActionButton fab;
+    //TODO: When harlan sets up hangouts this url is for checking a hangout is done.
+    private static final String HANGOUT_CHECK =
+            "https://hangryfoodiehangout.000webhostapp.com/hangoutScript.php?cmd=checkDone&hangout=";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +40,11 @@ public class HangoutActivity extends AppCompatActivity
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
                 //TODO: Just for making order thing
-                toolbar.setTitle("Order Item: ");
-                fab.setVisibility(View.GONE);
-                FragmentManager fm = getSupportFragmentManager();
-                fm.beginTransaction().replace(R.id.content_frame, new OrderMenuFragment())
-                        .commit();
+//                toolbar.setTitle("Order Item: ");
+//                fab.setVisibility(View.GONE);
+//                FragmentManager fm = getSupportFragmentManager();
+//                fm.beginTransaction().replace(R.id.content_frame, new OrderMenuFragment())
+//                        .commit();
             }
         });
 
@@ -109,7 +113,7 @@ public class HangoutActivity extends AppCompatActivity
     }
 
     @Override
-    public void orderTabListener(OrdersContent.OrderItem item) {
+    public void orderTabListener(OrdersContent item) {
 
     }
 

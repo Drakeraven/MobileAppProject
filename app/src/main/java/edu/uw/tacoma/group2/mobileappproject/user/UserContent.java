@@ -33,6 +33,7 @@ public class UserContent {
     public static String sUserName;
     public static String sUserPic;
     public static String sUserEmail;
+    public static String sUserRestaurant;
 
 
     /**
