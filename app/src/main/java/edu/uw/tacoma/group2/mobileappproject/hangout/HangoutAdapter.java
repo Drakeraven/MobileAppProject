@@ -21,12 +21,10 @@ import edu.uw.tacoma.group2.mobileappproject.R;
 public class HangoutAdapter extends RecyclerView.Adapter<HangoutAdapter.ViewHolder> {
     private int position;
     private final List<Hangout> mValues;
-    private final HangoutFragment.HangoutInteractionListener mListener;
     private final Context mContext;
 
-    HangoutAdapter(List<Hangout> items, HangoutFragment.HangoutInteractionListener listener, Context context){
+    HangoutAdapter(List<Hangout> items, Context context){
         mValues = items;
-        mListener = listener;
         mContext = context;
     }
 
@@ -43,14 +41,6 @@ public class HangoutAdapter extends RecyclerView.Adapter<HangoutAdapter.ViewHold
         holder.mHangout = mValues.get(position);
         holder.mHidView.setText(mValues.get(position).getHid());
         holder.mRestView.setText(mValues.get(position).getRestName() );
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(null != mListener){
-                    mListener.hangoutListener(holder.mHangout);
-                }
-            }
-        });
 
         holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

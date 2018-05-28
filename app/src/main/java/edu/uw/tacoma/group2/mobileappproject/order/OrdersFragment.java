@@ -24,7 +24,6 @@ import edu.uw.tacoma.group2.mobileappproject.R;
 public class OrdersFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
-    private OrdersTabListener mListener;
     HangryDB mHangryDB;
 
     /**
@@ -80,37 +79,12 @@ public class OrdersFragment extends Fragment {
             }
             List<OrdersContent> prevOrders = mHangryDB.getOrders();
             if (prevOrders != null) {
-                recyclerView.setAdapter(new MyOrdersRecyclerViewAdapter(prevOrders, mListener));
+                recyclerView.setAdapter(new MyOrdersRecyclerViewAdapter(prevOrders));
             } else {
                 Toast.makeText(getContext(),"No Orders to display.", Toast.LENGTH_LONG).show();
             }
         }
         return view;
-    }
-
-    /**
-     * Sets up the listener to handle the event when a user clicks on the Order tab of the favorite
-     * activity.
-     * @param context the context using this
-     */
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OrdersTabListener) {
-            mListener = (OrdersTabListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OrdersTabListener");
-        }
-    }
-
-    /**
-     * Sets the order tab listener to null if the fragment is detached.
-     */
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 
     /**

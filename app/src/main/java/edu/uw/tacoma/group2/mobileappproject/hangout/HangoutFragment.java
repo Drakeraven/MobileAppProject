@@ -42,7 +42,6 @@ public class HangoutFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private static final String  ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
     private List<Hangout> mHangoutList;
-    private HangoutInteractionListener mListener;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -95,26 +94,9 @@ public class HangoutFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof HangoutInteractionListener) {
-            mListener = (HangoutInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement HangoutInteractionListener");
-        }
-    }
-
-    @Override
     public void onStart(){
         super.onStart();
 
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 
     @Override
@@ -133,7 +115,6 @@ public class HangoutFragment extends Fragment implements SwipeRefreshLayout.OnRe
         Hangout hangout = mHangoutList.get(position);
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction().replace(R.id.content_frame, OrderMenuFragment.newInstance(1, hangout))
-                .addToBackStack(null)
                 .commit();
         return super.onContextItemSelected(item);
     }
@@ -205,7 +186,7 @@ public class HangoutFragment extends Fragment implements SwipeRefreshLayout.OnRe
             }
             if (!mHangoutList.isEmpty()) {
                 mRecyclerView.setAdapter(null);
-                mRecyclerView.setAdapter(new HangoutAdapter(mHangoutList, mListener, getActivity()));
+                mRecyclerView.setAdapter(new HangoutAdapter(mHangoutList, getActivity()));
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         }

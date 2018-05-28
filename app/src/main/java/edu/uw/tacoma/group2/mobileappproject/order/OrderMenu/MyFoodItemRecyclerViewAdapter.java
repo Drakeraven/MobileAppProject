@@ -1,34 +1,29 @@
 package edu.uw.tacoma.group2.mobileappproject.order.OrderMenu;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import edu.uw.tacoma.group2.mobileappproject.R;
-import edu.uw.tacoma.group2.mobileappproject.order.OrderMenu.OrderMenuFragment.onOrderMenuListener;
-import edu.uw.tacoma.group2.mobileappproject.order.OrderMenu.FoodContent.FoodItem;
-
 import java.util.List;
+
+import edu.uw.tacoma.group2.mobileappproject.R;
+import edu.uw.tacoma.group2.mobileappproject.order.OrderMenu.FoodContent.FoodItem;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link FoodItem} and makes a call to the
- * specified {@link onOrderMenuListener}.
- * TODO: Replace the implementation with code for your data type.
+ * @author Stephanie Day
+ * @version 1.0
  */
 public class MyFoodItemRecyclerViewAdapter extends RecyclerView.Adapter<MyFoodItemRecyclerViewAdapter.ViewHolder> {
 
     private final List<FoodItem> mValues;
-    private final onOrderMenuListener mListener;
     private final View mContext;
 
-    public MyFoodItemRecyclerViewAdapter(List<FoodItem> items, onOrderMenuListener listener, View context) {
+    public MyFoodItemRecyclerViewAdapter(List<FoodItem> items, View context) {
         mValues = items;
-        mListener = listener;
         mContext = context;
     }
 
@@ -39,6 +34,12 @@ public class MyFoodItemRecyclerViewAdapter extends RecyclerView.Adapter<MyFoodIt
         return new ViewHolder(view);
     }
 
+    /**
+     * Binds the data given to the adapter to a view holder. Also handles the click
+     * listeners for selecting a menu item and updating the total accordingly.
+     * @param holder A view group holding the food item thats in this section of the list
+     * @param position position in the list currently
+     */
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
@@ -49,11 +50,7 @@ public class MyFoodItemRecyclerViewAdapter extends RecyclerView.Adapter<MyFoodIt
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onOrderMenuInteraction(holder.mItem);
-                }
+                //Marks the view holder as selected, and displays so
                 holder.mItem.setSelected(!holder.mItem.isSelected());
                 holder.mView.setBackgroundColor(holder.mItem.isSelected()? Color.LTGRAY : Color.WHITE);
                 convertPrices(holder.mItem);
@@ -61,6 +58,11 @@ public class MyFoodItemRecyclerViewAdapter extends RecyclerView.Adapter<MyFoodIt
         });
     }
 
+    /**
+     * When a user clicks on a menu item,
+     * we take the price of that item and update their total
+     * @param item food item selected for ordering
+     */
     private void convertPrices(FoodItem item) {
         TextView orderTotal = mContext.findViewById(R.id.Order_Total);
         Float price = Float.parseFloat(item.foodPrice);

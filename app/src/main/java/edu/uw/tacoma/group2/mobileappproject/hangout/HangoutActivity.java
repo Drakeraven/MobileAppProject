@@ -48,10 +48,7 @@ import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
  */
 public class HangoutActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        GroupFragment.GroupTabListener,
-        OrdersFragment.OrdersTabListener,
-        HangoutFragment.HangoutInteractionListener,
-        OrderMenuFragment.onOrderMenuListener{
+        GroupFragment.GroupTabListener {
     private static final String TAG_THREE = "MEMBER INSERT === ";
     private static final String TAG_FOUR = "MEMBER TASK === ";
     private static final String ADD_HANGOUT_URL =
@@ -144,6 +141,8 @@ public class HangoutActivity extends AppCompatActivity
                     .commit();
             fab.setVisibility(View.VISIBLE);
         } else if (id == R.id.nav_oldOrders) {
+            Toolbar toolbar = findViewById(R.id.toolbar);
+            toolbar.setTitle("Old Orders: ");
             fm.beginTransaction()
                     .replace(R.id.content_frame, new OrdersFragment())
                     .commit();
@@ -154,11 +153,6 @@ public class HangoutActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    public void orderTabListener(OrdersContent item) {
-
     }
 
     /**
@@ -263,14 +257,6 @@ public class HangoutActivity extends AppCompatActivity
             sb.append("&price=").append("0");
         Log.e(TAG_THREE, sb.toString());
         return sb.toString();
-    }
-
-    @Override
-    public void hangoutListener(Hangout item) {
-    }
-
-    @Override
-    public void onOrderMenuInteraction(FoodContent.FoodItem item) {
     }
 
     /**

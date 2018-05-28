@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-//TODO: modify this class to parse sqlLite to display previous orders
 /**
  * This class represents an Order object and its associated values.
  * @author Harlan Stewart

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,10 +32,11 @@ import edu.uw.tacoma.group2.mobileappproject.order.OrderMenu.FoodContent.FoodIte
 import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
 
 /**
- * A fragment representing a list of Items.
+ * A fragment representing a list of Items on a menu.
  * <p/>
- * Activities containing this fragment MUST implement the {@link onOrderMenuListener}
  * interface.
+ * @author Stephanie Day
+ * @version 1.0
  */
 public class OrderMenuFragment extends Fragment {
     private static final String TAG = "Order Menu Fragment";
@@ -41,7 +44,6 @@ public class OrderMenuFragment extends Fragment {
             "https://hangryfoodiehangout.000webhostapp.com/hangoutScript.php?cmd=ordered&user=" + UserContent.sUserID;
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
-    private onOrderMenuListener mListener;
     private String tempPrice;
     private String tempHangout;
     HangryDB mHangryDB;
@@ -55,8 +57,19 @@ public class OrderMenuFragment extends Fragment {
     public OrderMenuFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
+    @Override
+    public void onPause() {
+        super.onPause();
+        FragmentManager fm = getFragmentManager();
+        fm.popBackStack();
+    }
+
+    /**
+     * Passes in the hangout variable for use in updating the order in the database(s)
+     * @param columnCount number of columns for the list
+     * @param hangout instance of the hangout that is being ordered for
+     * @return new OrderMenu Fragment that knows what hangout you order for.
+     */
     public static OrderMenuFragment newInstance(int columnCount, Hangout hangout) {
         OrderMenuFragment fragment = new OrderMenuFragment();
         Bundle args = new Bundle();
@@ -66,6 +79,11 @@ public class OrderMenuFragment extends Fragment {
         return fragment;
     }
 
+
+    /**
+     * Hangout variable retrieved as an argument for this instance of the order menu
+     * @param savedInstanceState any saved states?
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +95,14 @@ public class OrderMenuFragment extends Fragment {
         }
     }
 
+    /**
+     * Apart from regular adapter set up, sets the order button listener to save the order
+     * in the local database and remotely to track state of the hangout
+     * @param inflater inflates layout associated with fragment
+     * @param container Holds the layout
+     * @param savedInstanceState saved states
+     * @return A view of this fragment to display for the user, with proper listeners
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -89,7 +115,7 @@ public class OrderMenuFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyFoodItemRecyclerViewAdapter(FoodContent.ITEMS, mListener, view));
+            recyclerView.setAdapter(new MyFoodItemRecyclerViewAdapter(FoodContent.ITEMS, view));
 
         Button btn = view.findViewById(R.id.btn_order);
         final TextView OrderTotal = view.findViewById(R.id.Order_Total);
@@ -97,17 +123,22 @@ public class OrderMenuFragment extends Fragment {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = buildOrderUrl(OrderTotal.getText().toString());
-                Log.i(TAG, "Generated update order: " + url);
-                //TODO: update local db?
-                OrderMasterTask task = new OrderMasterTask();
-                task.execute(url);
+                    String url = buildOrderUrl(OrderTotal.getText().toString());
+                    Log.i(TAG, "Generated update order: " + url);
+                    OrderMasterTask task = new OrderMasterTask();
+                    task.execute(url);
             }
         });
 
         return view;
     }
 
+
+    /**
+     * After user orders, builds the url to start the task of saving
+     * @param price price of the order to put in the URL
+     * @return URL for adding the item ordered to the database(s)
+     */
     private String buildOrderUrl(String price) {
         price = price.substring(7);
         StringBuilder sb = new StringBuilder(UPDATE_ORDER);
@@ -119,38 +150,10 @@ public class OrderMenuFragment extends Fragment {
         return sb.toString();
     }
 
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof onOrderMenuListener) {
-            mListener = (onOrderMenuListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement onOrderMenuListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
     /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
+     *Handles the task of updating orders in the remote database.
+     * Then saves the order in order history on the device.
      */
-    public interface onOrderMenuListener {
-        void onOrderMenuInteraction(FoodItem item);
-    }
-
     public class OrderMasterTask extends AsyncTask<String, Void, String> {
         private final String TAG = "Order Master Task";
 
@@ -206,7 +209,7 @@ public class OrderMenuFragment extends Fragment {
                 Log.e(TAG, e.getMessage());
                 return;
             }
-
+            //Saving previous order to the db
             if (mHangryDB == null) {
                 mHangryDB = new HangryDB(getActivity());
                 boolean inserted = mHangryDB.insertOrder(tempHangout, "food", tempPrice);
