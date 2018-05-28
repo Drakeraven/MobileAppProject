@@ -2,6 +2,7 @@ package edu.uw.tacoma.group2.mobileappproject;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -74,12 +75,13 @@ public class FriendGroupActivity extends AppCompatActivity implements
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
         FloatingActionButton fab = findViewById(R.id.fab);
+        //TODO: Add friend here, whole new activity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (tabLayout.getSelectedTabPosition() == 0) {
-                    Snackbar.make(view, "Replace with Add Friend", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    Intent addFriend = new Intent(FriendGroupActivity.this, AddFriendActivity.class);
+                    startActivity(addFriend);
                 } else {
                     new AddGroup(FriendGroupActivity.this);
                 }
