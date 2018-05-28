@@ -200,7 +200,7 @@ public class AddFriendFragment extends Fragment {
         }
 
         /**
-         * Handles response from web service, populates the user's friends.
+         * Handles response from web service, populates the user list.
          * @param result Response from the web service
          */
         @Override
@@ -220,6 +220,7 @@ public class AddFriendFragment extends Fragment {
             }
             if (!mUserList.isEmpty()) {
                 //crossfade();
+                Log.i(TAG, "onPostExecute: " + mUserList);
                 mRecyclerView.setAdapter(new MyAddFriendRecyclerViewAdapter(mUserList, mListener));
             }
         }
