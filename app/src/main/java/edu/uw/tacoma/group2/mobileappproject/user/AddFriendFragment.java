@@ -221,6 +221,13 @@ public class AddFriendFragment extends Fragment {
             if (!mUserList.isEmpty()) {
                 //crossfade();
                 Log.i(TAG, "onPostExecute: " + mUserList);
+                for(FriendContent use : mUserList) {
+                    Log.i(TAG, "mUserList" + use.getFrenID());
+                    Log.i(TAG, "mUserList" + use.getFrenEmail());
+                    Log.i(TAG, "mUserList" + use.getFrenName());
+                    Log.i(TAG, "mUserList" + use.getFrenImage());
+                }
+
                 mRecyclerView.setAdapter(new MyAddFriendRecyclerViewAdapter(mUserList, mListener));
             }
         }

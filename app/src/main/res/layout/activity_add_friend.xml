@@ -20,14 +20,6 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
-    <ProgressBar
-        android:id="@+id/loading_spinner"
-        style="?android:progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="230dp"
-        android:layout_gravity="center"
-        tools:layout_editor_absoluteX="154dp"
-        tools:layout_editor_absoluteY="273dp"/>
 
     <include layout="@layout/content_add_friend" />
 

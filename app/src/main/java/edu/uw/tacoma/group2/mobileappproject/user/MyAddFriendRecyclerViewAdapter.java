@@ -19,6 +19,7 @@ import edu.uw.tacoma.group2.mobileappproject.friend.FriendFragment.FriendTabList
  * {@link RecyclerView.Adapter} that can display a {@link FriendContent} and makes a call to the
  * specified {@link FriendTabListener}.
  * @author Stephanie Day
+ * @editor Cassie Renz
  * @version 1.0
  */
 public class MyAddFriendRecyclerViewAdapter extends RecyclerView.Adapter<MyAddFriendRecyclerViewAdapter.ViewHolder> {
@@ -51,9 +52,9 @@ public class MyAddFriendRecyclerViewAdapter extends RecyclerView.Adapter<MyAddFr
     }
 
     /**
-     * Called when binding a friend view to the list.
+     * Called when binding a user view to a list
      * @param holder the view holding a particular friend
-     * @param position Where in the list that friend view in positioned
+     * @param position Where in the list that user view in positioned
      */
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
@@ -75,8 +76,8 @@ public class MyAddFriendRecyclerViewAdapter extends RecyclerView.Adapter<MyAddFr
     }
 
     /**
-     * Returns count of friends listed.
-     * @return Number of friends listed
+     * Returns count of users listed.
+     * @return Number of users listed
      */
     @Override
     public int getItemCount() {
