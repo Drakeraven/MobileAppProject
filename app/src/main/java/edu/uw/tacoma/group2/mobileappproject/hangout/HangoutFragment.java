@@ -1,15 +1,19 @@
-package edu.uw.tacoma.group2.mobileappproject.group;
+package edu.uw.tacoma.group2.mobileappproject.hangout;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -23,119 +27,127 @@ import java.net.URL;
 import java.util.List;
 
 import edu.uw.tacoma.group2.mobileappproject.R;
+import edu.uw.tacoma.group2.mobileappproject.order.OrderMenu.OrderMenuFragment;
 import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
 
-
 /**
- * A fragment representing a list of Groups
- * <p/>
- * Activities containing this fragment MUST implement the {@link GroupTabListener}
- * interface.
- * @author Stephanie Day
- * @version 1.0
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link HangoutInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link HangoutFragment#newInstance} factory method to
+ * create an instance of this fragment.
  */
-public class GroupFragment extends Fragment {
-
-    private static final String TAG = "Group List";
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    private static final String GROUPS_URL =
-            "http://stephd27.000webhostapp.com/list.php?cmd=groups&uid=" + UserContent.sUserID;
-
+public class HangoutFragment extends Fragment {
+    private static final String HANGOUTS_URL =
+            "https://hangryfoodiehangout.000webhostapp.com/getHangouts.php?&fid=" + UserContent.sUserID;
+    private static final String TAG = "Hangout List";
+    private static final String  ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
-    private GroupTabListener mListener;
-    private List<GroupContent> mGroupList;
+    private List<Hangout> mHangoutList;
+    private HangoutInteractionListener mListener;
     private RecyclerView mRecyclerView;
 
-
-
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public GroupFragment() {
+    public HangoutFragment() {
+        // Required empty public constructor
     }
 
     /**
-     * For generating a new Group Fragment
-     * @param columnCount How many columns to view groups by
-     * @return New Friend List populated with user's groups
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     * @return A new instance of fragment HangoutFragment.
      */
-    @SuppressWarnings("unused")
-    public static GroupFragment newInstance(int columnCount) {
-        GroupFragment fragment = new GroupFragment();
+    public static HangoutFragment newInstance(int columnCount) {
+        HangoutFragment fragment = new HangoutFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
         return fragment;
     }
 
-    /**
-     * Called when fragment is created to set how many columns in list.
-     * @param savedInstanceState Any saved information
-     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
     }
-    /**
-     * <p>Creates the layout for the groups in the list,</p>
-     * and prompts loading of user's groups from server.
-     * @param inflater inflates fragment inside view
-     * @param container view to inflate fragment in
-     * @param savedInstanceState any saved information
-     * @return View associated with fragment
-     */
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_group_list, container, false);
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view =  inflater.inflate(R.layout.fragment_hangout_list, container, false);
+        if(view instanceof RecyclerView){
             Context context = view.getContext();
             mRecyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
+            registerForContextMenu(mRecyclerView);
+            if(mColumnCount <= 1){
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
+            }else{
                 mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
+            GetHangoutsTask task = new GetHangoutsTask();
+            task.execute(HANGOUTS_URL);
+
+
         }
         return view;
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        GetGroupInfoTask task = new GetGroupInfoTask();
-        task.execute(GROUPS_URL);
+    public void onResume() {
+        super.onResume();
+        FloatingActionButton fab = getActivity().findViewById(R.id.fab);
+        fab.setVisibility(View.VISIBLE);
+        Toolbar tb = getActivity().findViewById(R.id.toolbar);
+        tb.setTitle(R.string.current_hangouts);
+
     }
 
-
-    /**
-     * <p>Called when Fragment is attached to an activity</p>
-     * Binds listener to fragment.
-     * @param context Context of the app
-     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof GroupTabListener) {
-            mListener = (GroupTabListener) context;
+        if (context instanceof HangoutInteractionListener) {
+            mListener = (HangoutInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement GroupTabListener");
+                    + " must implement HangoutInteractionListener");
         }
     }
 
-    /**Called if/when fragment is removed from activity*/
+    @Override
+    public void onStart(){
+        super.onStart();
+
+    }
+
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        int position = -1;
+        try {
+            position = ((HangoutAdapter)mRecyclerView.getAdapter()).getPosition();
+        } catch (Exception e) {
+            Log.d(TAG, e.getLocalizedMessage(), e);
+            return super.onContextItemSelected(item);
+        }
+        FloatingActionButton fab = getActivity().findViewById(R.id.fab);
+        fab.setVisibility(View.GONE);
+        Toolbar tb = getActivity().findViewById(R.id.toolbar);
+        tb.setTitle("Order Item: ");
+        Hangout hangout = mHangoutList.get(position);
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().replace(R.id.content_frame, OrderMenuFragment.newInstance(1, hangout))
+                .addToBackStack(null)
+                .commit();
+
+        return super.onContextItemSelected(item);
     }
 
     /**
@@ -143,20 +155,16 @@ public class GroupFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
+     * <p>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface GroupTabListener {
-        void groupTabListener(GroupContent item);
+    public interface HangoutInteractionListener {
+        void hangoutListener(Hangout item);
     }
 
-    /**
-     * Web Service used to retrieve a User's Groups.
-     */
-    private class GetGroupInfoTask extends AsyncTask<String, Void, String> {
-
+    private class GetHangoutsTask extends AsyncTask<String, Void, String>{
         /**
          * Kicks off getting groups
          * @param urls query url for retrieving groups
@@ -182,7 +190,7 @@ public class GroupFragment extends Fragment {
                         response += s;
                     }
                 } catch (Exception e) {
-                    response = "Unable to give friends, Reason: " + e.getMessage();
+                    response = "Unable to give hangouts, Reason: " + e.getMessage();
                 } finally {
                     if (urlConnection != null)
                         urlConnection.disconnect();
@@ -190,6 +198,7 @@ public class GroupFragment extends Fragment {
             }
             return response;
         }
+
 
         /**
          * Handles response from web service, populates the user's groups.
@@ -204,15 +213,16 @@ public class GroupFragment extends Fragment {
                 return;
             }
             try {
-                mGroupList = GroupContent.parseGroupList(result);
+                mHangoutList = Hangout.parseHangout(result);
                 Log.e(TAG, result);
 
             }catch (JSONException e) {
                 Log.e(TAG, e.getMessage());
                 return;
             }
-            if (!mGroupList.isEmpty()) {
-                mRecyclerView.setAdapter(new MyGroupRecyclerViewAdapter(mGroupList, mListener));
+            if (!mHangoutList.isEmpty()) {
+                mRecyclerView.setAdapter(null);
+                mRecyclerView.setAdapter(new HangoutAdapter(mHangoutList, mListener, getActivity()));
             }
         }
     }

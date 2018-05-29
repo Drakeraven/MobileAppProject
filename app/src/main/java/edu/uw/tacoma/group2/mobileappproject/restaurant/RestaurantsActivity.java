@@ -1,15 +1,13 @@
-package edu.uw.tacoma.group2.mobileappproject;
+package edu.uw.tacoma.group2.mobileappproject.restaurant;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -21,32 +19,24 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import edu.uw.tacoma.group2.mobileappproject.restaurant.Restaurant;
-import edu.uw.tacoma.group2.mobileappproject.restaurant.RestaurantAdapter;
+import edu.uw.tacoma.group2.mobileappproject.R;
 
 /**
  * This class represents the Restaurants activity. The purpose of the activity is
@@ -57,6 +47,8 @@ import edu.uw.tacoma.group2.mobileappproject.restaurant.RestaurantAdapter;
  */
 public class RestaurantsActivity extends AppCompatActivity {
     private String URL = "https://developers.zomato.com/api/v2.1/geocode?";
+    private static final String DEFAULT_LAT = "47.244176";
+    private static final String DEFAULT_LON ="-122.436984";
     private static final String API_KEY = "1b66bc58a591877d162b63cb4ebcb5de";
     private static final String TAG = "RestaurantsActivity";
     public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
@@ -92,7 +84,14 @@ public class RestaurantsActivity extends AppCompatActivity {
         mSearchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadZomatoData(mLatitude,mLongitude);
+                if(mLatitude == null || mLongitude == null){
+                    mLatitude = DEFAULT_LAT;
+                    mLongitude = DEFAULT_LON;
+                    loadZomatoData(mLatitude, mLongitude);
+                } else {
+                    loadZomatoData(mLatitude,mLongitude);
+                }
+
             }
         });
         mFusedClient = LocationServices.getFusedLocationProviderClient(this);
@@ -133,13 +132,15 @@ public class RestaurantsActivity extends AppCompatActivity {
      * image, and aggregate user rating to the user.
      */
     private void loadZomatoData(String lat, String lon){
-        final ProgressDialog progressDialog = new ProgressDialog(this);
+        /*final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading....");
-        progressDialog.show();
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = URL +"lat="+  lat + "&lon=" + lon;
-        Log.i(TAG, "URL: " + url);
-        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+        progressDialog.show();*/
+        //RequestQueue queue = Volley.newRequestQueue(this);
+        String url = URL + "lat="+  lat + "&lon=" + lon;
+        //Log.i(TAG, "URL: " + url);
+        ZomatoAsyncTask zomTask = new ZomatoAsyncTask();
+        zomTask.execute(new String[]{url});
+        /*final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -167,7 +168,8 @@ public class RestaurantsActivity extends AppCompatActivity {
                 return params;
             }
         };
-        queue.add(request);
+        queue.add(request);*/
+
 
     }
 
@@ -227,5 +229,60 @@ public class RestaurantsActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    private class ZomatoAsyncTask extends AsyncTask<String, Void, String>{
+
+
+        @Override
+        protected String doInBackground(String... urls) {
+            String response = "";
+            HttpURLConnection urlConnection = null;
+            for (String url : urls) {
+                try {
+                    java.net.URL urlObject = new URL(url);
+
+
+                    urlConnection = (HttpURLConnection) urlObject.openConnection();
+                    //urlConnection.setRequestMethod("HEAD");
+                    urlConnection.addRequestProperty("user-key",API_KEY );
+
+                    InputStream content = urlConnection.getInputStream();
+
+                    BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
+                    String s;
+                    while ((s = buffer.readLine()) != null) {
+                        response += s;
+                        //Log.e(TAG,response);
+                    }
+
+                } catch (Exception e) {
+                    response = "Unable to add course, Reason: "
+                            + e.getMessage();
+                } finally {
+                    if (urlConnection != null)
+                        urlConnection.disconnect();
+                }
+            }
+            //Log.i(TAG,response);
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String result){
+            if (result.startsWith("Unable to")) {
+                Log.e(TAG, result);
+                return;
+            }
+            try {
+                mRestaurantList = Restaurant.getRestaurants(result);
+                mAdapter = new RestaurantAdapter(mRestaurantList, getApplicationContext(), mRecycler);
+                mRecycler.setAdapter(mAdapter);
+
+            }catch (JSONException e) {
+                Log.e(TAG, e.getMessage());
+                return;
+            }
+        }
     }
 }
