@@ -1,5 +1,6 @@
 package edu.uw.tacoma.group2.mobileappproject;
 
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -37,14 +38,14 @@ public class HangoutActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
                 //TODO: Just for making order thing
-                toolbar.setTitle("Order Item: ");
-                fab.setVisibility(View.GONE);
-                FragmentManager fm = getSupportFragmentManager();
-                fm.beginTransaction().replace(R.id.content_frame, new OrderMenuFragment())
-                        .commit();
+//                toolbar.setTitle("Order Item: ");
+//                fab.setVisibility(View.GONE);
+//                FragmentManager fm = getSupportFragmentManager();
+//                fm.beginTransaction().replace(R.id.content_frame, new OrderMenuFragment())
+//                        .commit();
             }
         });
 
@@ -113,12 +114,12 @@ public class HangoutActivity extends AppCompatActivity
     }
 
     @Override
-    public void orderTabListener(OrdersContent.OrderItem item) {
+    public void onOrderMenuInteraction(FoodContent.FoodItem item) {
 
     }
 
     @Override
-    public void onOrderMenuInteraction(FoodContent.FoodItem item) {
+    public void orderTabListener(OrdersContent item) {
 
     }
 }

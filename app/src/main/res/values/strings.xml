@@ -25,5 +25,6 @@
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
+    <string name="order_and_pay">Order and Pay</string>
 
 </resources>
