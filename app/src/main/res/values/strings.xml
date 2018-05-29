@@ -30,5 +30,6 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="swipe_instructions">Swipe down to get restaurants near you.</string>
+    <string name="remove_friend">Remove friend</string>
 
 </resources>

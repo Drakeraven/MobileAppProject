@@ -13,10 +13,15 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.net.URLEncoder;
 
 import edu.uw.tacoma.group2.mobileappproject.friend.FriendContent;
 import edu.uw.tacoma.group2.mobileappproject.friend.FriendFragment;
@@ -24,6 +29,8 @@ import edu.uw.tacoma.group2.mobileappproject.group.AddGroup;
 import edu.uw.tacoma.group2.mobileappproject.group.GroupContent;
 import edu.uw.tacoma.group2.mobileappproject.group.GroupFragment;
 import edu.uw.tacoma.group2.mobileappproject.group.GroupMemberFragment;
+import edu.uw.tacoma.group2.mobileappproject.hangout.CreateHangoutTask;
+import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
 
 /**
  * Tabbed Activity that shows the User's friends and groups
@@ -34,6 +41,9 @@ public class FriendGroupActivity extends AppCompatActivity implements
         FriendFragment.FriendTabListener,
         GroupFragment.GroupTabListener {
 
+    private static final String TAG = "FriendGroupActivity" ;
+    private static final String REMOVE_FRIEND =
+            "https://stephd27.000webhostapp.com/removeFriend.php?id=";
     /**
      * Shows detailed information for each friend when clicked on.
      */
@@ -130,14 +140,46 @@ public class FriendGroupActivity extends AppCompatActivity implements
      * @param item friend that was clicked.
      */
     @Override
-    public void friendTabListener(FriendContent item) {
+    public void friendTabListener(final FriendContent item) {
         TextView popUpName = friendPopUp.findViewById(R.id.friend_name);
         TextView popUpEmail = friendPopUp.findViewById(R.id.friend_email);
+        Button popUpRemove = friendPopUp.findViewById(R.id.remove_friend_btn);
         //ProfilePictureView popUpIcon = friendPopUp.findViewById(R.id.friend_profile_pic);
         popUpName.setText(item.getFrenName());
         popUpEmail.setText(item.getFrenEmail());
         //popUpIcon.setProfileId(item.getFrenID());
+        popUpRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeFriend(item);
+            }
+        });
         friendPopUp.show();
+    }
+
+    public void removeFriend(FriendContent user) {
+
+        try {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(REMOVE_FRIEND);
+            stringBuilder.append(URLEncoder.encode(UserContent.sUserID, "UTF-8"));
+            stringBuilder.append("&fid=");
+            stringBuilder.append(URLEncoder.encode(user.getFrenID(), "UTF-8"));
+
+            Log.i(TAG, "Url is " +stringBuilder.toString());
+            CreateHangoutTask addFriendAsyncTask = new CreateHangoutTask();
+            addFriendAsyncTask.execute(stringBuilder.toString());
+            Toast toast = Toast.makeText(this, "Removed friend!", Toast.LENGTH_SHORT);
+            toast.show();
+
+            Intent splashReturn = new Intent(this, SplashActivity.class);
+            splashReturn.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(splashReturn);
+        }
+        catch (Exception e) {
+            Toast.makeText(this, "Couldn't register, Something wrong with the URL" + e.getMessage(),
+                    Toast.LENGTH_SHORT). show();
+        }
     }
 
     /**

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddFriendActivity"
+    android:background="@color/hangryPeach"
     android:id="@+id/addfriend_fragment_container">
 
     <android.support.design.widget.AppBarLayout
