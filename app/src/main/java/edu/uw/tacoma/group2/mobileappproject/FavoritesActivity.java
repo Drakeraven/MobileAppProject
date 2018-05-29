@@ -51,7 +51,7 @@ public class FavoritesActivity extends AppCompatActivity implements  OrdersFragm
      * @param item
      */
     @Override
-    public void orderTabListener(OrdersContent.OrderItem item) {
+    public void orderTabListener(OrdersContent item) {
 
     }
 

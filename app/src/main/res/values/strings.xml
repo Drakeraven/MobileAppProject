@@ -26,5 +26,9 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="title_activity_add_friend">AddFriendActivity</string>
+    <string name="current_hangouts">Current Hangouts</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="swipe_instructions">Swipe down to get restaurants near you.</string>
 
 </resources>

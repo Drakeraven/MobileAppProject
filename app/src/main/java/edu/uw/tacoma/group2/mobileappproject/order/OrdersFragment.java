@@ -9,9 +9,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import java.util.List;
+
+import edu.uw.tacoma.group2.mobileappproject.HangryDB;
 import edu.uw.tacoma.group2.mobileappproject.R;
-import edu.uw.tacoma.group2.mobileappproject.order.OrdersContent.OrderItem;
 
 /**
  * Order Fragment used for displaying information about an Order object.
@@ -22,6 +25,7 @@ public class OrdersFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
     private OrdersTabListener mListener;
+    HangryDB mHangryDB;
 
     /**
      * Required empty public constructor.
@@ -71,7 +75,15 @@ public class OrdersFragment extends Fragment {
             }else{
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyOrdersRecyclerViewAdapter(OrdersContent.ITEMS, mListener));
+            if (mHangryDB == null) {
+                mHangryDB = new HangryDB(getContext());
+            }
+            List<OrdersContent> prevOrders = mHangryDB.getOrders();
+            if (prevOrders != null) {
+                recyclerView.setAdapter(new MyOrdersRecyclerViewAdapter(prevOrders, mListener));
+            } else {
+                Toast.makeText(getContext(),"No Orders to display.", Toast.LENGTH_LONG).show();
+            }
         }
         return view;
     }
@@ -105,6 +117,6 @@ public class OrdersFragment extends Fragment {
      * Public interface for setting up an OrderTabListener.
      */
     public interface  OrdersTabListener {
-        void orderTabListener(OrderItem item);
+        void orderTabListener(OrdersContent item);
     }
 }
