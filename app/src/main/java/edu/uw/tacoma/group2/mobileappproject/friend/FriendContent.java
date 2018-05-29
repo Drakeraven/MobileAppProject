@@ -16,9 +16,12 @@ import java.util.List;
 public class FriendContent implements Serializable {
     /**Defined JSON tags for parsing and storage*/
     private static final String ID = "fid";
+    private static final String UID = "id";
     private static final String NAME = "fname";
+    private static final String UNAME = "name";
     private static final String PIC = "fimage";
     private static final String EMAIL = "femail";
+    private static final String UEMAIL = "email";
 
     private String mFrenID;
     private String mFrenName;
@@ -62,6 +65,31 @@ public class FriendContent implements Serializable {
 
         return FriendList;
     }
+
+    /**
+     * A method that parses a JSON variable to generate individual user items
+     * @param friendsJSON Returned query from web service database
+     * @return List of constructed user objects
+     * @throws JSONException In case malformed JSONS
+     */
+    public static List<FriendContent> giveMeUsers(String friendsJSON) throws JSONException {
+        List<FriendContent> FriendList = new ArrayList<FriendContent>();
+        if (friendsJSON != null) {
+
+            JSONArray arr = new JSONArray(friendsJSON);
+
+            for (int i = 0; i < arr.length(); i++) {
+                JSONObject obj = arr.getJSONObject(i);
+                FriendContent course = new FriendContent(obj.getString(FriendContent.UID), obj.getString(FriendContent.UNAME)
+                        , "none", obj.getString(FriendContent.UEMAIL));
+                FriendList.add(course);
+            }
+
+        }
+
+        return FriendList;
+    }
+
 
 
     public String getFrenID() {

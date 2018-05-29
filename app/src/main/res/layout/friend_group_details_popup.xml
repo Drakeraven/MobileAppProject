@@ -12,7 +12,8 @@
         android:layout_alignParentTop="true"
         android:background="@color/browser_actions_bg_grey"
         android:gravity="end"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_alignParentLeft="true">
 
 
         <TextView
@@ -36,6 +37,13 @@
             android:layout_marginTop="10dp"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/remove_friend_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/remove_friend"
+            android:textColor="@color/hangryGrey"/>
     </LinearLayout>
 
 </RelativeLayout>

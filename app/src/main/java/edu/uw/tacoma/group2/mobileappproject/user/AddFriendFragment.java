@@ -1,9 +1,8 @@
-package edu.uw.tacoma.group2.mobileappproject.friend;
+package edu.uw.tacoma.group2.mobileappproject.user;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,74 +13,60 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import org.json.JSONException;
+
+import edu.uw.tacoma.group2.mobileappproject.R;
+import edu.uw.tacoma.group2.mobileappproject.friend.FriendContent;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.List;
 
-import edu.uw.tacoma.group2.mobileappproject.R;
-import edu.uw.tacoma.group2.mobileappproject.SplashActivity;
-import edu.uw.tacoma.group2.mobileappproject.hangout.CreateHangoutTask;
-import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
-
 /**
- * A fragment representing one person in a list of Friends.
+ * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link FriendTabListener}
+ * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
- * @author Stephanie Day
- * @version 1.0
  */
-public class FriendFragment extends Fragment {
+public class AddFriendFragment extends Fragment {
     /**Constants for debugging, sending queries*/
     private static final String TAG = "Friend List";
     private static final String ARG_COLUMN_COUNT = "column-count";
     private static final String FRIENDS_URL =
             "http://stephd27.000webhostapp.com/list.php?cmd=friends&uid=" + UserContent.sUserID;
     private static final String USERS_URL =
-            "http://http://stephd27.000webhostapp.com/list.php?cmd=users";
+            "http://stephd27.000webhostapp.com/list.php?cmd=users";
     private int mColumnCount = 1;
-    private FriendTabListener mListener;
-    private List<FriendContent> mFriendList;
     private List<FriendContent> mUserList;
     private RecyclerView mRecyclerView;
     private View mLoadingView;
     private int mLongAnimDuration;
 
+    private OnListFragmentInteractionListener mListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public FriendFragment() {
+    public AddFriendFragment() {
     }
 
 
-    /**
-     * For generating a new Friend Fragment
-     * @param columnCount How many columns to view friends by
-     * @return New Friend List populated with user's friends
-     */
+
+    // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static FriendFragment newInstance(int columnCount) {
-        FriendFragment fragment = new FriendFragment();
+    public static AddFriendFragment newInstance(int columnCount) {
+        AddFriendFragment fragment = new AddFriendFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
         return fragment;
     }
 
-    /**
-     * Called when fragment is created to set how many columns in list.
-     * @param savedInstanceState Any saved information
-     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,19 +76,10 @@ public class FriendFragment extends Fragment {
         }
     }
 
-    /**
-     * <p>Creates the layout for the friends in the list,</p>
-     * and prompts loading of user's friends from server.
-     * @param inflater inflates fragment inside view
-     * @param container view to inflate fragment in
-     * @param savedInstanceState any saved information
-     * @return View associated with fragment
-     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_friend_list, container, false);
-        mLoadingView = getActivity().findViewById(R.id.loading_spinner);
+        View view = inflater.inflate(R.layout.fragment_addfriend_list, container, false);
         mLongAnimDuration= getResources().getInteger(android.R.integer.config_longAnimTime);
 
         // Set the adapter
@@ -115,36 +91,31 @@ public class FriendFragment extends Fragment {
             } else {
                 mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            GetFriendsTask task = new GetFriendsTask();
-            task.execute(new String[]{FRIENDS_URL});
+            //TODO: Add async task call
+            GetUsersTask task = new GetUsersTask();
+            task.execute(new String[]{USERS_URL});
         }
+
         return view;
     }
 
 
-    /**
-     * <p>Called when Fragment is attached to an activity</p>
-     * Binds listener to fragment.
-     * @param context Context of the app
-     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof FriendTabListener) {
-            mListener = (FriendTabListener) context;
+        if (context instanceof OnListFragmentInteractionListener) {
+            mListener = (OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement GroupTabListener");
+                    + " must implement OnListFragmentInteractionListener");
         }
     }
 
-    /**Called if/when fragment is removed from activity*/
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
-
 
     /**Gives our friendlist kick ass fading animations!     */
     private void crossfade() {
@@ -184,18 +155,19 @@ public class FriendFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface FriendTabListener {
-        void friendTabListener(FriendContent item);
+    public interface OnListFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onListFragmentInteraction(FriendContent item);
     }
 
     /**
      * Web Service used to retrieve a User's friends.
      */
-    private class GetFriendsTask extends AsyncTask<String, Void, String> {
+    private class GetUsersTask extends AsyncTask<String, Void, String> {
 
         /**
-         * Kicks off getting friends
-         * @param urls query url for retrieving friends
+         * Kicks off getting users
+         * @param urls query url for retrieving users
          * @return Response from web service
          */
         @Override
@@ -218,7 +190,7 @@ public class FriendFragment extends Fragment {
                         response += s;
                     }
                 } catch (Exception e) {
-                    response = "Unable to give friends, Reason: " + e.getMessage();
+                    response = "Unable to give users, Reason: " + e.getMessage();
                 } finally {
                     if (urlConnection != null)
                         urlConnection.disconnect();
@@ -228,7 +200,7 @@ public class FriendFragment extends Fragment {
         }
 
         /**
-         * Handles response from web service, populates the user's friends.
+         * Handles response from web service, populates the user list.
          * @param result Response from the web service
          */
         @Override
@@ -240,15 +212,15 @@ public class FriendFragment extends Fragment {
                 return;
             }
             try {
-                mFriendList = FriendContent.giveMeFriends(result);
+                mUserList = FriendContent.giveMeUsers(result);
 
             }catch (JSONException e) {
                 Log.e(TAG, e.getMessage());
                 return;
             }
-            if (!mFriendList.isEmpty()) {
-                crossfade();
-                mRecyclerView.setAdapter(new MyFriendRecyclerViewAdapter(mFriendList, mListener));
+            if (!mUserList.isEmpty()) {
+                //crossfade();
+                mRecyclerView.setAdapter(new MyAddFriendRecyclerViewAdapter(mUserList, mListener));
             }
         }
     }
