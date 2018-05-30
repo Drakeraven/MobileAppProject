@@ -112,13 +112,14 @@ public class HangoutActivity extends AppCompatActivity
         return true;
     }
 
+
     @Override
-    public void orderTabListener(OrdersContent item) {
+    public void onOrderMenuInteraction(FoodContent.FoodItem item) {
 
     }
 
     @Override
-    public void onOrderMenuInteraction(FoodContent.FoodItem item) {
+    public void orderTabListener(OrdersContent item) {
 
     }
 }

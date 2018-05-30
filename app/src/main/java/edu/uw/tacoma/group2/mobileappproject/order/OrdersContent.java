@@ -1,9 +1,5 @@
 package edu.uw.tacoma.group2.mobileappproject.order;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 //TODO: modify this class to parse sqlLite to display previous orders
 /**
  * This class represents an Order object and its associated values.
@@ -18,30 +14,6 @@ public class OrdersContent {
     public OrdersContent(String mHangoutID, String mFoods, String mPrice) {
         this.mHangoutID = mHangoutID;
         this.mFoods = mFoods;
-        this.mPrice = mPrice;
-    }
-
-    public String getmHangoutID() {
-        return mHangoutID;
-    }
-
-    public void setmHangoutID(String mHangoutID) {
-        this.mHangoutID = mHangoutID;
-    }
-
-    public String getmFoods() {
-        return mFoods;
-    }
-
-    public void setmFoods(String mFoods) {
-        this.mFoods = mFoods;
-    }
-
-    public String getmPrice() {
-        return mPrice;
-    }
-
-    public void setmPrice(String mPrice) {
         this.mPrice = mPrice;
     }
 }
