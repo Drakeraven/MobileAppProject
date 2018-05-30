@@ -13,7 +13,7 @@ import java.util.List;
  * one of their groups and a restaurant for the hangout. The members of this class also correlate with
  * the column names of the database table which they will be used for retrieving and sending data.
  * @author Harlan Stewart
- * @version 1.0
+ * @version 1.8
  */
 public class Hangout implements Serializable {
     public static final String HID = "hid";

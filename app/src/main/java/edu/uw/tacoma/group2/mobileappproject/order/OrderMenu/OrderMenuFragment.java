@@ -1,6 +1,7 @@
 package edu.uw.tacoma.group2.mobileappproject.order.OrderMenu;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import edu.uw.tacoma.group2.mobileappproject.HangryDB;
+import edu.uw.tacoma.group2.mobileappproject.OrderCompleteActivity;
 import edu.uw.tacoma.group2.mobileappproject.R;
 import edu.uw.tacoma.group2.mobileappproject.hangout.Hangout;
 import edu.uw.tacoma.group2.mobileappproject.order.OrderMenu.FoodContent.FoodItem;
@@ -102,6 +104,8 @@ public class OrderMenuFragment extends Fragment {
                 //TODO: update local db?
                 OrderMasterTask task = new OrderMasterTask();
                 task.execute(url);
+                Intent completeIntent = new Intent(getContext(), OrderCompleteActivity.class);
+                getContext().startActivity(completeIntent);
             }
         });
 
@@ -196,6 +200,7 @@ public class OrderMenuFragment extends Fragment {
                 JSONObject jsonObject = new JSONObject(result);
                 String status = (String) jsonObject.get("result");
                 if (status.equals("success")) {
+
                     Log.i(TAG, "Successfully updated order.");
                 } else {
                     Log.i(TAG, "Failed to add: "

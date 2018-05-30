@@ -8,7 +8,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -44,7 +43,7 @@ import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
  * In this class the user will be able to create new hangouts, view their current hangout, and also
  * have access to the ordering activity where they can place an order.
  * @author Harlan Stewart
- * @version 1.0
+ * @version 1.5
  */
 public class HangoutActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -63,10 +62,16 @@ public class HangoutActivity extends AppCompatActivity
     private HashMap<String, String> mMemberMap;
     private Date mDate;
     FloatingActionButton fab;
-    private static final String TAG ="Hangout Activity";
-    private SwipeRefreshLayout mSwipeRefreshLayout;
 
 
+    /**
+     * This method creates the layout for the hangout activity and will initially call the fragment
+     * manager to display the list of current hangouts the user is a part of. Also this method sets
+     * local variables for the activities associated views and implements the function of the floating
+     * action buttons onClick listener which will display a list of groups to select for a new hangout
+     * when it is pressed.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -158,7 +163,6 @@ public class HangoutActivity extends AppCompatActivity
 
     @Override
     public void orderTabListener(OrdersContent item) {
-
     }
 
     /**

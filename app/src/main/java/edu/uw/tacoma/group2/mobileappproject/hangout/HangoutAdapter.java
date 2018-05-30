@@ -17,6 +17,8 @@ import edu.uw.tacoma.group2.mobileappproject.R;
 /**
  * This class represents an adapter which is used to populate a list of hangouts that the current
  * user is a member of.
+ * @author Harlan Stewart
+ * @version 1.4
  */
 public class HangoutAdapter extends RecyclerView.Adapter<HangoutAdapter.ViewHolder> {
     private int position;
@@ -38,6 +40,14 @@ public class HangoutAdapter extends RecyclerView.Adapter<HangoutAdapter.ViewHold
         return new ViewHolder(view);
     }
 
+    /**
+     * Binds the current viewholder being populated in the hangout list with the correct values for
+     * hangout id and restaurant name. After this it will implement the onClick listener for the current
+     * viewholder object. Finally this method will also the the onLongClick listener for the same viewholder
+     * object to allow implementation for when the user performs a long click on the viewholder.
+     * @param holder the current viewholder to be populated.
+     * @param position the position of the current viewholder in the viewholder list.
+     */
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         holder.mHangout = mValues.get(position);
@@ -51,7 +61,6 @@ public class HangoutAdapter extends RecyclerView.Adapter<HangoutAdapter.ViewHold
                 }
             }
         });
-
         holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {

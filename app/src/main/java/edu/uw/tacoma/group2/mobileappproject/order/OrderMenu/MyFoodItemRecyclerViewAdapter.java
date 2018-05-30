@@ -25,6 +25,7 @@ public class MyFoodItemRecyclerViewAdapter extends RecyclerView.Adapter<MyFoodIt
     private final List<FoodItem> mValues;
     private final onOrderMenuListener mListener;
     private final View mContext;
+    public static String USER_TOTAL;
 
     public MyFoodItemRecyclerViewAdapter(List<FoodItem> items, onOrderMenuListener listener, View context) {
         mValues = items;
@@ -84,9 +85,9 @@ public class MyFoodItemRecyclerViewAdapter extends RecyclerView.Adapter<MyFoodIt
         if (currTotal < 0 || currTotal < 1) {
             currTotal = 0.0F;
         }
-        String strTotal = String.format("%.2f", currTotal);
+        USER_TOTAL = String.format("%.2f", currTotal);
 
-        output += strTotal;
+        output += USER_TOTAL;
 
         orderTotal.setText(output);
     }

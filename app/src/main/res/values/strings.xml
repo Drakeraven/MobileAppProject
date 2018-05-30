@@ -30,5 +30,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="swipe_instructions">Swipe down to get restaurants near you.</string>
+    <string name="order_complete_activity">Order Complete Activity</string>
+    <string name="hangout_label_text">Hangout Time:</string>
+    <string name="rest_label_text">Place:</string>
 
 </resources>

@@ -22,12 +22,14 @@
                 android:id="@+id/imageView"
                 android:layout_margin="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                />
             <TextView
                 android:id="@+id/restaurant_name"
                 android:gravity="center"
                 android:layout_margin="5dp"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                android:textColor="@color/hangryOrange"
                 android:text="Name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

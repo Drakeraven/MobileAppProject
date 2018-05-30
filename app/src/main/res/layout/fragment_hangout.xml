@@ -5,10 +5,17 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/hangout_label"
+        android:text="@string/hangout_label_text"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/hangryGrey"/>
 
     <TextView
         android:id="@+id/item_hid"
-        android:textColor="@color/hangryGrey"
+        android:textColor="@color/hangryOrange"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -16,13 +23,27 @@
         />
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/rest_label"
+        android:text="@string/rest_label_text"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/hangryGrey"/>
+
+    <TextView
         android:id="@+id/rest_name"
-        android:textColor="@color/hangryGrey"
+        android:textColor="@color/hangryOrange"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_margin="8dp"
         android:paddingBottom="16dp"
         android:textAppearance="?android:attr/textAppearanceListItem"
          />
+    <View
+        android:id="@+id/divider_hangs"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="?android:attr/listDivider"
+        />
 
 </LinearLayout>

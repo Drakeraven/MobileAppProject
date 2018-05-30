@@ -2,12 +2,10 @@ package edu.uw.tacoma.group2.mobileappproject.restaurant;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,17 +23,12 @@ import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
  * RecyclerView adapter used to gather the information created by the Restaurant class fields and display
  * the list of restaurants to the user.
  * @author Harlan Stewart
- * @version 1.0
+ * @version 1.5
  */
 public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.ViewHolder> {
-    public static final String KEY_NAME = "name";
-    public static final String KEY_IMAGE = "featured_image";
-    public static final String KEY_RATING = "user_rating";
     private List<Restaurant> mRestaurantsList;
     private Context mContext;
     private RecyclerView mRecycler;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-
 
     /**
      * public constructore used to create instance of the RecyclerView adapter
@@ -47,7 +40,6 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         this.mRestaurantsList = restaurantsList;
         this.mContext = context;
         this.mRecycler = recycler;
-
     }
 
     /**
@@ -60,7 +52,6 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_restaurant, parent, false);
-
         return new ViewHolder(v);
     }
 
@@ -79,6 +70,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         }else {
             holder.image.setImageResource(R.mipmap.ic_launcher);
         }
+
         /**
          * When the user picks on a restaurant from the list it will be set to their restaurant choice
          * for creating a hangout.
