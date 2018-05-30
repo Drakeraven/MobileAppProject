@@ -97,6 +97,7 @@ public class HangoutActivity extends AppCompatActivity
                 fm.beginTransaction()
                         .replace(R.id.content_frame, new GroupFragment())
                         .commit();
+                toolbar.setTitle("Choose a group");
             }
         });
     }
