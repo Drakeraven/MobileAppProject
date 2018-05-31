@@ -52,7 +52,8 @@ public class HangoutAdapter extends RecyclerView.Adapter<HangoutAdapter.ViewHold
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         holder.mHangout = mValues.get(position);
         holder.mHidView.setText(mValues.get(position).getHid());
-        holder.mRestView.setText(mValues.get(position).getRestName() );
+        holder.mRestView.setText(mValues.get(position).getRestName());
+        holder.mGroupNameView.setText(mValues.get(position).getGroupName());
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,6 +88,7 @@ public class HangoutAdapter extends RecyclerView.Adapter<HangoutAdapter.ViewHold
         final View mView;
         final TextView mHidView;
         final TextView mRestView;
+        final TextView mGroupNameView;
         public Hangout mHangout;
 
         public ViewHolder(View view) {
@@ -94,6 +96,7 @@ public class HangoutAdapter extends RecyclerView.Adapter<HangoutAdapter.ViewHold
             mView = view;
             mHidView = view.findViewById(R.id.item_hid);
             mRestView = view.findViewById(R.id.rest_name);
+            mGroupNameView = view.findViewById(R.id.group_name);
             view.setOnCreateContextMenuListener(this);
         }
 

@@ -61,6 +61,7 @@ public class HangoutActivity extends AppCompatActivity
             "http://stephd27.000webhostapp.com/list.php?cmd=members&group=";
     private HashMap<String, String> mMemberMap;
     private Date mDate;
+    private String mGroupName;
     FloatingActionButton fab;
 
 
@@ -211,9 +212,10 @@ public class HangoutActivity extends AppCompatActivity
     private void insertIntoHangoutTable(GroupContent group){
         long sysTime = System.currentTimeMillis();
         mDate = new Date(sysTime);
+        mGroupName = group.getGroupName();
         CreateHangoutTask taskMem = new CreateHangoutTask();
         String mGroupCount = group.getGroupCount();
-        String urlHangout = buildHangoutURL(mGroupCount, mDate);
+        String urlHangout = buildHangoutURL(mGroupCount, mDate, mGroupName);
         taskMem.execute(urlHangout);
     }
 
@@ -222,7 +224,7 @@ public class HangoutActivity extends AppCompatActivity
      * for members of the group the user has chosen for starting a new hangout.
      * @param group the users group choice.
      */
-    private void getMembersFromDB( GroupContent group){
+    private void getMembersFromDB(GroupContent group){
         GetMemberInfoTask memInfoTask = new GetMemberInfoTask();
         String membersURL = GET_MEMBERS_URL + group.getGroupID();
         memInfoTask.execute(membersURL);
@@ -235,7 +237,7 @@ public class HangoutActivity extends AppCompatActivity
      * @param date the current system date/time for primary key.
      * @return the string url for creating a new hangout.
      */
-    private String buildHangoutURL(String memCount, Date date){
+    private String buildHangoutURL(String memCount, Date date, String groupName){
         StringBuilder sb = new StringBuilder(ADD_HANGOUT_URL);
         sb.append("&hid=").append(date.toString());
         if(!(UserContent.sUserRestaurant == null)){
@@ -247,6 +249,7 @@ public class HangoutActivity extends AppCompatActivity
         }
         sb.append("&num_members=").append(memCount);
         sb.append("&closed_open=").append("0");
+        sb.append("&group_name=").append(groupName);
         //Log.e(TAG_TWO, sb.toString());
         return  sb.toString();
     }
@@ -323,6 +326,7 @@ public class HangoutActivity extends AppCompatActivity
             }
             try {
                 mMemberMap = GroupContent.parseGroupMembers(result);
+
             }catch (JSONException e) {
                 Log.e(TAG_FOUR, e.getMessage());
                 return;

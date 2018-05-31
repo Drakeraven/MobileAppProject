@@ -23,9 +23,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.uw.tacoma.group2.mobileappproject.R;
+import edu.uw.tacoma.group2.mobileappproject.group.GroupContent;
+import edu.uw.tacoma.group2.mobileappproject.group.GroupFragment;
 import edu.uw.tacoma.group2.mobileappproject.order.OrderMenu.OrderMenuFragment;
 import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
 
@@ -40,6 +43,7 @@ public class HangoutFragment extends Fragment implements SwipeRefreshLayout.OnRe
             "https://hangryfoodiehangout.000webhostapp.com/getHangouts.php?&fid=" + UserContent.sUserID;
     private static final String TAG = "Hangout List";
     private static final String  ARG_COLUMN_COUNT = "column-count";
+    private static String mGroupName;
     private int mColumnCount = 1;
     private List<Hangout> mHangoutList;
     private HangoutInteractionListener mListener;
@@ -48,6 +52,7 @@ public class HangoutFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     public HangoutFragment() {
         // Required empty public constructor
+
     }
 
     /**
@@ -90,6 +95,7 @@ public class HangoutFragment extends Fragment implements SwipeRefreshLayout.OnRe
         mSwipeRefreshLayout.setOnRefreshListener(this);
             GetHangoutsTask task = new GetHangoutsTask();
             task.execute(HANGOUTS_URL);
+
         return view;
     }
 
@@ -196,6 +202,8 @@ public class HangoutFragment extends Fragment implements SwipeRefreshLayout.OnRe
                         urlConnection.disconnect();
                 }
             }
+
+            //Log.e("HANGOUT LIST", response);
             return response;
         }
 
@@ -212,10 +220,11 @@ public class HangoutFragment extends Fragment implements SwipeRefreshLayout.OnRe
             }
             try {
                 mHangoutList = Hangout.parseHangout(result);
-                Log.e(TAG, result);
+
 
             }catch (JSONException e) {
                 Log.e(TAG, e.getMessage());
+                Log.e(TAG, result);
                 return;
             }
             if (!mHangoutList.isEmpty()) {

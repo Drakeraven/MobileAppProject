@@ -1,5 +1,7 @@
 package edu.uw.tacoma.group2.mobileappproject.group;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -71,11 +73,12 @@ public class GroupContent {
             HashMap<String, String> members = new HashMap<>();
         if (membersJSON != null) {
             JSONArray array = new JSONArray(membersJSON);
-
             for (int i = 0; i < array.length(); i++) {
                 JSONObject object = array.getJSONObject(i);
                 members.put(object.getString(GroupContent.FRIEND_NAME), object.getString(GroupContent.FRIEND_ID));
             }
+
+
         }
         return members;
     }
@@ -87,6 +90,7 @@ public class GroupContent {
     public void setGroupID(String groupID) {
         this.mGroupID = groupID;
     }
+
 
     public String getGroupName() {
         return mGroupName;

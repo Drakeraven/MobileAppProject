@@ -1,5 +1,7 @@
 package edu.uw.tacoma.group2.mobileappproject.hangout;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -7,6 +9,8 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import edu.uw.tacoma.group2.mobileappproject.group.GroupContent;
 
 /**
  * This class represents a Hangout object and its fields. A hangout is created by the user choosing
@@ -20,22 +24,16 @@ public class Hangout implements Serializable {
     public static final String REST_NAME = "rest_name";
     public static final String NUM_MEMBERS = "num_members";
     public static final String CLOSED_OPEN = "closed_open";
+    public static final String GROUP_NAME = "group_name";
     private String mHid;
     private String mRestName;
     private String mNumMembers;
     private String mClosedOpen;
-
-    public static final String FID = "fid";
-    public static final String ORDERED = "ordered";
-    public static final String FRIEND_NAME = "friend_name";
-    public static final String PRICE = "price";
     private String mFid;
     private String mOrdered;
     private String mFriendName;
     private String mPrice;
-
-    public static final List<Hangout> hangList = new ArrayList<>();
-
+    private String mGroupName;
     /**
      * Private constructor used to create a hangout object that is related to the database
      * hangout table.
@@ -44,28 +42,12 @@ public class Hangout implements Serializable {
      * @param numMems The total number of people in this hangout.
      * @param closedOpen Value for knowing if a hangout has already ended or not.
      */
-    private Hangout(String hid, String restName, String numMems, String closedOpen){
+    public Hangout(String hid, String restName, String numMems, String closedOpen, String groupName){
         this.mHid = hid;
         this.mRestName = restName;
         this.mNumMembers = numMems;
         this.mClosedOpen = closedOpen;
-    }
-
-    /**
-     * Private constructor used to create a hangout object that is related to the database
-     * hangout_mems table.
-     * @param hid The time and date used for the unique primary key.
-     * @param fid The id of the person who is part of this hangout.
-     * @param ordered Value to indicate whether this person has ordered or not.
-     * @param fName The name of the person who is part of this hangout.
-     * @param price The price of the item the person has ordered.
-     */
-    private Hangout(String hid, String fid, String ordered, String fName, String price){
-        this.mHid = hid;
-        this.mFid = fid;
-        this.mOrdered = ordered;
-        this.mFriendName = fName;
-        this.mPrice = price;
+        this.mGroupName = groupName;
     }
 
     /**
@@ -83,39 +65,19 @@ public class Hangout implements Serializable {
                 Hangout hangout = new Hangout(obj.getString(Hangout.HID),
                         obj.getString(Hangout.REST_NAME),
                         obj.getString(Hangout.NUM_MEMBERS),
-                        obj.getString(Hangout.CLOSED_OPEN));
+                        obj.getString(Hangout.CLOSED_OPEN),
+                        obj.getString(Hangout.GROUP_NAME));
                 hList.add(hangout);
             }
         }
         return hList;
     }
 
-    /**
-     * Method used for parsing a list of hangout objects based on the hangout_mems table.
-     * @param hangJSON The json string that will be parsed.
-     * @return a list of hangout objects.
-     * @throws JSONException thrown when the JSON string is invalid.
-     */
-    public static List<Hangout> parseHangoutMems(String hangJSON) throws JSONException {
-        List<Hangout> hList = new ArrayList<>();
-        if(hangJSON != null) {
-            JSONArray arr = new JSONArray(hangList);
-            for(int i = 0; i < arr.length(); i++){
-                JSONObject obj = arr.getJSONObject(i);
-                Hangout hangout = new Hangout(obj.getString(Hangout.HID),
-                        obj.getString(Hangout.FID),
-                        obj.getString(Hangout.ORDERED),
-                        obj.getString(Hangout.FRIEND_NAME),
-                        obj.getString(Hangout.PRICE));
-                hangList.add(hangout);
-            }
-        }
-        return hangList;
-    }
-
     public String getHid() {
         return mHid;
     }
+
+    public String getGroupName(){return mGroupName;}
 
     public void setHid(String mHid) {
         this.mHid = mHid;

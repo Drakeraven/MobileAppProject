@@ -33,5 +33,6 @@
     <string name="order_complete_activity">Order Complete Activity</string>
     <string name="hangout_label_text">Hangout Time:</string>
     <string name="rest_label_text">Place:</string>
+    <string name="group_name_text">Group name:</string>
 
 </resources>
