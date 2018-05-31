@@ -127,9 +127,17 @@ public class OrderMenuFragment extends Fragment {
             public void onClick(View v) {
                 String url = buildOrderUrl(OrderTotal.getText().toString());
                 Log.i(TAG, "Generated update order: " + url);
-                //TODO: update local db?
                 OrderMasterTask task = new OrderMasterTask();
                 task.execute(url);
+                //Saving previous order to the db
+                if (mHangryDB == null) {
+                    mHangryDB = new HangryDB(getActivity());
+                    boolean inserted = mHangryDB.insertOrder(tempHangout, "food", tempPrice);
+                    if (!inserted) {
+                        Log.e(TAG, "Didn't insert Order locally");
+                    }
+                }
+
                 Intent completeIntent = new Intent(getContext(), OrderCompleteActivity.class);
                 getContext().startActivity(completeIntent);
             }
@@ -220,14 +228,6 @@ public class OrderMenuFragment extends Fragment {
             }catch (JSONException e) {
                 Log.e(TAG, e.getMessage());
                 return;
-            }
-            //Saving previous order to the db
-            if (mHangryDB == null) {
-                mHangryDB = new HangryDB(getActivity());
-                boolean inserted = mHangryDB.insertOrder(tempHangout, "food", tempPrice);
-                if (!inserted) {
-                    Log.e(TAG, "Didn't insert Order locally");
-                }
             }
 
         }
