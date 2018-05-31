@@ -42,6 +42,8 @@ import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
  */
 public class OrderMenuFragment extends Fragment {
     private static final String TAG = "Order Menu Fragment";
+    private static final String CHECK_DONE =
+            "http://hangryfoodiehangout.000webhostapp.com/hangoutScript.php?cmd=checkDone&hangout=";
     private static final String UPDATE_ORDER =
             "https://hangryfoodiehangout.000webhostapp.com/hangoutScript.php?cmd=ordered&user=" + UserContent.sUserID;
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -128,7 +130,7 @@ public class OrderMenuFragment extends Fragment {
                 String url = buildOrderUrl(OrderTotal.getText().toString());
                 Log.i(TAG, "Generated update order: " + url);
                 OrderMasterTask task = new OrderMasterTask();
-                task.execute(url);
+                task.execute(url, CHECK_DONE + tempHangout);
                 //Saving previous order to the db
                 if (mHangryDB == null) {
                     mHangryDB = new HangryDB(getActivity());
