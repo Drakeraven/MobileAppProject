@@ -15,10 +15,9 @@ import java.net.URL;
  * decides to create a hangout the information from their choice will be inserted into the
  * database.
  * @author Harlan Stewart
- * @version 1.0
+ * @version 1.4
  */
 public class CreateHangoutMembersTask extends AsyncTask<String, Void, String> {
-
     private static final String TAG = "HANGOUT MEMBER TASK  ";
 
     @Override
@@ -30,15 +29,12 @@ public class CreateHangoutMembersTask extends AsyncTask<String, Void, String> {
                 Log.e("Executing urls ", url);
                 URL urlObject = new URL(url);
                 urlConnection = (HttpURLConnection) urlObject.openConnection();
-
                 InputStream content = urlConnection.getInputStream();
-
                 BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
                 String s;
                 while ((s = buffer.readLine()) != null) {
                     response += s;
-                    Log.e(TAG,response);
-                }
+                    Log.e(TAG,response);                }
             } catch (Exception e) {
                 response = "Unable to add members, Reason: "
                         + e.getMessage();
@@ -48,7 +44,6 @@ public class CreateHangoutMembersTask extends AsyncTask<String, Void, String> {
             }
         }
         //Log.i(TAG,response);
-
         return response;
     }
 }

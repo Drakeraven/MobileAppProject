@@ -23,9 +23,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.uw.tacoma.group2.mobileappproject.R;
+import edu.uw.tacoma.group2.mobileappproject.group.GroupContent;
+import edu.uw.tacoma.group2.mobileappproject.group.GroupFragment;
 import edu.uw.tacoma.group2.mobileappproject.order.OrderMenu.OrderMenuFragment;
 import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
 
@@ -33,20 +36,23 @@ import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
  *This class is used to represent a HangoutFragment which is used to display information about a single hangout.
  * Any hangouts in which the user is currently a part of will be retrieved from the database in this method.\
  * @author Harlan Stewart
- * @version 1.0
+ * @version 1.6
  */
 public class HangoutFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private static final String HANGOUTS_URL =
             "https://hangryfoodiehangout.000webhostapp.com/getHangouts.php?&fid=" + UserContent.sUserID;
     private static final String TAG = "Hangout List";
     private static final String  ARG_COLUMN_COUNT = "column-count";
+    private static String mGroupName;
     private int mColumnCount = 1;
     private List<Hangout> mHangoutList;
+    private HangoutInteractionListener mListener;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public HangoutFragment() {
         // Required empty public constructor
+
     }
 
     /**
@@ -70,6 +76,14 @@ public class HangoutFragment extends Fragment implements SwipeRefreshLayout.OnRe
         }
     }
 
+    /**
+     * Sets the default recyclerview for a hangout fragment which is a list of hangout objects, then
+     * implements the SwipeRefreshListener to allow the user to swipe down to refresh the hangout list.
+     * @param inflater the inflater for this fragment.
+     * @param container the container holding hangout fragments.
+     * @param savedInstanceState saved state.
+     * @return the view representing a hangout fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -81,6 +95,7 @@ public class HangoutFragment extends Fragment implements SwipeRefreshLayout.OnRe
         mSwipeRefreshLayout.setOnRefreshListener(this);
             GetHangoutsTask task = new GetHangoutsTask();
             task.execute(HANGOUTS_URL);
+
         return view;
     }
 
@@ -94,11 +109,33 @@ public class HangoutFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     @Override
-    public void onStart(){
-        super.onStart();
-
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof HangoutInteractionListener) {
+            mListener = (HangoutInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement HangoutInteractionListener");
+        }
     }
 
+    @Override
+    public void onStart(){
+        super.onStart();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    /**
+     * Implements the functionality to display a list of OrderMenuFragments when the user
+     * performs a long click.
+     * @param item the menu item selected.
+     * @return check to see if an item was selected or not.
+     */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         int position = -1;
@@ -115,10 +152,15 @@ public class HangoutFragment extends Fragment implements SwipeRefreshLayout.OnRe
         Hangout hangout = mHangoutList.get(position);
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction().replace(R.id.content_frame, OrderMenuFragment.newInstance(1, hangout))
+                .addToBackStack(null)
                 .commit();
         return super.onContextItemSelected(item);
     }
 
+    /**
+     * Method to perform async task to display a the list of hangouts the user is a part
+     * of when the user swipes down to refresh.
+     */
     @Override
     public void onRefresh() {
         GetHangoutsTask task = new GetHangoutsTask();
@@ -141,7 +183,6 @@ public class HangoutFragment extends Fragment implements SwipeRefreshLayout.OnRe
          */
         @Override
         protected String doInBackground(String... urls) {
-           // mSwipeRefreshLayout.setRefreshing(true);
             String response = "";
             HttpURLConnection urlConnection = null;
             for (String url : urls) {
@@ -165,20 +206,19 @@ public class HangoutFragment extends Fragment implements SwipeRefreshLayout.OnRe
         }
 
         /**
-         * Handles response from web service, populates the user's groups.
+         * Handles response from web service, populates the user's hangouts..
          * @param result Response from the web service
          */
         @Override
         protected void onPostExecute(String result) {
             Log.i(TAG, "onPostExecute");
-
             if (result.startsWith("Unable to")) {
                 Log.e(TAG, result);
                 return;
             }
             try {
                 mHangoutList = Hangout.parseHangout(result);
-                Log.e(TAG, result);
+
 
             }catch (JSONException e) {
                 Log.e(TAG, e.getMessage());
@@ -186,7 +226,7 @@ public class HangoutFragment extends Fragment implements SwipeRefreshLayout.OnRe
             }
             if (!mHangoutList.isEmpty()) {
                 mRecyclerView.setAdapter(null);
-                mRecyclerView.setAdapter(new HangoutAdapter(mHangoutList, getActivity()));
+                mRecyclerView.setAdapter(new HangoutAdapter(mHangoutList, mListener, getActivity()));
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         }

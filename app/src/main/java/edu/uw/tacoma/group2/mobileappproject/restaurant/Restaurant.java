@@ -10,7 +10,7 @@ import java.util.List;
  * Class to represent a Restaurant object and its respective fields to hold the values
  * for the restaurant's mName, thumbnail mImage(if provided), and its aggregrate user mRating.
  * @author Harlan Stewart
- * @version 1.0
+ * @version 1.4
  */
 public class Restaurant {
     public static final String NAME = "name";

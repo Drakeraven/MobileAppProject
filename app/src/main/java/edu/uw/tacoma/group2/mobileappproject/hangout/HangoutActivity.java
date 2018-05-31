@@ -44,11 +44,14 @@ import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
  * In this class the user will be able to create new hangouts, view their current hangout, and also
  * have access to the ordering activity where they can place an order.
  * @author Harlan Stewart
- * @version 1.0
+ * @version 1.5
  */
 public class HangoutActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        GroupFragment.GroupTabListener {
+        GroupFragment.GroupTabListener,
+        OrdersFragment.OrdersTabListener,
+        HangoutFragment.HangoutInteractionListener,
+        OrderMenuFragment.onOrderMenuListener{
     private static final String TAG_THREE = "MEMBER INSERT === ";
     private static final String TAG_FOUR = "MEMBER TASK === ";
     private static final String ADD_HANGOUT_URL =
@@ -59,11 +62,20 @@ public class HangoutActivity extends AppCompatActivity
             "http://stephd27.000webhostapp.com/list.php?cmd=members&group=";
     private HashMap<String, String> mMemberMap;
     private Date mDate;
+    private String mGroupName;
     FloatingActionButton fab;
     private static final String TAG ="Hangout Activity";
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
 
+    /**
+     * This method creates the layout for the hangout activity and will initially call the fragment
+     * manager to display the list of current hangouts the user is a part of. Also this method sets
+     * local variables for the activities associated views and implements the function of the floating
+     * action buttons onClick listener which will display a list of groups to select for a new hangout
+     * when it is pressed.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +101,7 @@ public class HangoutActivity extends AppCompatActivity
                 fm.beginTransaction()
                         .replace(R.id.content_frame, new GroupFragment())
                         .commit();
+                toolbar.setTitle("Choose a group");
             }
         });
     }
@@ -155,6 +168,11 @@ public class HangoutActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    public void orderTabListener(OrdersContent item) {
+
+    }
+
     /**
      * Once the user has chosen to create a new hangout by hitting the floating action button
      * a list of groups will be displayed and the user can choose one of them to start a new hangout.
@@ -200,9 +218,10 @@ public class HangoutActivity extends AppCompatActivity
     private void insertIntoHangoutTable(GroupContent group){
         long sysTime = System.currentTimeMillis();
         mDate = new Date(sysTime);
+        mGroupName = group.getGroupName();
         CreateHangoutTask taskMem = new CreateHangoutTask();
         String mGroupCount = group.getGroupCount();
-        String urlHangout = buildHangoutURL(mGroupCount, mDate);
+        String urlHangout = buildHangoutURL(mGroupCount, mDate, mGroupName);
         taskMem.execute(urlHangout);
     }
 
@@ -211,7 +230,7 @@ public class HangoutActivity extends AppCompatActivity
      * for members of the group the user has chosen for starting a new hangout.
      * @param group the users group choice.
      */
-    private void getMembersFromDB( GroupContent group){
+    private void getMembersFromDB(GroupContent group){
         GetMemberInfoTask memInfoTask = new GetMemberInfoTask();
         String membersURL = GET_MEMBERS_URL + group.getGroupID();
         memInfoTask.execute(membersURL);
@@ -224,7 +243,7 @@ public class HangoutActivity extends AppCompatActivity
      * @param date the current system date/time for primary key.
      * @return the string url for creating a new hangout.
      */
-    private String buildHangoutURL(String memCount, Date date){
+    private String buildHangoutURL(String memCount, Date date, String groupName){
         StringBuilder sb = new StringBuilder(ADD_HANGOUT_URL);
         sb.append("&hid=").append(date.toString());
         if(!(UserContent.sUserRestaurant == null)){
@@ -236,6 +255,7 @@ public class HangoutActivity extends AppCompatActivity
         }
         sb.append("&num_members=").append(memCount);
         sb.append("&closed_open=").append("0");
+        sb.append("&group_name=").append(groupName);
         //Log.e(TAG_TWO, sb.toString());
         return  sb.toString();
     }
@@ -257,6 +277,14 @@ public class HangoutActivity extends AppCompatActivity
             sb.append("&price=").append("0");
         Log.e(TAG_THREE, sb.toString());
         return sb.toString();
+    }
+
+    @Override
+    public void hangoutListener(Hangout item) {
+    }
+
+    @Override
+    public void onOrderMenuInteraction(FoodContent.FoodItem item) {
     }
 
     /**
@@ -304,6 +332,7 @@ public class HangoutActivity extends AppCompatActivity
             }
             try {
                 mMemberMap = GroupContent.parseGroupMembers(result);
+
             }catch (JSONException e) {
                 Log.e(TAG_FOUR, e.getMessage());
                 return;

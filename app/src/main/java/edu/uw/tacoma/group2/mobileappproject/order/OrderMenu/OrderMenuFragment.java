@@ -1,6 +1,7 @@
 package edu.uw.tacoma.group2.mobileappproject.order.OrderMenu;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,6 +27,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import edu.uw.tacoma.group2.mobileappproject.HangryDB;
+import edu.uw.tacoma.group2.mobileappproject.OrderCompleteActivity;
 import edu.uw.tacoma.group2.mobileappproject.R;
 import edu.uw.tacoma.group2.mobileappproject.hangout.Hangout;
 import edu.uw.tacoma.group2.mobileappproject.order.OrderMenu.FoodContent.FoodItem;
@@ -44,6 +46,7 @@ public class OrderMenuFragment extends Fragment {
             "https://hangryfoodiehangout.000webhostapp.com/hangoutScript.php?cmd=ordered&user=" + UserContent.sUserID;
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
+    private onOrderMenuListener mListener;
     private String tempPrice;
     private String tempHangout;
     HangryDB mHangryDB;
@@ -115,7 +118,7 @@ public class OrderMenuFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyFoodItemRecyclerViewAdapter(FoodContent.ITEMS, view));
+            recyclerView.setAdapter(new MyFoodItemRecyclerViewAdapter(FoodContent.ITEMS, mListener, view));
 
         Button btn = view.findViewById(R.id.btn_order);
         final TextView OrderTotal = view.findViewById(R.id.Order_Total);
@@ -123,10 +126,13 @@ public class OrderMenuFragment extends Fragment {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    String url = buildOrderUrl(OrderTotal.getText().toString());
-                    Log.i(TAG, "Generated update order: " + url);
-                    OrderMasterTask task = new OrderMasterTask();
-                    task.execute(url);
+                String url = buildOrderUrl(OrderTotal.getText().toString());
+                Log.i(TAG, "Generated update order: " + url);
+                //TODO: update local db?
+                OrderMasterTask task = new OrderMasterTask();
+                task.execute(url);
+                Intent completeIntent = new Intent(getContext(), OrderCompleteActivity.class);
+                getContext().startActivity(completeIntent);
             }
         });
 
@@ -148,6 +154,24 @@ public class OrderMenuFragment extends Fragment {
         tempPrice = price;
         tempHangout = mHangout.getHid();
         return sb.toString();
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof onOrderMenuListener) {
+            mListener = (onOrderMenuListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement onOrderMenuListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
     }
 
     /**
@@ -199,6 +223,7 @@ public class OrderMenuFragment extends Fragment {
                 JSONObject jsonObject = new JSONObject(result);
                 String status = (String) jsonObject.get("result");
                 if (status.equals("success")) {
+
                     Log.i(TAG, "Successfully updated order.");
                 } else {
                     Log.i(TAG, "Failed to add: "

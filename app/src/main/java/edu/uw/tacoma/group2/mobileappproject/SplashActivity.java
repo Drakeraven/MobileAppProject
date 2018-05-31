@@ -36,9 +36,7 @@ import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
  */
 
 public class SplashActivity extends AppCompatActivity {
-
     private CallbackManager mCallbackManager;
-
     private static final String TAG = "Splash Activity";
 
     /**
@@ -56,7 +54,6 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_splash);
-
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
                     "edu.uw.tacoma.group2.mobileappproject",

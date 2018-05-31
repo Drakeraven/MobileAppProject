@@ -15,13 +15,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -46,7 +42,7 @@ import edu.uw.tacoma.group2.mobileappproject.restaurant.RestaurantAdapter;
  * to provide the user with a list of restaurants near their location and allow them to select one
  * of them as the destination for their hangry foody hangout dinner with friends.
  * @author Harlan Stewart
- * @version 1.0
+ * @version 1.7
  */
 public class RestaurantsActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     private String URL = "https://developers.zomato.com/api/v2.1/geocode?";
@@ -57,30 +53,27 @@ public class RestaurantsActivity extends AppCompatActivity implements SwipeRefre
     public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
     public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 2;
     private LocationRequest mLocationRequest;
-    private Button mSearchBtn;
-    private Location mCurrentLocation;
     private String mLatitude;
     private String mLongitude;
     private static final int MY_PERMISSIONS_LOCATIONS = 0;
     private FusedLocationProviderClient mFusedClient;
     private LocationCallback mLocationCallback;
-    private GoogleApiClient mGoogleApiClient;
     private RecyclerView mRecycler;
     private RestaurantAdapter mAdapter;
     private List<Restaurant> mRestaurantList;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-
-
     /**
-     * Defines the layout for the list of nearby restaurants to display to the user.
+     * Defines the layout for the list of nearby restaurants to display to the user. This method also
+     * handles the Location services activities which prompt the user to allow the application access
+     * to their current location which will be used to get their coordinates in order to populate a
+     * list of restaurants near their current location.
      * @param savedInstanceState saved instance state for last created activity.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurants);
-
         mRecycler = (RecyclerView) findViewById(R.id.recycler_restaurants);
         mRecycler.setHasFixedSize(true);
         mRecycler.setLayoutManager(new LinearLayoutManager(getParent()));
@@ -93,22 +86,17 @@ public class RestaurantsActivity extends AppCompatActivity implements SwipeRefre
         } else {
             loadZomatoData(mLatitude,mLongitude);
         }
-
         mRestaurantList = new ArrayList<Restaurant>();
-       /* mSearchBtn = findViewById(R.id.btn_search);
-        mSearchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mLatitude == null || mLongitude == null){
-                    mLatitude = DEFAULT_LAT;
-                    mLongitude = DEFAULT_LON;
-                    loadZomatoData(mLatitude, mLongitude);
-                } else {
-                    loadZomatoData(mLatitude,mLongitude);
-                }
+        locationRequests();
+    }
 
-            }
-        });*/
+    /**
+     * Method for requesting and checking the permissions from the user to allow location
+     * services from the application. Once location services have been allowed this method will
+     * get the users current coordinates and set the values for mLatitude/mLongitude for the purpose
+     * of finding restaurants near their current location.
+     */
+    private void locationRequests(){
         mFusedClient = LocationServices.getFusedLocationProviderClient(this);
         mLocationCallback = new LocationCallback(){
             @Override
@@ -136,11 +124,7 @@ public class RestaurantsActivity extends AppCompatActivity implements SwipeRefre
         } else {
             mFusedClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
         }
-
-
     }
-
-
 
     /**
      * This method is used to request data from the Zomato api curl request service.
@@ -149,45 +133,10 @@ public class RestaurantsActivity extends AppCompatActivity implements SwipeRefre
      * image, and aggregate user rating to the user.
      */
     private void loadZomatoData(String lat, String lon){
-        /*final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loading....");
-        progressDialog.show();*/
-        //RequestQueue queue = Volley.newRequestQueue(this);
         String url = URL + "lat="+  lat + "&lon=" + lon;
         //Log.i(TAG, "URL: " + url);
         ZomatoAsyncTask zomTask = new ZomatoAsyncTask();
         zomTask.execute(new String[]{url});
-        /*final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        progressDialog.dismiss();
-                        try{
-                            mRestaurantList = Restaurant.getRestaurants(response);
-                            mAdapter = new RestaurantAdapter(mRestaurantList, getApplicationContext());
-                            mRecycler.setAdapter(mAdapter);
-                        }catch (JSONException e){
-                            Log.e("JEXCEPTION", e.getMessage());
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("user-key", API_KEY);
-                params.put("Accept", "application/json");
-                //params.put("lat", String.valueOf(mLatitude));
-                //params.put("lon", String.valueOf(mLongitude));
-                return params;
-            }
-        };
-        queue.add(request);*/
-
-
     }
 
     @Override
@@ -196,13 +145,11 @@ public class RestaurantsActivity extends AppCompatActivity implements SwipeRefre
         if(mFusedClient != null) {
             mFusedClient.removeLocationUpdates(mLocationCallback);
         }
-
     }
 
     /**
-     * NOT YET IMPLEMENTED
-     * intended to get the users current coordinates to use when requesting nearby
-     * restaurants.
+     * More location permission checks to ensure the application has been given permission to use
+     * the current user's location.
      */
     private void getLocation() {
         if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)
@@ -225,11 +172,17 @@ public class RestaurantsActivity extends AppCompatActivity implements SwipeRefre
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_LOCATIONS);
             }
-
         }
     }
 
-
+    /**
+     * Handles what happens when the permissions request was either accepted or denied. If denied a toast
+     * message is displayed to the user to explain that location services are required for functionality of
+     * the application.
+     * @param requestCode code for the request.
+     * @param permissions current permissions being granted.
+     * @param grantResults results codes.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults){
         switch (requestCode){
@@ -239,16 +192,18 @@ public class RestaurantsActivity extends AppCompatActivity implements SwipeRefre
                             == PackageManager.PERMISSION_GRANTED){
                         mFusedClient.requestLocationUpdates(mLocationRequest,mLocationCallback, Looper.myLooper());
                     }
-
                 } else {
                     Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
                 }
                 return;
             }
         }
-
     }
 
+    /**
+     * Method for repopulating the list of restaurants near the user when the user
+     * swipes down to refresh the current list.
+     */
     @Override
     public void onRefresh() {
         if(mLatitude == null || mLongitude == null){
@@ -260,9 +215,19 @@ public class RestaurantsActivity extends AppCompatActivity implements SwipeRefre
         }
     }
 
+    /**
+     * Private inner class to handle the Asynchronous background activity which makes a request to the
+     * Zomato API to return information about restaurants near the user's current location.
+     */
     private class ZomatoAsyncTask extends AsyncTask<String, Void, String>{
 
-
+        /**
+         * Handles the background request to the Zomato api server. The static URL string of the
+         * RestaurantsActivity class, the users current coordinates, and the developers API key are appended
+         * to the url string to return correct results.
+         * @param urls
+         * @return
+         */
         @Override
         protected String doInBackground(String... urls) {
             String response = "";
@@ -270,21 +235,15 @@ public class RestaurantsActivity extends AppCompatActivity implements SwipeRefre
             for (String url : urls) {
                 try {
                     java.net.URL urlObject = new URL(url);
-
-
                     urlConnection = (HttpURLConnection) urlObject.openConnection();
-                    //urlConnection.setRequestMethod("HEAD");
                     urlConnection.addRequestProperty("user-key",API_KEY );
-
                     InputStream content = urlConnection.getInputStream();
-
                     BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
                     String s;
                     while ((s = buffer.readLine()) != null) {
                         response += s;
                         //Log.e(TAG,response);
                     }
-
                 } catch (Exception e) {
                     response = "Unable to add course, Reason: "
                             + e.getMessage();
@@ -297,6 +256,13 @@ public class RestaurantsActivity extends AppCompatActivity implements SwipeRefre
             return response;
         }
 
+        /**
+         * Handles the post execution of the zomato async task. Upon successful completion
+         * this method with set the list of restaurants near the user and also define the
+         * adapter view and corresponding recycler view to display information about nearby restaurants
+         * to the user.
+         * @param result the result of the async request.
+         */
         @Override
         protected void onPostExecute(String result){
             if (result.startsWith("Unable to")) {
@@ -304,18 +270,15 @@ public class RestaurantsActivity extends AppCompatActivity implements SwipeRefre
                 return;
             }
             try {
-
                 mRestaurantList = Restaurant.getRestaurants(result);
                 mAdapter = new RestaurantAdapter(mRestaurantList, getApplicationContext(), mRecycler);
                 mRecycler.setAdapter(mAdapter);
-
 
             }catch (JSONException e) {
                 Log.e(TAG, e.getMessage());
                 return;
             }
             mSwipeRefreshLayout.setRefreshing(false);
-
         }
     }
 }
