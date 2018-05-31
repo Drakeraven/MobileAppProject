@@ -152,7 +152,6 @@ public class HangoutFragment extends Fragment implements SwipeRefreshLayout.OnRe
         Hangout hangout = mHangoutList.get(position);
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction().replace(R.id.content_frame, OrderMenuFragment.newInstance(1, hangout))
-                .addToBackStack(null)
                 .commit();
         return super.onContextItemSelected(item);
     }

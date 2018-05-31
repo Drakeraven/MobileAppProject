@@ -155,8 +155,11 @@ public class OrderMenuFragment extends Fragment {
         return sb.toString();
     }
 
-
-
+    @Override
+    public void onStop() {
+        super.onStop();
+        getActivity().finish();
+    }
 
     /**
      *Handles the task of updating orders in the remote database.
