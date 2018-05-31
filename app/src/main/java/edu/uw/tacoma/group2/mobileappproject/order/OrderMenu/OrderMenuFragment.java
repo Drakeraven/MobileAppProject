@@ -46,7 +46,6 @@ public class OrderMenuFragment extends Fragment {
             "https://hangryfoodiehangout.000webhostapp.com/hangoutScript.php?cmd=ordered&user=" + UserContent.sUserID;
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
-    private onOrderMenuListener mListener;
     private String tempPrice;
     private String tempHangout;
     HangryDB mHangryDB;
@@ -118,7 +117,7 @@ public class OrderMenuFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyFoodItemRecyclerViewAdapter(FoodContent.ITEMS, mListener, view));
+            recyclerView.setAdapter(new MyFoodItemRecyclerViewAdapter(FoodContent.ITEMS, view));
 
         Button btn = view.findViewById(R.id.btn_order);
         final TextView OrderTotal = view.findViewById(R.id.Order_Total);
@@ -157,22 +156,7 @@ public class OrderMenuFragment extends Fragment {
     }
 
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof onOrderMenuListener) {
-            mListener = (onOrderMenuListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement onOrderMenuListener");
-        }
-    }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 
     /**
      *Handles the task of updating orders in the remote database.

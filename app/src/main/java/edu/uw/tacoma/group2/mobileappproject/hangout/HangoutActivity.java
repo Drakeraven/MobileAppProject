@@ -34,7 +34,6 @@ import edu.uw.tacoma.group2.mobileappproject.R;
 import edu.uw.tacoma.group2.mobileappproject.group.GroupContent;
 import edu.uw.tacoma.group2.mobileappproject.group.GroupFragment;
 import edu.uw.tacoma.group2.mobileappproject.order.OrderMenu.FoodContent;
-import edu.uw.tacoma.group2.mobileappproject.order.OrderMenu.OrderMenuFragment;
 import edu.uw.tacoma.group2.mobileappproject.order.OrdersContent;
 import edu.uw.tacoma.group2.mobileappproject.order.OrdersFragment;
 import edu.uw.tacoma.group2.mobileappproject.user.UserContent;
@@ -50,8 +49,7 @@ public class HangoutActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         GroupFragment.GroupTabListener,
         OrdersFragment.OrdersTabListener,
-        HangoutFragment.HangoutInteractionListener,
-        OrderMenuFragment.onOrderMenuListener{
+        HangoutFragment.HangoutInteractionListener {
     private static final String TAG_THREE = "MEMBER INSERT === ";
     private static final String TAG_FOUR = "MEMBER TASK === ";
     private static final String ADD_HANGOUT_URL =
@@ -283,9 +281,7 @@ public class HangoutActivity extends AppCompatActivity
     public void hangoutListener(Hangout item) {
     }
 
-    @Override
-    public void onOrderMenuInteraction(FoodContent.FoodItem item) {
-    }
+
 
     /**
      * Private inner class that represents an AyncTask that is used for getting information based
